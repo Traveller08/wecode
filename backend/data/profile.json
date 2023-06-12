@@ -1,0 +1,10 @@
+{
+    "status": "success",
+    "data": {
+      "user_id": "AB1234",
+      "user_type": "individual",
+      "email": "xxxyyy@gmail.com",
+      "user_name": "AxAx Bxx",
+      "broker": "ZERODHA"
+    }
+  }
