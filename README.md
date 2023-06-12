@@ -1,4 +1,4 @@
-# InvestTrack
+# we-code
 
 ## Technologies Used
 
