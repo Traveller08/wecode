@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import "../dashboard/index.css";
-
 import apiService from "../../services/apiService.js";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";

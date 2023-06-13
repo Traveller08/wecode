@@ -5,9 +5,12 @@ import { BrowserRouter as Router, Routes } from 'react-router-dom';
 import Register from './components/register/Register';
 import HomePage from './components/homepage/Homepage';
 import { useState, useEffect } from 'react';
-import Dashboard from './components/dashboard/Dashboard';
+import Content from './components/content/Content';
 import Profile from './components/profile/Profile';
+import LeftSideBar from './components/sidebar/LeftSideBar';
+import RightSideBar from './components/sidebar/RightSideBar';
 import Cookies from 'js-cookie';
+import NavBar from './navbar/NavBar';
 function App() {
   const [user, setUser] = useState(false);
   useEffect(() => {
@@ -22,15 +25,18 @@ function App() {
   return (
     <Router >
     <div className="App">
+      {/* <NavBar /> */}
       <Routes>
         <Route exact path='/' 
          element={
            <>
            {
               user?   
-              <>
-                <Dashboard />
-              </>:
+              <div className='row'>
+                <LeftSideBar />
+                <Content />
+                <RightSideBar />
+              </div>:
               <>
                 <HomePage />
               </>
