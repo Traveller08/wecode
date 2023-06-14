@@ -1,33 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
 import HomePageCarousel from "../carousel/HomePageCarousel";
-import NavBar from "../../navbar/NavBar";
+import NavBar from "../navbar/NavBar";
 import LeftSideBar from "../sidebar/LeftSideBar";
 import RightSideBar from "../sidebar/RightSideBar";
 import Content from "../content/Content";
 import WeCodeFooter from "../footer/WeCodeFooter";
-function HomePage() {
+function HomePage(props) {
+  const [leftContent, setLeftContent] = useState("");
+  const [rightContent, setRightContent] = useState("");
+  const [mainContent, setMainContent] = useState("feed");
   return (
     <>
-      <NavBar />
+      <NavBar user={props.user} 
+      usertype={props.usertype} 
+      setuser={props.setuser} 
+      setusertype={props.setusertype} 
+      leftcontent={leftContent}
+      rightcontent={rightContent}
+      maincontent = {mainContent}
+      setleftcontent={setLeftContent}
+      setrightcontent={setRightContent}
+      setmaincontent={setMainContent}
+      url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
+      />
       <div className="container">
-        <HomePageCarousel />
-        {/* <div>
-          
-          <h1>InvestTrack</h1>
-          <p>Track and manage your investments with ease.</p>
-          <p>InvestTrack helps you stay on top of your portfolio, monitor market trends, and make informed investment decisions.</p>
-          
-          <div className="cta-buttons">
-            <Link to="/login" className="btn btn-primary">Login</Link>
-            <Link to="/register" className="btn btn-secondary">Register</Link>
-          </div>
-        </div> */}
-        <div className="row mt-2">
-          <LeftSideBar />
-          <Content />
-          <RightSideBar />
+        {mainContent==="feed" && <HomePageCarousel />}
+        <div  className="row mt-2">
+          <LeftSideBar user={props.user} usertype={props.usertype} setuser={props.setuser} setusertype={props.setusertype} content={leftContent} setcontent={setLeftContent}/>
+          <Content user={props.user} usertype={props.usertype} setuser={props.setuser} setusertype={props.setusertype} content={mainContent} setcontent={setMainContent} />
+          <RightSideBar user={props.user} usertype={props.usertype} setuser={props.setuser} setusertype={props.setusertype} content={rightContent} setcontent={setRightContent} />
         </div>
       </div>
       <WeCodeFooter />

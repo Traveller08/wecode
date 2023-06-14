@@ -1,56 +1,52 @@
-.login-container {
+/* .form-container {
     max-width: 600px;
     margin: 20px auto;
     padding: 2rem;
     background-color: #ffffff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
-  
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .error-message {
-    color: #ff0000;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  label {
-    display: block;
-    min-width: 200px;
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  button {
-    display: block;
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    opacity: 0.8;
-  }
+   */
 
+.form-container {
+    margin: 2%  auto;
+
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  max-width: 600px;
+  /* padding: 60px 30px; */
+  padding-top: 50px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+}
+.form-container div{
+  margin-bottom: 10px;
+}
+.input-group-container{
+  display: flex;
+  flex-direction: row;
   
+}
+.form-label{
+  width: 20%;
+}
+
+.header-container{
+  text-align: center;
+}
+
+
+.btn-container{
+  display: flex;
+  flex-direction: row-reverse;
+  /* background-color: red */
+}
+
+.btn-container button{
+   margin-right: 0px;
+   min-width: 100px;
+}
+
+
+
+

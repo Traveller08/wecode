@@ -10,6 +10,7 @@ export const verifyJwtToken = (req, res, next) => {
         const secret_key = process.env.SECRET_KEY;
         const decoded = jwt.verify(token,secret_key); 
         req.user = decoded.username;
+        req.usertype = decoded.usertype;
       } catch (error) {
         return res.status(401).json({ message: 'Access denied. Invalid token.' });
       }

@@ -7,23 +7,26 @@ import { verifyLoginDetails } from "../middleware/verify_login_details.js";
 const router = express.Router();
 
 router.post('/', verifyLoginDetails, async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, usertype } = req.body;
+    console.log("login ", req.body);
     try {
+      
       const connection = await mysql2.createConnection(db);
-      const query = `SELECT * FROM users WHERE username = '${username}' LIMIT 1`;
+      const query = `SELECT * FROM users WHERE username = '${username}' and usertype='${usertype}' LIMIT 1`;
       const [rows] = await connection.promise().query(query);
       if (rows.length === 1) {
         const hashedPassword = rows[0].password;
         const passwordMatch = await compareHash(password, hashedPassword);
         if (passwordMatch) {
           const payload = {
-            username: rows[0].username
+            username: rows[0].username,
+            usertype:usertype
           };
-          const token = generateAccessToken(username);
-          return res.status(200).json({status:"success", token: token });
+          const token = generateAccessToken(payload);
+          return res.status(200).json({message:"login successful", token: token });
         }
       }
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'invalid credentials' });
     } catch (error) {
       // console.error('Error executing database query:', error);
       return res.status(500).json({ message: 'Internal server error' });
