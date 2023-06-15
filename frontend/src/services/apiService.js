@@ -24,7 +24,7 @@ const register = async (userdetails) => {
   const response = await api.post('/user/register',userdetails);
   return response.data;
 };
-const createNewPost = async(data,token) =>{
+const createNewPost = async(token, data) =>{
   if(token){
     setAuthToken(token);
     const response = await api.post('/post/create',{data});
@@ -32,6 +32,33 @@ const createNewPost = async(data,token) =>{
   }
   return {status:"failed", data:{},message:"session expired"};
 }
+
+const getPosts = async () => {
+ 
+    const response = await api.get('/post/all');
+    console.log("response at apiserver ", response);
+    return response.data;
+ 
+
+};
+const createNewComment = async(token, data, parentid) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.post('/comment/create',{data,parentid});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
+
+const createNewReply = async(token, data, parentid) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.post('/reply/create',{data,parentid});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
+
 
 
 const getProfile = async (token) => {
@@ -55,7 +82,10 @@ const apiService = {
   register,
   login,
   getProfile,
-  createNewPost
+  createNewPost,
+  createNewComment,
+  createNewReply,
+  getPosts,
 };
 
 export default apiService;

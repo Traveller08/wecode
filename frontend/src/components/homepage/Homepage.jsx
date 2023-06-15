@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./index.css";
 import HomePageCarousel from "../carousel/HomePageCarousel";
 import NavBar from "../navbar/NavBar";
 import LeftSideBar from "../sidebar/LeftSideBar";
 import RightSideBar from "../sidebar/RightSideBar";
 import Content from "../content/Content";
 import WeCodeFooter from "../footer/WeCodeFooter";
+// import './index.css';
 function HomePage(props) {
   const [leftContent, setLeftContent] = useState("");
   const [rightContent, setRightContent] = useState("");

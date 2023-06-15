@@ -1,0 +1,27 @@
+.card-footer{
+  display: flex;
+  flex-direction: row;
+}
+.card-footer-left{
+   display: flex;
+   flex-direction: row;
+   width: 50%;
+   
+}
+.f-icon{
+    margin-left: 3%;
+    transition: all ease-in-out 0.3s;
+}
+.f-icon:hover{
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.card-footer-right{
+    display: flex;
+    width: 50%;
+    flex-direction: row-reverse;
+}
+.card-text{
+    font-size: 1rem;
+}

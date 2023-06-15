@@ -19,7 +19,7 @@ const CreatePost = (props) => {
     e.preventDefault();
     setWaiting(true);
     try{
-      const response = await apiService.createNewPost(postText, Cookies.get('token'));
+      const response = await apiService.createNewPost(Cookies.get('token'),postText);
       setErrorType("success");
       setError(response.message);
     }catch(error){
@@ -84,13 +84,12 @@ const CreatePost = (props) => {
               </div>
             </div>
           </div>
-          <div className="btn-toolbar justify-content-between">
+          <div className="btn-toolbar mt-2 justify-content-between">
             <div className="btn-group">
-              <button  className="btn btn-primary" onClick={handleResetText}>
+              <button  className="btn btn-danger" onClick={handleResetText}>
                 reset
               </button>
-            </div>
-            <div className="btn-group">
+            
               <button type="submit" className="btn btn-primary" onClick={handleCreatePost}>
                 {
                   waiting?"posting...":"post"
