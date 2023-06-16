@@ -17,8 +17,7 @@ const Content = (props) => {
   return (
     <>
       <div className="col-md-6 gedf-main">
-        {props.user && props.content === "feed" && <CreatePost />}
-        {props.content === "feed" && <Feed />}
+        {props.content === "feed" && <Feed user={props.user} />}
         {props.content==="blogs" && <Blogs />}
         {props.content==="tutorials" && <Tutorials />}
         {props.content==="problems" && <Problems />}

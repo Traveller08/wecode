@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CommentForm from "./CommentForm";
 import "./comments.css";
 import Cookies from "js-cookie";
+import apiService from "../../services/apiService";
 const Reply = (reply) => {
   const [commentRxn, setCommentRxn] = useState("");
+  const [replyUser, setReplyUser] = useState({});
+  const userid = reply.data.userid;
+  const replyid = reply.data.replyid;
+  useEffect(() => {
+    const fetchReplyUser = async () => {
+      try {  
+        const response = await apiService.getUserDetails(userid);
+        setReplyUser(response.data[0]);
+      } catch (error) {
+        console.log("Error fetching post user data:", error);
+      }
+    };
+    fetchReplyUser();
+  }, []);
 
   return (
     <>
@@ -12,7 +27,7 @@ const Reply = (reply) => {
           <div className="comment-left">
             <div className="comment-avatar">
               <img
-                src={reply.data.url}
+                src={replyUser.url?replyUser.url:"https://picsum.photos/50/50"}
                 className="rounded-circle"
                 width="36"
                 alt="avatar"
@@ -20,9 +35,9 @@ const Reply = (reply) => {
             </div>
           </div>
           <div className="comment-mid">
-            <div className="comment-username text-muted">{reply.data.name}</div>
+            <div className="comment-username text-muted">{replyUser.firstName + " " + replyUser.lastName}</div>
             {!reply.data.isDeleted ? (
-              <div className="comment-body">{reply.data.body}</div>
+              <div className="comment-body">{reply.data.data}</div>
             ) : (
               <>
                 <div

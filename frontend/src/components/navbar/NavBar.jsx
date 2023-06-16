@@ -8,6 +8,9 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { useNavigate, Link } from 'react-router-dom';
 import Cookies from "js-cookie";
 import './Navbar.css';
+import toast from "react-hot-toast";
+const successNotify=(message) =>toast.success(message);
+const errorNotify = (message) => toast.error(message);
 const NavBar = (props) => {
   const navigate = useNavigate();
   const handleLoginButtonClick = (e) =>{
@@ -22,7 +25,8 @@ const NavBar = (props) => {
     if (Cookies.get("user")) {
         Cookies.remove("user");
     }
-    alert("Logout successfull");
+    successNotify("Logout successfull!");
+    
     navigate('/');
     // navigate('/');
 };
@@ -110,7 +114,9 @@ const NavBar = (props) => {
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item >
-                    <Button variant="outline-success" onClick={handleLogout}>Logout</Button>
+                    <Button variant="outline-success" onClick={handleLogout}>
+                      Logout
+                      </Button>
                     </NavDropdown.Item>
                   </NavDropdown>
                 )}

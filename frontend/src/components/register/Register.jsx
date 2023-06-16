@@ -3,9 +3,11 @@ import Form from "react-bootstrap/Form";
 import apiService from "../../services/apiService";
 import "./index.css";
 import { Link } from "react-router-dom";
-import Alert from 'react-bootstrap/Alert';
 import PropTypes from 'prop-types';
 import FormNavBar from "../navbar/FormNavbar";
+import toast from "react-hot-toast";
+const successNotify=(message) =>toast.success(message);
+const errorNotify = (message) => toast.error(message);
 function Register(props) {
   const [userdetails, setUserdetails] = useState({
     firstName: "",
@@ -16,8 +18,6 @@ function Register(props) {
     usertype:""
   });
   const [confirmpassword, setConfirmpassword] = useState("");
-  const [error, setError] = useState("");
-  const [errorType, setErrorType] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const [waiting, setWaiting] = useState(false);
 
@@ -42,12 +42,10 @@ function Register(props) {
     setWaiting(true);
     try {
       const response = await apiService.register(userdetails);
-      setErrorType("success");
-      setError(response.message);
+      successNotify(response.message);
       console.log(response);
     } catch (error) {
-      setErrorType("danger");
-      setError(error.response.data.message);
+      errorNotify(error.response.data.message);
       console.error("Error message:", error);
     } finally {
       
@@ -71,18 +69,7 @@ function Register(props) {
              <h2>
               Register as {props.usertype}
               </h2>
-        </div>
-      {
-        error && 
-        <Alert variant={errorType} onClose={() => {setError(""); setErrorType("");}} dismissible>
-        <Alert.Heading>{errorType==="danger"?"Failed":"Success"}</Alert.Heading>
-        <p>
-          {error}
-        </p>
-      </Alert>
-
-      }
-      
+        </div>     
         <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label for="inputEmail3" className="col-sm-2 col-form-label">
@@ -192,7 +179,9 @@ function Register(props) {
               type="submit" 
               className="btn btn-primary" 
               disabled={confirmpassword==="" || confirmpassword!==userdetails.password}
-              >
+              >{
+                waiting &&  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              }
                 {
                   waiting?"please wait...":"Register"
                 }

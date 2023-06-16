@@ -4,81 +4,66 @@ import "./comments.css";
 import Cookies from "js-cookie";
 import Reply from "./Reply";
 import apiService from "../../services/apiService";
-import Alert from "react-bootstrap/Alert";
+import toast from "react-hot-toast";
+const successNotify=(message) =>toast.success(message);
+const errorNotify = (message) => toast.error(message);
 
-let data = [
-  {
-    id: "1",
-    body: "First comment and sakdfjnsdf dsfd fd dfg dgd fgd fgd fg dfg df gdf g dfg df g  cvb dsf ffdf gfdgfd ghfghfghgfh",
-    name: "Jack",
-    username: "lit2020034@iiitl.ac.in",
-    parentId: null,
-    createdAt: "2021-08-16T23:00:33.010+02:00",
-    url: "https://picsum.photos/50/50",
-    isDeleted:true,
-  },
-  {
-    id: "2",
-    body: "Second comment",
-    name: "John",
-    username: "lit2020034@iiitl.ac.in",
-    parentId: null,
-    createdAt: "2021-08-16T23:00:33.010+02:00",
-    url: "https://picsum.photos/50/50",
-    isDeleted:true,
-  },
-  {
-    id: "3",
-    body: "First comment first child",
-    name: "John",
-    username: "lit2020034@iiitl.ac.in",
-    parentId: "1",
-    createdAt: "2021-08-16T23:00:33.010+02:00",
-    url: "https://picsum.photos/50/50",
-    isDeleted:false,
-  },
-  {
-    id: "4",
-    body: "Second comment second child",
-    name: "John",
-    username: "lit2020034@iiitl.ac.in",
-    parentId: "2",
-    createdAt: "2021-08-16T23:00:33.010+02:00",
-    url: "https://picsum.photos/50/50",
-    isDeleted:false,
-  },
-];
+
 const Comment = (comment) => {
   const [commentRxn, setCommentRxn] = useState("");
   const [replies, setReplies] = useState([]);
   const [replyForm, setReplyForm] = useState(false);
-  const [error, setError] = useState("");
-  const [errorType, setErrorType] = useState("");
+  const [commentUser, setCommentUser] = useState({});
+  const userid = comment.data.userid;
+  const commentid = comment.data.commentid;
+  const [showReplies, setShowReplies] = useState(false);
   // const isDeleted = comment.isDeleted;
   const handleFormClose = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     setReplyForm(false);
   };
+  const handleShowReplies = () =>{
+    setShowReplies(true);
+  }
 
   const addReply = async (reply) => {
     try {
       const response = await apiService.createNewReply(
         Cookies.get("token"),
         reply,
-        comment.data.id
+        commentid
       );
-      setErrorType("success");
-      setError(response.message);
+
+      setReplies([response.data,...replies])
+      successNotify(response.message);
     } catch (error) {
-      setErrorType("danger");
-      setError(error.response.data.message);
+      errorNotify(error.response.data.message);
       console.error("Error message:", error);
     }
   };
   useEffect(() => {
-    setReplies(data);
+    const fetchReplies = async () => {
+      try {
+          const response = await apiService.getReplies(commentid);
+          setReplies(response.data);
+          console.log("comments ", response.data);
+      } catch (error) {
+          console.log("Error fetching replies:", error);
+      }
+  };
+    fetchReplies();
   }, []);
-
+  useEffect(() => {
+    const fetchCommentUser = async () => {
+      try {  
+        const response = await apiService.getUserDetails(userid);
+        setCommentUser(response.data[0]);
+      } catch (error) {
+        console.log("Error fetching post user data:", error);
+      }
+    };
+    fetchCommentUser();
+  }, []);
   return (
     <>
       <div className="comment-card">
@@ -86,7 +71,7 @@ const Comment = (comment) => {
           <div className="comment-left">
             <div className="comment-avatar">
               <img
-                src={comment.data.url}
+                src={commentUser.url?commentUser.url:"https://picsum.photos/50/50"}
                 className="rounded-circle"
                 width="36"
                 alt="avatar"
@@ -96,7 +81,7 @@ const Comment = (comment) => {
           {}
           <div className="comment-mid">
             <div className="comment-username text-muted">
-              {comment.data.name}
+              {commentUser.firstName + " " +  commentUser.lastName}
             </div>
             {comment.data.isDeleted ? (
               <>
@@ -106,7 +91,7 @@ const Comment = (comment) => {
               </>
             ) : (
               <>
-                <div className="comment-body">{comment.data.body}</div>
+                <div className="comment-body">{comment.data.data}</div>
                 <div className="comment-footer">
                   {Cookies.get("user") && (
                     <div
@@ -119,7 +104,7 @@ const Comment = (comment) => {
                     </div>
                   )}
                   {Cookies.get("user") &&
-                    Cookies.get("user") === comment.data.username && (
+                    Cookies.get("user") === commentUser.username && (
                       <div className="comment-footer-link close-write-comment">
                         delete
                       </div>
@@ -167,21 +152,6 @@ const Comment = (comment) => {
           )}
         </div>
 
-        {error && (
-          <Alert
-            variant={errorType}
-            onClose={() => {
-              setError("");
-              setErrorType("");
-            }}
-            dismissible
-          >
-            <Alert.Heading>
-              {errorType === "danger" ? "Failed" : "Success"}
-            </Alert.Heading>
-            <p>{error}</p>
-          </Alert>
-        )}
         {replyForm && (
           <CommentForm
             submitLabel="Reply"
@@ -191,14 +161,19 @@ const Comment = (comment) => {
           />
         )}
         <div className="comment-replies">
-          <div className="more-replies text-muted">
-            View {` ${10} `} more replies
+          {
+            !showReplies&& <div className="more-replies text-muted" onClick={handleShowReplies}>
+            View {` ${replies.length} `} more replies
           </div>
-          <div className="replies">
-            {replies.map((reply) => {
+          }
+          {
+            showReplies && <div className="replies">
+            {replies && replies.map((reply) => {
               return <Reply data={reply} />;
             })}
           </div>
+          }
+          
         </div>
       </div>
     </>

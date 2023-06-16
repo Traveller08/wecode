@@ -28,7 +28,8 @@ const createUsers = () => {
         username VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
         codeforcesHandle VARCHAR(255),
-        usertype VARCHAR(255) NOT NULL
+        usertype VARCHAR(255) NOT NULL,
+        photourl VARCHAR(255) 
       )`;
 };
 
@@ -76,6 +77,7 @@ const insertIntoComments = (commentid, postid) => {
 const createCommentDetails = () => {
   return `CREATE TABLE IF NOT EXISTS commentDetails (
          commentid VARCHAR(255) primary key NOT NULL,
+         userid INT NOT NULL,
          data VARCHAR(5000) NOT NULL,
          createdtime BIGINT NOT NULL,
          likes INT,
@@ -83,11 +85,11 @@ const createCommentDetails = () => {
          isdeleted INT
        )`;
 };
-const insertIntoCommentDetails = (commentid, data, createdtime) => {
+const insertIntoCommentDetails = (userid , commentid, data, createdtime) => {
   return `INSERT INTO commentDetails
-    (commentid, data, createdtime, likes, dislikes, isdeleted) 
+    (userid, commentid, data, createdtime, likes, dislikes, isdeleted) 
     VALUES 
-    ('${commentid}', '${data}', '${createdtime}', ${0}, ${0} , ${0})`;
+    (${userid} ,'${commentid}', '${data}', '${createdtime}', ${0}, ${0} , ${0})`;
 };
 const createReplies = () => {
   return `CREATE TABLE IF NOT EXISTS replies (
@@ -104,6 +106,7 @@ const insertIntoReplies = (replyid, commentid) => {
 };
 const createReplyDetails = () => {
   return `CREATE TABLE IF NOT EXISTS replyDetails (
+         userid INT NOT NULL,
          replyid VARCHAR(255) primary key NOT NULL,
          data VARCHAR(5000) NOT NULL,
          createdtime BIGINT NOT NULL,
@@ -112,22 +115,42 @@ const createReplyDetails = () => {
          isdeleted INT
        )`;
 };
-const insertIntoReplyDetails = (replyid, data, createdtime) => {
+const insertIntoReplyDetails = (userid, replyid, data, createdtime) => {
   return `INSERT INTO replyDetails
-    (replyid, data, createdtime, likes, dislikes, isdeleted) 
+    (userid ,replyid, data, createdtime, likes, dislikes, isdeleted) 
     VALUES 
-    ('${replyid}', '${data}', '${createdtime}', ${0}, ${0} , ${0})`;
+    (${userid}, '${replyid}', '${data}', '${createdtime}', ${0}, ${0} , ${0})`;
 };
 
 const getPostsData = () =>{
-  return 
-  `
-    SELECT * FROM postDetails
-  `;
-  // SELECT * FROM postDetails WHERE postid IN(
+  return 'SELECT * FROM postDetails ORDER BY createdtime DESC'
+};
+
+const getCommentsData = (postid) =>{
+  return `SELECT * FROM commentDetails WHERE commentid IN (
+    SELECT commentid FROM comments WHERE postid='${postid}'
+  ) ORDER BY createdtime DESC`
+};
+
+const getRepliesData = (commentid) =>{
+  return `SELECT * FROM replyDetails WHERE replyid IN (
+    SELECT replyid FROM replies WHERE commentid='${commentid}'
+  ) ORDER BY createdtime DESC`
+};
+
+const getPostuser = (postid) =>{
+  return `SELECT username, firstName, lastName, photourl FROM users WHERE id in (
+    SELECT userid FROM posts WHERE postid='${postid}'
+  )`
+};
+const getUserDetails = (userid) =>{
+  return `SELECT username, firstName, lastName, photourl FROM users WHERE id ='${userid}'`
+};
+
+// SELECT * FROM postDetails WHERE postid IN(
   //   SELECT postid FROM posts WHERE userid=${userid}
   // )
-}
+  
 export {
   db,
   createUsers,
@@ -144,5 +167,9 @@ export {
   insertIntoPosts,
   insertIntoComments,
   insertIntoReplies,
-  getPostsData
+  getPostsData,
+  getPostuser,
+  getCommentsData,
+  getUserDetails,
+  getRepliesData
 };

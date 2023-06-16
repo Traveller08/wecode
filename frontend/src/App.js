@@ -6,8 +6,8 @@ import HomePage from "./components/homepage/Homepage";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import Register from "./components/register/Register";
-
-const  App = () =>{
+import { Toaster } from "react-hot-toast";
+const App = () => {
   const [user, setUser] = useState(false);
   const [usertype, setUsertype] = useState("Learner");
   useEffect(() => {
@@ -70,8 +70,33 @@ const  App = () =>{
           />
         </Routes>
       </div>
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+
+          // Default options for specific types
+          success: {
+            duration: 3000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+        }}
+      />
     </Router>
   );
-}
+};
 
 export default App;

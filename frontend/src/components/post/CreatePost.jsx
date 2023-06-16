@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Alert from "react-bootstrap/Alert";
-import apiService from '../../services/apiService';
-import Cookies from "js-cookie";
 const CreatePost = (props) => {
   const [postText, setPostText] = useState("");
-  const [error, setError] = useState("");
-  const [errorType, setErrorType] = useState("");
   const [waiting, setWaiting] = useState(false);
 
   const handleTextChange = (e) =>{
@@ -18,31 +13,14 @@ const CreatePost = (props) => {
   const handleCreatePost = async(e) =>{
     e.preventDefault();
     setWaiting(true);
-    try{
-      const response = await apiService.createNewPost(Cookies.get('token'),postText);
-      setErrorType("success");
-      setError(response.message);
-    }catch(error){
-      setErrorType("danger");
-      setError(error.response.data.message);
-      console.error("Error message:", error);
-    }finally{
-      setWaiting(false);
-    }
+    await props.handleSubmit(postText);
+    setWaiting(false);
+    setPostText("");
   }
   return (
     <>
       <div className="card gedf-card">
-      {
-        error && 
-        <Alert variant={errorType} onClose={() => {setError(""); setErrorType("");}} dismissible>
-        <Alert.Heading>{errorType==="danger"?"Failed":"Success"}</Alert.Heading>
-        <p>
-          {error}
-        </p>
-      </Alert>
-
-      }
+    
         <div className="card-header">
           <ul
             className="nav nav-tabs card-header-tabs"
@@ -91,6 +69,9 @@ const CreatePost = (props) => {
               </button>
             
               <button type="submit" className="btn btn-primary" onClick={handleCreatePost}>
+                {
+                  waiting &&  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                }
                 {
                   waiting?"posting...":"post"
                 }

@@ -8,6 +8,9 @@ import Alert from 'react-bootstrap/Alert';
 import PropTypes from 'prop-types';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";
+const successNotify=(message) =>toast.success(message);
+const errorNotify = (message) => toast.error(message);
 const Login=(props)=> {
 
   const [userdetails, setUserdetails] = useState({
@@ -16,8 +19,7 @@ const Login=(props)=> {
     usertype:""
   });
 
-  const [error, setError] = useState("");
-  const [errorType, setErrorType] = useState("");
+
   const [waiting, setWaiting] = useState(false);
   const navigate = useNavigate();
 
@@ -36,18 +38,14 @@ const Login=(props)=> {
     setWaiting(true);
     try {
       const response = await apiService.login(userdetails);
-      setErrorType("success");
-      setError(response.message);
-
+      successNotify(response.message);
       const { token } = response;
       Cookies.set('token', token, { expires: 1/48 });
       Cookies.set('user', userdetails.username, { expires: 1/48 });
       props.setuser(true);
       navigate('/');
     } catch (error) {
-      setErrorType("danger");
-      setError(error.response.data.message);
-
+      errorNotify(error.response.data.message);
       console.error("Error message:", error);
     } finally {
       setWaiting(false);
@@ -67,16 +65,6 @@ const Login=(props)=> {
               Login as {props.usertype}
               </h2>
         </div>
-      {
-        error && 
-        <Alert variant={errorType} onClose={() => {setError(""); setErrorType("");}} dismissible>
-        <Alert.Heading>{errorType==="danger"?"Failed":"Success"}</Alert.Heading>
-        <p>
-          {error}
-        </p>
-      </Alert>
-
-      }
       
         <form onSubmit={handleSubmit}>
           <div className="form-group row">
@@ -119,6 +107,9 @@ const Login=(props)=> {
           <div className="form-group row">
             <div className="col-sm btn-container">
               <button type="submit" className="btn btn-primary">
+                {
+                  waiting &&  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                }
                 {
                   waiting?"please wait...":"Login"
                 }

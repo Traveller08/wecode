@@ -9,6 +9,8 @@ const CommentForm = (props) => {
     setWaiting(true);
     await props.handleSubmit(text,props.commentid);
     setWaiting(false);
+    setText("");
+    props.handleClose(false);
   };
   const handleCloseForm = (e) => {
     e.preventDefault();
@@ -42,7 +44,9 @@ const CommentForm = (props) => {
               className="btn btn-primary"
               disabled={text.length === 0 || waiting}
               onClick={handleCreateComment}
-            >
+            >{
+              waiting &&  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
               {waiting ? props.submitLabel + "ing..." : props.submitLabel}
             </button>
             {props.hasCancelButton && (
