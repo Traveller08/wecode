@@ -19,10 +19,12 @@ const Comments = (props) => {
       try {
           const response = await apiService.getComments(postid);
           setComments(response.data);
-
+         
           console.log("comments ", response.data);
       } catch (error) {
           console.log("Error fetching comments:", error);
+      }finally{
+        props.setcnt(comments.length);
       }
   };
     fetchComments();
@@ -58,7 +60,10 @@ const Comments = (props) => {
     <div className="comments">
       <div className="comments-header">
         <div className="comments-left-header">
-          Comments {`( ${comments.length} )`}
+          Comments {`( ${comments.length} )` }
+          {
+            props.setcnt(comments.length)
+          }
         </div>
         <div className={`comments-right-header ${showCommentForm?"close-write-comment":"open-write-comment"}`} onClick={handleCommentForm}>
           {showCommentForm ? "Close" : "write comment"}

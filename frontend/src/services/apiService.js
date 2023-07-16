@@ -1,6 +1,6 @@
 import axios from 'axios';
-
-const baseURL = 'http://localhost:5000/api'; // Replace with your backend API URL
+import qs from "qs";
+const baseURL = 'http://localhost:5001/api'; // Replace with your backend API URL
 
 const api = axios.create({
   baseURL,
@@ -98,7 +98,29 @@ const login = async (userdetails) => {
     return response.data;
 };
 
-
+const getProblems = async(tags,from, to) =>{
+  const response = await api.get('/codeforces/problems', {
+    params:{tags:tags,from:from,to:to},
+    paramsSerializer: function(params) {
+      return qs.stringify(params, {arrayFormat: 'repeat'})
+   },
+});
+ console.log(response.data)
+return response.data;
+}
+const getContests = async(contestType) =>{
+  const response = await api.get('/codeforces/contests', {
+    params:{contestType:contestType}
+});
+console.log(response.data)
+return response.data;
+}
+const getContestProblems = async(contestId,cf_username) =>{
+  const response = await api.get('codeforces/contest/problems',{
+    params:{contestId:contestId,cf_username:cf_username}
+  });
+  return response.data;
+}
 const apiService = {
   setAuthToken,
   register,
@@ -111,8 +133,10 @@ const apiService = {
   getComments,
   getPostUser,
   getUserDetails,
-  getReplies
-
+  getReplies,
+  getProblems,
+  getContests,
+  getContestProblems
 };
 
 export default apiService;

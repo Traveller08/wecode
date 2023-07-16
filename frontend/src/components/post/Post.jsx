@@ -3,11 +3,12 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Comments from "../comments/Comments";
 import Cookies from "js-cookie";
 import apiService from "../../services/apiService";
+import Badge from "react-bootstrap/Badge";
 const Post = (props) => {
   const [showComments, setShowComments] = useState(false);
   const [postRxn, setPostRxn] = useState("");
   const [postuserDetails, setPostuserDetails] = useState({});
-  const [comments, setComments] = useState([]);
+  const [commentsCount, setCommentsCount]=useState(0);
   const postid = props.postid;
   const getTime = (time) => {
     const t_esc = Date.now() - time;
@@ -128,6 +129,7 @@ const Post = (props) => {
                     }
                   }}
                 ></i>
+               
                 {!showComments ? (
                   <>
                     <i
@@ -137,7 +139,9 @@ const Post = (props) => {
                         transform: "rotate(360deg) scaleX(-1)",
                       }}
                       onClick={handleComments}
-                    ></i>
+                    >
+                    </i>
+                       {/* <Badge  bg="primary">{commentsCount}</Badge> */}
                   </>
                 ) : (
                   <>
@@ -148,7 +152,9 @@ const Post = (props) => {
                         transform: "rotate(360deg) scaleX(-1)",
                       }}
                       onClick={handleComments}
-                    ></i>
+                    >
+                    </i>
+                       {/* <Badge  bg="primary">{commentsCount}</Badge> */}
                   </>
                 )}
 
@@ -165,7 +171,7 @@ const Post = (props) => {
               </div>
             </div>
           </div>
-          {showComments &&  <Comments postid={postid} /> }
+          {showComments &&  <Comments setcnt={setCommentsCount} postid={postid} /> }
         </div>
       }
     </>

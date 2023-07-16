@@ -7,7 +7,10 @@ import user from "./Routes/user.js";
 import post from "./Routes/post.js";
 import comment from "./Routes/comment.js";
 import reply from "./Routes/reply.js";
+import codeforces from "./Routes/codeforces.js";
 import mysql2 from "mysql2";
+import axios from "axios";
+import {initCF} from "./Routes/codeforces.js";
 import {
   db,
   createUsers,
@@ -24,6 +27,8 @@ app.use("/api/user/", user);
 app.use("/api/post/", post);
 app.use("/api/comment/", comment);
 app.use("/api/reply/", reply);
+app.use("/api/codeforces/", codeforces);
+
 
 const intiDB = async () => {
     try{
@@ -56,7 +61,12 @@ const intiDB = async () => {
     }
 
 };
-app.listen(5000, async () => {
+
+
+app.listen(5001, async () => {
     await intiDB();
-    console.log("app listening on port 5000");
+    initCF();
+    console.log("app listening on port 5001");
 });
+
+

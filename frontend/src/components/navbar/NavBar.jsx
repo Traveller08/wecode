@@ -30,13 +30,10 @@ const NavBar = (props) => {
     navigate('/');
     // navigate('/');
 };
-  const handleContent =(e) =>{
-    e.preventDefault();
-    props.setmaincontent(e.target.name);
-  }
+
   return (
     <>
-      <Navbar key="lg" bg="light" expand="lg" className="mb-3">
+      <Navbar key="lg"  expand="lg" className="mb-3 nav" style={{padding:"15px 30px"}}>
         <Container fluid>
           <Navbar.Brand href="#">wecode</Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
@@ -58,8 +55,8 @@ const NavBar = (props) => {
                   align={{lg:"end"}}
                   id={`offcanvasNavbarDropdown-expand-lg`}
                 >
-                  <NavDropdown.Item name="blogs" onClick={handleContent}>Blogs</NavDropdown.Item>
-                  <NavDropdown.Item name="tutorials" onClick={handleContent}>Tutorials</NavDropdown.Item>
+                  <NavDropdown.Item name="blogs" href="/learn/blogs">Blogs</NavDropdown.Item>
+                  <NavDropdown.Item name="tutorials" href="learn/tutorials">Tutorials</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item href="#action5">
                     Something else here
@@ -71,19 +68,19 @@ const NavBar = (props) => {
                   id={`offcanvasNavbarDropdown-expand-lg`}
                   align={{lg:"end"}}
                 >
-                  <NavDropdown.Item name="problems" onClick={handleContent}>Problems</NavDropdown.Item>
-                  <NavDropdown.Item name="contests" onClick={handleContent}>Contests</NavDropdown.Item>
+                  <NavDropdown.Item name="problems" href="/practice/problems">Problems</NavDropdown.Item>
+                  <NavDropdown.Item name="contests" href="/practice/contests">Contests</NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item name="problemSheets" onClick={handleContent}>
+                  <NavDropdown.Item name="problemSheets" href="/practice/problemsheets">
                     Problem sheets
                   </NavDropdown.Item>
-                  <NavDropdown.Item name="companyWiseProblems" onClick={handleContent}>
+                  <NavDropdown.Item name="companyWiseProblems" href="/practice/companywise/problems">
                     Company-wise Problems
                   </NavDropdown.Item>
                 </NavDropdown>
-                {props.user && <Nav.Link name="visualizer" onClick={handleContent}>Visualizer</Nav.Link>}
+                {props.user && <Nav.Link name="visualizer" href="/visualizer">Visualizer</Nav.Link>}
                 {props.user && (
-                  <Nav.Link name="discuss" onClick={handleContent}>Discuss</Nav.Link>
+                  <Nav.Link name="discuss" href="/discuss">Discuss</Nav.Link>
                 )}
                 {
                   props.user && props.usertype==="Educator" &&  <Nav.Link href="#action2">Add resources</Nav.Link>
@@ -105,16 +102,16 @@ const NavBar = (props) => {
                     align={{lg:"end"}}
 
                   >
-                    <NavDropdown.Item name="account" onClick={handleContent}>Account</NavDropdown.Item>
-                    <NavDropdown.Item name="profile" onClick={handleContent}>
+                    <NavDropdown.Item name="account" href="/account">Account</NavDropdown.Item>
+                    <NavDropdown.Item name="profile" href="/edit/profile">
                       Edit profile
                     </NavDropdown.Item>
-                    <NavDropdown.Item name="reportBug" onClick={handleContent} >
+                    <NavDropdown.Item name="reportBug" href="/report/bug" >
                       Report a bug
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item >
-                    <Button variant="outline-success" onClick={handleLogout}>
+                    <Button variant="outline-success" href={handleLogout}>
                       Logout
                       </Button>
                     </NavDropdown.Item>
