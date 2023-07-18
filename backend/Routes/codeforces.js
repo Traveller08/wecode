@@ -125,6 +125,7 @@ router.get("/contests", async (req, res) => {
 router.get("/contest/problems", async (req, res) => {
     let {contestId, cf_username}= req.query;
     // console.log(req.query)
+    cf_username="voyager_08"
     try {
         // console.log(`/contest.standings?contestId=${contestId}&from=1&count=1`);
         const response = await cfapi.get(`/contest.standings?contestId=${contestId}&from=1&count=1`);

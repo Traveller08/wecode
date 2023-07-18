@@ -38,6 +38,24 @@ const getPosts = async () => {
     const response = await api.get('/post/all');
     return response.data;
 };
+const getQuestions = async (token) => {
+  if(token){
+      setAuthToken(token);
+      const response = await api.get('/question/all');
+      return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+};
+
+const askNewQuestion = async(token, data) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.post('/question/ask',{data});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
+
 
 const getComments = async (postid) => {
   setAuthToken(postid);
@@ -136,7 +154,9 @@ const apiService = {
   getReplies,
   getProblems,
   getContests,
-  getContestProblems
+  getContestProblems,
+  getQuestions,
+  askNewQuestion
 };
 
 export default apiService;

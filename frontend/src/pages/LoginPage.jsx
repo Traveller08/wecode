@@ -7,8 +7,8 @@ const LoginPage = (props) => {
       <Login
         user={props.user}
         usertype={props.usertype}
-        setuser={props.handleUser}
-        setusertype={props.handleUserType}
+        setuser={props.setuser}
+        setusertype={props.setusertype}
       />
     </>
   );

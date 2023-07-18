@@ -25,7 +25,9 @@ const errorNotify = (message) => toast.error(message);
 // ];
 export default function Feed(props) {
   const [posts, setPosts] = useState([{}]);
+  const [questions, setQuestions]= useState([{}]);
   const [fetched, setFetched] = useState(false);
+  const [active, setActive] = useState("posts");
  
   useEffect(() => {
     const fetchPosts = async () => {
@@ -40,6 +42,19 @@ export default function Feed(props) {
     fetchPosts();
     setFetched(true);
   }, []);
+  useEffect(() => {
+  const fetchQuestions = async () => {
+    try {
+      const response = await apiService.getQuestions();
+      setQuestions(response.data);
+      // console.log("posts in feeed", response.data);
+    } catch (error) {
+      console.log("Error fetching posts:", error);
+    }
+  };
+  fetchQuestions();
+  setFetched(true);
+}, []);
   const createPost = async (text) => {
     try {
       const response = await apiService.createNewPost(
@@ -54,12 +69,26 @@ export default function Feed(props) {
       console.error("Error message:", error);
     }
   };
+  const askQuestion = async (text) => {
+    try {
+      const response = await apiService.askNewQuestion(
+        Cookies.get("token"),
+        text
+      );
+    
+      successNotify("post created successfully");
+      setQuestions([response.data,...questions]);
+    } catch (error) {
+      errorNotify(error.response.data.message);
+      console.error("Error message:", error);
+    }
+  };
   return (
     <>
       <div>
-        {props.user && <CreatePost handleSubmit={createPost} />}
+        {props.user && <CreatePost handleSubmit={createPost} user={props.user}  active={active} setactive={setActive}/>}
 
-        {posts.map((post) => {
+        {active==="posts" && posts.map((post) => {
           return (
             <>
               {post.postid && (
@@ -70,6 +99,21 @@ export default function Feed(props) {
                   likes={post.likes}
                   dislikes={post.dislikes}
                   onsubmit={createPost}
+                />
+              )}
+            </>
+          );
+        })}
+        {active==="ask" && questions.map((question) => {
+          return (
+            <>
+              {question.questionid && (
+                <Post
+                  postid={`${question.questionid}`}
+                  createdtime={question.createdtime}
+                  data={question.data}
+                  onsubmit={askQuestion}
+                  post={false}
                 />
               )}
             </>
