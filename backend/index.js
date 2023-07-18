@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 import user from "./Routes/user.js";
 import post from "./Routes/post.js";
 import comment from "./Routes/comment.js";
