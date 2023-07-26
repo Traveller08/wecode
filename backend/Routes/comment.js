@@ -1,14 +1,31 @@
 import express from "express";
 const router = express.Router();
 import mysql2 from "mysql2";
+
 import {
   db,
-  insertIntoComments,
-  insertIntoCommentDetails,
+  // insertIntoComments,
+  // insertIntoCommentDetails,
+  insertIntoCommentTable,
   getCommentsData,
 } from "../util/db.js";
+
 import { generateId } from "../util/id.js";
 import { verifyJwtToken } from "../middleware/verify_jwt_token.js";
+
+
+const getCommentUserDetails = async (userid, connection) => {
+  try {
+    const [userdetails] = await connection
+      .promise()
+      .query(`SELECT username, firstName, lastName, photourl FROM users WHERE id='${userid}'`);
+    return userdetails[0];
+  } catch (error) {
+    console.log("Error fetching user details:", error);
+    return null;
+  }
+};
+
 
 router.post("/create", verifyJwtToken, async (req, res) => {
   const { data, parentid } = req.body;
@@ -28,24 +45,39 @@ router.post("/create", verifyJwtToken, async (req, res) => {
         const commentid = generateId();
         console.log(data, parentid, timestamp, username, usertype, commentid);
         
+        // await connection
+        //   .promise()
+        //   .query(insertIntoComments(commentid, parentid));
+        // connection.commit();
+
+        // await connection
+        //   .promise()
+        //   .query(insertIntoCommentDetails(userid, commentid, data, timestamp));
+        // connection.commit();
         await connection
           .promise()
-          .query(insertIntoComments(commentid, parentid));
+          .query(insertIntoCommentTable(commentid, parentid, userid, data, timestamp));
         connection.commit();
 
-
-        await connection
-          .promise()
-          .query(insertIntoCommentDetails(userid, commentid, data, timestamp));
-        connection.commit();
-
+        // const [comment] = await connection
+        //   .promise()
+        //   .query(`SELECT * FROM commentDetails WHERE commentid='${commentid}'`);
         const [comment] = await connection
           .promise()
-          .query(`SELECT * FROM commentDetails WHERE commentid='${commentid}'`);
+          .query(`SELECT * FROM commentTable WHERE commentid='${commentid}'`);
+        
+        
+        const userdetails = await getCommentUserDetails(userid, connection);
+
+        const combinedObj = {
+          ...comment[0],
+          ...userdetails,
+        };
 
         return res
           .status(200)
-          .json({ message: "comment created", data: comment[0] });
+          // .json({ message: "comment created", data: comment[0] });
+          .json({ message: "comment created", data: combinedObj });
       }
       return res.status(500).json({ message: "internal server error" });
     } 
@@ -62,6 +94,7 @@ router.post("/create", verifyJwtToken, async (req, res) => {
   
 });
 
+
 router.get("/all", async (req, res) => {
   try {
     const postid = req.query.postid;
@@ -77,9 +110,18 @@ router.get("/all", async (req, res) => {
 
       console.log("get all comments of ", postid, "comments ", comments);
 
+      const commentsWithUsers = await Promise.all(comments.map(async (comment) => {
+        const userdetails = await getCommentUserDetails(comment.userid, connection);
+        return {
+          ...comment,
+          ...userdetails,
+        };
+      }));
+
       return res
         .status(200)
-        .json({ message: "comments fetched successfully", data: comments });
+        // .json({ message: "comments fetched successfully", data: comments });
+        .json({ message: "comments fetched successfully", data: commentsWithUsers });
     } 
     catch (error) {
       return res.status(500).json({ message: "internal server error" });
