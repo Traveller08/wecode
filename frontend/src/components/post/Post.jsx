@@ -4,12 +4,17 @@ import Comments from "../comments/Comments";
 import Cookies from "js-cookie";
 import apiService from "../../services/apiService";
 import Badge from "react-bootstrap/Badge";
+
 const Post = (props) => {
+
   const [showComments, setShowComments] = useState(false);
   const [postRxn, setPostRxn] = useState("");
-  const [postuserDetails, setPostuserDetails] = useState({});
+  
+  // const [postuserDetails, setPostuserDetails] = useState({});
+
   const [commentsCount, setCommentsCount]=useState(0);
   const postid = props.postid;
+
   const getTime = (time) => {
     const t_esc = Date.now() - time;
     let mins = t_esc / 36000;
@@ -22,55 +27,72 @@ const Post = (props) => {
     hrs = hrs % 24;
     return `${days} d ${hrs} h ${mins} min ago`;
   };
+
   const handleComments = async (e) => {
     if (showComments) {
       setShowComments(false);
-    } else {
+    } 
+    else {
       setShowComments(true);
     }
   };
   
 
-  useEffect(() => {
-    const fetchPostUser = async () => {
-      try {
+  // useEffect(() => {
+    
+  //   const fetchPostUser = async () => {
+  //     try {
       
-        const response = await apiService.getPostUser(postid);
-        setPostuserDetails(response.data[0]);
+  //       const response = await apiService.getPostUser(postid);
+  //       setPostuserDetails(response.data[0]);
         
-      } catch (error) {
-        console.log("Error fetching post user data:", error);
-      }
-    };
-    fetchPostUser();
-  }, []);
+  //     } 
+  //     catch (error) {
+  //       console.log("Error fetching post user data:", error);
+  //     }
+  //   };
+
+  //   fetchPostUser();
+
+  // }, []);
   
   return (
     <>
       {
-        postuserDetails  && postuserDetails.username &&
+        // postuserDetails  && postuserDetails.username &&
         <div className="gedf-card">
           <div className="card">
             <div className="card-header">
               <div className="d-flex justify-content-between align-items-center">
                 <div className="d-flex justify-content-between align-items-center">
+                  
                   <div className="mr-2">
                     <img
                       className="rounded-circle"
                       width="45"
-                      src={postuserDetails.url?postuserDetails.url:"https://picsum.photos/50/50"}
+                      src={props.photourl ? props.photourl : "https://picsum.photos/50/50"}
                       alt="user"
-                    />
+                    /> 
                   </div>
+
                   <div className="ml-2">
-                    <div className="h6 m-0">{postuserDetails.username}</div>
+
+                    {/* <div className="h6 m-0">{postuserDetails.username}</div> */}
+                    <div className="h6 m-0"> {props.username} </div>
+
                     <div
                       className="h7 text-muted"
                       style={{ textAlign: "left" }}
                     >
-                      {postuserDetails.firstName +
+                      {/* {postuserDetails.firstName +
                         " " +
-                        postuserDetails.lastName}
+                        postuserDetails.lastName} */}
+                        {/* "Custom Name" */}
+                        
+                        {props.firstName +
+                        " " +
+                        props.lastName}
+
                     </div>
                   </div>
                 </div>

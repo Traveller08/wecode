@@ -2,8 +2,10 @@ import { useState } from "react";
 import "./comments.css";
 
 const CommentForm = (props) => {
+
   const [text, setText] = useState("");
   const [waiting, setWaiting] = useState(false);
+  
   const handleCreateComment = async (e) => {
     e.preventDefault();
     setWaiting(true);
@@ -12,10 +14,12 @@ const CommentForm = (props) => {
     setText("");
     props.handleClose(false);
   };
+
   const handleCloseForm = (e) => {
     e.preventDefault();
     props.handleClose(false);
   };
+  
   return (
     <>
       <div className="comment-form-container mt-2">

@@ -5,7 +5,8 @@ import Cookies from "js-cookie";
 import Reply from "./Reply";
 import apiService from "../../services/apiService";
 import toast from "react-hot-toast";
-const successNotify=(message) =>toast.success(message);
+
+const successNotify=(message) => toast.success(message);
 const errorNotify = (message) => toast.error(message);
 
 
@@ -13,15 +14,20 @@ const Comment = (comment) => {
   const [commentRxn, setCommentRxn] = useState("");
   const [replies, setReplies] = useState([]);
   const [replyForm, setReplyForm] = useState(false);
+
   const [commentUser, setCommentUser] = useState({});
+  
   const userid = comment.data.userid;
   const commentid = comment.data.commentid;
+
   const [showReplies, setShowReplies] = useState(false);
   // const isDeleted = comment.isDeleted;
+
   const handleFormClose = (e) => {
     // e.preventDefault();
     setReplyForm(false);
   };
+
   const handleShowReplies = () =>{
     setShowReplies(true);
   }
@@ -41,6 +47,7 @@ const Comment = (comment) => {
       console.error("Error message:", error);
     }
   };
+
   useEffect(() => {
     const fetchReplies = async () => {
       try {
@@ -53,6 +60,7 @@ const Comment = (comment) => {
   };
     fetchReplies();
   }, []);
+
   useEffect(() => {
     const fetchCommentUser = async () => {
       try {  
@@ -64,6 +72,7 @@ const Comment = (comment) => {
     };
     fetchCommentUser();
   }, []);
+  
   return (
     <>
       <div className="comment-card">

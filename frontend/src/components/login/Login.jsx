@@ -27,11 +27,11 @@ const Login=(props)=> {
     const { name, value } = e.target;
     setUserdetails({ ...userdetails, [name]: value });
   };
-  useEffect(()=>{
-    
+  
+  useEffect(()=>{  
     setUserdetails({...userdetails,"usertype":props.usertype});
   },[]);
- 
+  
   const handleSubmit = async (e) => {
     // e.preventDefault();
     e.preventDefault();
@@ -44,10 +44,12 @@ const Login=(props)=> {
       Cookies.set('user', userdetails.username, { expires: 1/48 });
       props.setuser(true);
       navigate('/');
-    } catch (error) {
+    } 
+    catch (error) {
       errorNotify(error.response.data.message);
       console.error("Error message:", error);
-    } finally {
+    } 
+    finally {
       setWaiting(false);
       setUserdetails({
         username: "",
@@ -55,6 +57,7 @@ const Login=(props)=> {
         usertype:userdetails.usertype
       });
     }
+
   };
   return (
     <>

@@ -4,10 +4,13 @@ import apiService from "../../services/apiService";
 import "./index.css";
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
+
 import FormNavBar from "../navbar/FormNavbar";
 import toast from "react-hot-toast";
+
 const successNotify=(message) =>toast.success(message);
 const errorNotify = (message) => toast.error(message);
+
 function Register(props) {
   const [userdetails, setUserdetails] = useState({
     firstName: "",
@@ -17,6 +20,7 @@ function Register(props) {
     codeforcesHandle: "",
     usertype:""
   });
+
   const [confirmpassword, setConfirmpassword] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const [waiting, setWaiting] = useState(false);
@@ -24,17 +28,23 @@ function Register(props) {
   useEffect(()=>{
     setUserdetails({...userdetails,"usertype":props.usertype});
   },[]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserdetails({ ...userdetails, [name]: value });
   };
+  
   const handleConfirmPasswordChange = (e) => {
+    
     setConfirmpassword(e.target.value);
+
     if (e.target.value !== userdetails.password) {
       setPasswordMessage("passwords don't match");
-    }else{
+    }
+    else{
       setPasswordMessage("");
     }
+
   };
   
   const handleSubmit = async (e) => {
@@ -61,6 +71,7 @@ function Register(props) {
       setConfirmpassword("");
     }
   };
+  
   return (
     <>
       <FormNavBar />

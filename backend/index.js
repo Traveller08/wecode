@@ -7,29 +7,50 @@ app.use(express.json());
 
 import user from "./Routes/user.js";
 import post from "./Routes/post.js";
+
+import question from "./Routes/question.js";
+
 import comment from "./Routes/comment.js";
 import reply from "./Routes/reply.js";
 import codeforces from "./Routes/codeforces.js";
+
 import mysql2 from "mysql2";
 import axios from "axios";
+
 import {initCF} from "./Routes/codeforces.js";
+
 import {
   db,
   createUsers,
+  
+  // post 
   createPosts,
-  createComments,
-  createReplies,
-  createCommentDetails,
-  createReplyDetails,
   createPostDetails,
+
+  // post comments 
+  createComments,
+  createCommentDetails,
+
+  createReplies,
+  createReplyDetails,
+
+  
+  createQuestions,
+  createQuestionDetails,
+
 } from "./util/db.js";
 
 app.use("/api/user/", user);
+app.use("/api/codeforces/", codeforces);
 
 app.use("/api/post/", post);
 app.use("/api/comment/", comment);
 app.use("/api/reply/", reply);
-app.use("/api/codeforces/", codeforces);
+
+
+app.use("/api/question" , question) 
+// app.use("/api/question/comment/", questionComment);
+// app.use("/api/question/reply/", questionReply);
 
 
 const intiDB = async () => {
@@ -41,6 +62,7 @@ const intiDB = async () => {
     
         await connection.promise().query(createPosts());
         connection.commit();
+
         await connection.promise().query(createComments());
         connection.commit();
     
@@ -53,11 +75,20 @@ const intiDB = async () => {
         connection.commit();
         await connection.promise().query(createReplyDetails());
         connection.commit();
+
+        // Questions -----------------------------------
+        await connection.promise().query(createQuestions());
+        connection.commit();
+
+        await connection.promise().query(createQuestionDetails());
+        connection.commit();
+
        
         console.log("db initialised...");
 
 
-    }catch(error){
+    }
+    catch(error){
         console.log("database initialization failed...");
         console.log(error);
     }

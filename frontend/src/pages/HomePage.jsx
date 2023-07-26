@@ -1,6 +1,7 @@
 import React from "react";
 import HomePageCarousel from "../components/carousel/HomePageCarousel";
 import Feed from "../components/feed/Feed";
+
 const Homepage = (props) => {
   return (
     <>
@@ -9,7 +10,7 @@ const Homepage = (props) => {
         <div className="col-md-3"></div>
         <div className="col-md-6 gedf-main container">
           
-          <Feed user={props.user} />
+        <Feed user={props.user} />
         </div>
         <div className="col-md-3"></div>
       </div>

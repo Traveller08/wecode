@@ -9,14 +9,19 @@ import { useNavigate, Link } from 'react-router-dom';
 import Cookies from "js-cookie";
 import './Navbar.css';
 import toast from "react-hot-toast";
+
 const successNotify=(message) =>toast.success(message);
 const errorNotify = (message) => toast.error(message);
+
 const NavBar = (props) => {
+  
   const navigate = useNavigate();
+
   const handleLoginButtonClick = (e) =>{
     props.setusertype(e.target.name);
     navigate('/login')
   }
+
   const handleLogout = (e) => {
     // e.preventDefault();
     if (Cookies.get("token")) {
@@ -28,8 +33,7 @@ const NavBar = (props) => {
     successNotify("Logout successfull!");
     
     navigate('/');
-    // navigate('/');
-};
+  };
 
   return (
     <>

@@ -5,16 +5,19 @@ const baseURL = 'http://localhost:5001/api'; // Replace with your backend API UR
 const api = axios.create({
   baseURL,
 });
+
 const sessionAlert = () =>{
   alert("session expired login again to continue...");
   window.location.href='/';
 }
+
 // Set the token for authenticated requests
 const setAuthToken = (token) => {
   console.log("token in set auth  -> ", token);
   if (token) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
+  } 
+  else {
     delete api.defaults.headers.common['Authorization'];
     // sessionAlert();
   }
@@ -22,9 +25,10 @@ const setAuthToken = (token) => {
 
 // Register a new user
 const register = async (userdetails) => {
-  const response = await api.post('/user/register',userdetails);
+  const response = await api.post('/user/register', userdetails);
   return response.data;
 };
+
 const createNewPost = async(token, data) =>{
   if(token){
     setAuthToken(token);
@@ -38,23 +42,6 @@ const getPosts = async () => {
     const response = await api.get('/post/all');
     return response.data;
 };
-const getQuestions = async (token) => {
-  if(token){
-      setAuthToken(token);
-      const response = await api.get('/question/all');
-      return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-};
-
-const askNewQuestion = async(token, data) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.post('/question/ask',{data});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
 
 
 const getComments = async (postid) => {
@@ -63,6 +50,9 @@ const getComments = async (postid) => {
   console.log("post id ",postid , "comments in api service ",response.data);
   return response.data;
 };
+
+
+
 const getReplies = async (commentid) => {
   const response = await api.get('/reply/all',{params:{commentid:commentid}});
   return response.data;
@@ -139,6 +129,38 @@ const getContestProblems = async(contestId,cf_username) =>{
   });
   return response.data;
 }
+
+// ---------------------- Questions 
+
+// const getQuestions = async (token) => {
+//   if(token){
+//       setAuthToken(token);
+//       const response = await api.get('/question/all');
+//       return response.data;
+//   }
+//   return {status:"failed", data:{},message:"session expired"};
+// };
+
+const getQuestions = async () => {
+  const response = await api.get('/question/all');
+  return response.data;
+};
+
+const askNewQuestion = async(token, data) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.post('/question/ask',{data});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
+
+const getQuestionUser = async(questionid) =>{
+  const response = await api.get('/question/user', {params:{questionid:questionid}});
+  return response.data;
+}
+
+
 const apiService = {
   setAuthToken,
   register,
@@ -155,8 +177,12 @@ const apiService = {
   getProblems,
   getContests,
   getContestProblems,
+
+
   getQuestions,
-  askNewQuestion
+  askNewQuestion,
+  getQuestionUser,
+  
 };
 
 export default apiService;

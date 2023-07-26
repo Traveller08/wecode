@@ -27,22 +27,27 @@ import ContestsPage from "./pages/ContestsPage";
 const App = () => {
   const [user, setUser] = useState(false);
   const [usertype, setUsertype] = useState("Learner");
+  
   useEffect(() => {
     if (Cookies.get("token")) {
       setUser(true);
     }
   }, [user]);
+
   useEffect(() => {
     if (!Cookies.get("token")) {
       setUser(false);
     }
   }, []);
+
   const handleUser = (value) => {
     setUser(value);
   };
+
   const handleUserType = (value) => {
     setUsertype(value);
   };
+
 
   return (
     <Router>
@@ -60,6 +65,7 @@ const App = () => {
               />
             }
           />
+
           <Route
             exact
             path="/register"
@@ -102,10 +108,13 @@ const App = () => {
                   setusertype={setUsertype}
                   url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
                 />
+
                 <Problemspage user={user} usertype={usertype} />
+
               </>
             }
           />
+
         <Route
             exact
             path="/practice/contests"
@@ -122,13 +131,19 @@ const App = () => {
               </>
             }
           />
+  
         </Routes>
 
         
       </div>
+
+
       <NotificationToaster />
+
       <ChatBot />
+
       <WeCodeFooter />
+      
     </Router>
   );
 };

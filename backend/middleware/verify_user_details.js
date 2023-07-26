@@ -1,5 +1,6 @@
 // import validator from 'deep-email-validator';
 import {validate} from 'deep-email-validator';
+
 export const verifyUserDetails = async(req, res, next) => {
     const { firstName, lastName, username, password, codeforcesHandle, usertype } = req.body;
     console.log(req.body);

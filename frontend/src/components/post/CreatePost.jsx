@@ -1,22 +1,33 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 const CreatePost = (props) => {
+
   const [postText, setPostText] = useState("");
   const [waiting, setWaiting] = useState(false);
 
   const handleTextChange = (e) =>{
     setPostText(e.target.value);
   }
+
   const handleResetText = () =>{
     setPostText("");
   }
+
   const handleCreatePost = async(e) =>{
     e.preventDefault();
     setWaiting(true);
-    await props.handleSubmit(postText);
+    
+    if (props.active === "posts") {
+      await props.handleSubmitPost(postText);
+    }
+    else {
+      await props.handleSubmitQuestion(postText);
+    }
+
     setWaiting(false);
     setPostText("");
   }
+
   return (
     <>
       <div className="card gedf-card">

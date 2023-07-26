@@ -5,8 +5,10 @@ import "./comments.css";
 import apiService from "../../services/apiService";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+
 const successNotify=(message) =>toast.success(message);
 const errorNotify = (message) => toast.error(message);
+
 const Comments = (props) => {
   
   const [showCommentForm, setShowCommentForm] = useState(false);
@@ -14,28 +16,34 @@ const Comments = (props) => {
   
   const postid=props.postid;
   console.log("props of comments", props);
+
   useEffect(() => {
+
     const fetchComments = async () => {
       try {
           const response = await apiService.getComments(postid);
           setComments(response.data);
          
           console.log("comments ", response.data);
-      } catch (error) {
-          console.log("Error fetching comments:", error);
-      }finally{
-        props.setcnt(comments.length);
-      }
-  };
+        } 
+        catch (error) {
+            console.log("Error fetching comments:", error);
+        }
+        finally{
+          props.setcnt(comments.length);
+        }
+      };
+
     fetchComments();
+
   }, []);
 
-  
   
 
   const handleCommentForm = () => {
     setShowCommentForm(!showCommentForm);
   };
+
   const closeForm=()=>{
     setShowCommentForm(false);
   }
@@ -50,7 +58,9 @@ const Comments = (props) => {
     
       successNotify(response.message);
       setComments([response.data,...comments]);
-    } catch (error) {
+
+    } 
+    catch (error) {
       errorNotify(error.response.data.message);
       console.error("Error message:", error);
     } 
@@ -65,6 +75,7 @@ const Comments = (props) => {
             props.setcnt(comments.length)
           }
         </div>
+
         <div className={`comments-right-header ${showCommentForm?"close-write-comment":"open-write-comment"}`} onClick={handleCommentForm}>
           {showCommentForm ? "Close" : "write comment"}
         </div>
