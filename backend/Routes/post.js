@@ -4,11 +4,8 @@ const router = express.Router();
 import mysql2 from "mysql2";
 import {
   db,
-  // insertIntoPosts,
-  // insertIntoPostDetails,
   insertIntoPostTable,
   getPostsData,
-  // getPostuser,
 } from "../util/db.js";
 
 import { generateId } from "../util/id.js";
@@ -33,14 +30,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
         const userid = rows[0].id;
         const postid = generateId();
 
-        // await connection.promise().query(insertIntoPosts(postid, userid));
-        // connection.commit();
-        
-        // await connection
-        //   .promise()
-        //   .query(insertIntoPostDetails(postid, data, timestamp));
-        // connection.commit();
-
         await connection
           .promise()
           .query(insertIntoPostTable(postid, userid, data, timestamp));
@@ -55,10 +44,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
         
         try {
         
-          // const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id = (
-          //   SELECT userid FROM posts WHERE postid='${post[0].postid}'
-          // )`
-      
           const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id IN (
             SELECT userid FROM postTable WHERE postid='${postid}'
           )`;
@@ -66,8 +51,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
           const [userdetails] = await connection.promise().query(query);
           console.log(userdetails[0]);
           
-          // console.log(typeof userdetails[0]);
-
           const combinedObj = {
             ...post[0],
             ...userdetails[0]
@@ -76,7 +59,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
           
           return res
           .status(200)
-          // .json({ message: "post created successfully", data: post[0] });
           .json({ message: "post created successfully", data: combinedObj });
           
         }
@@ -85,7 +67,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
           return res.status(500).json({ message: "internal server error" });
         }
       
-        
       }
 
       return res.status(500).json({ message: "internal server error" });
@@ -113,28 +94,17 @@ router.get("/all", async (req, res) => {
       
       console.log( "posts ==> "  , posts)
 
-      // change this !! 
       const sendthis = []
-      // for (let post of posts) {
-      //   console.log("hey : " , post.postid)
-      // }
 
-      for (let post of posts) {
-        
+      for (let post of posts) {        
         try {
           
-          // const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id = (
-          //   SELECT userid FROM posts WHERE postid='${post.postid}'
-          // )`
           const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id IN (
             SELECT userid FROM postTable WHERE postid='${post.postid}'
           )`;
 
           const [userdetails] = await connection.promise().query(query);
-          // console.log(userdetails[0]);
           
-          // console.log(typeof userdetails[0]);
-
           const combinedObj = {
             ...post,
             ...userdetails[0]
@@ -143,8 +113,6 @@ router.get("/all", async (req, res) => {
           console.log(combinedObj)
 
           sendthis.push(combinedObj)
-
-          // const [rows] = await connection.promise().query(query);
         }
         catch(error) {
           console.log(error)
@@ -153,12 +121,10 @@ router.get("/all", async (req, res) => {
 
       }
 
-
       console.log("sendthis ==> " , sendthis)
       
       return res
         .status(200)
-        // .json({ message: "posts fetched successfully", data: posts });
         .json({ message: "posts fetched successfully", data: sendthis });
     } 
     catch (error) {
@@ -167,33 +133,11 @@ router.get("/all", async (req, res) => {
     finally {
       connection.close();
     }
-
   } 
 
   catch (error) {
     return res.status(500).json({ message: "internal server error" });
   }
 });
-
-// router.get("/user", async (req, res) => {
-//   console.log("here ");
-//   try {
-//     const postid = req.query.postid;
-//     const connection = await mysql2.createConnection(db);
-//     try {
-//       const [posts] = await connection.promise().query(getPostuser(postid));
-//       console.log("postid ->", postid, "posts ", posts);
-//       return res
-//         .status(200)
-//         .json({ message: "post user fetched successfully", data: posts });
-//     } catch (error) {
-//       return res.status(500).json({ message: "internal server error" });
-//     } finally {
-//       connection.close();
-//     }
-//   } catch (error) {
-//     return res.status(500).json({ message: "internal server error" });
-//   }
-// });
 
 export default router;

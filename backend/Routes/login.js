@@ -28,7 +28,6 @@ router.post('/', verifyLoginDetails, async (req, res) => {
       }
       return res.status(401).json({ message: 'invalid credentials' });
     } catch (error) {
-      // console.error('Error executing database query:', error);
       return res.status(500).json({ message: 'Internal server error' });
     }
   });

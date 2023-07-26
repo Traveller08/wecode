@@ -4,8 +4,6 @@ import mysql2 from "mysql2";
 
 import {
   db,
-  // insertIntoComments,
-  // insertIntoCommentDetails,
   insertIntoCommentTable,
   getCommentsData,
 } from "../util/db.js";
@@ -20,7 +18,8 @@ const getCommentUserDetails = async (userid, connection) => {
       .promise()
       .query(`SELECT username, firstName, lastName, photourl FROM users WHERE id='${userid}'`);
     return userdetails[0];
-  } catch (error) {
+  } 
+  catch (error) {
     console.log("Error fetching user details:", error);
     return null;
   }
@@ -45,28 +44,16 @@ router.post("/create", verifyJwtToken, async (req, res) => {
         const commentid = generateId();
         console.log(data, parentid, timestamp, username, usertype, commentid);
         
-        // await connection
-        //   .promise()
-        //   .query(insertIntoComments(commentid, parentid));
-        // connection.commit();
-
-        // await connection
-        //   .promise()
-        //   .query(insertIntoCommentDetails(userid, commentid, data, timestamp));
-        // connection.commit();
+  
         await connection
           .promise()
           .query(insertIntoCommentTable(commentid, parentid, userid, data, timestamp));
         connection.commit();
 
-        // const [comment] = await connection
-        //   .promise()
-        //   .query(`SELECT * FROM commentDetails WHERE commentid='${commentid}'`);
         const [comment] = await connection
           .promise()
           .query(`SELECT * FROM commentTable WHERE commentid='${commentid}'`);
-        
-        
+                
         const userdetails = await getCommentUserDetails(userid, connection);
 
         const combinedObj = {
@@ -76,7 +63,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
 
         return res
           .status(200)
-          // .json({ message: "comment created", data: comment[0] });
           .json({ message: "comment created", data: combinedObj });
       }
       return res.status(500).json({ message: "internal server error" });
@@ -120,7 +106,6 @@ router.get("/all", async (req, res) => {
 
       return res
         .status(200)
-        // .json({ message: "comments fetched successfully", data: comments });
         .json({ message: "comments fetched successfully", data: commentsWithUsers });
     } 
     catch (error) {

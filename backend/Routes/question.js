@@ -15,7 +15,7 @@ import { verifyJwtToken } from "../middleware/verify_jwt_token.js";
 router.post("/ask", verifyJwtToken, async (req, res) => {
   console.log("question request body ", req.body);
 
-  const { data } = req.body; // data => question string 
+  const { data } = req.body;
   const username = req.user;
   const usertype = req.usertype;
   const timestamp = Date.now();
@@ -32,13 +32,6 @@ router.post("/ask", verifyJwtToken, async (req, res) => {
         const userid = rows[0].id;
         const questionid = generateId();
 
-        // await connection.promise().query(insertIntoQuestions(questionid, userid));
-        // connection.commit();
-
-        // await connection
-        //   .promise()
-        //   .query(insertIntoQuestionDetails(questionid, data, timestamp));
-        // connection.commit();
         await connection
           .promise()
           .query(insertIntoQuestionTable(questionid, userid, data, timestamp));
@@ -46,23 +39,13 @@ router.post("/ask", verifyJwtToken, async (req, res) => {
 
         const [question] = await connection 
           .promise()
-          // .query(`SELECT * FROM questionDetails WHERE questionid='${questionid}'`);
           .query(`SELECT * FROM questionTable WHERE questionid='${questionid}'`);
 
         try {
     
-            // const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id = (
-            //     SELECT userid FROM questions WHERE questionid='${question[0].questionid}'
-            // )`
-            // const [userdetails] = await connection.promise().query(query);
-            // console.log(userdetails[0]);
-
             const [userdetails] = await connection
             .promise()
             .query(`SELECT username, firstName, lastName, photourl FROM users WHERE id = ${userid}`);
-
-            
-            // console.log(typeof userdetails[0]);
 
             const combinedObj = {
                 ...question[0],
@@ -81,7 +64,6 @@ router.post("/ask", verifyJwtToken, async (req, res) => {
             return res.status(500).json({ message: "internal server error" });
         }
         
-
       }
       return res.status(500).json({ message: "internal server error" });
     } 
@@ -115,18 +97,12 @@ router.get("/all", async (req, res) => {
         
         try {
           
-          // const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id = (
-          //   SELECT userid FROM questions WHERE questionid='${question.questionid}'
-          // )`
           const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id IN (
             SELECT userid FROM questionTable WHERE questionid='${question.questionid}'
           )`;
           
           const [userdetails] = await connection.promise().query(query);
-          // console.log(userdetails[0]);
           
-          // console.log(typeof userdetails[0]);
-
           const combinedObj = {
             ...question,
             ...userdetails[0]
@@ -136,7 +112,6 @@ router.get("/all", async (req, res) => {
 
           sendthis.push(combinedObj)
 
-          // const [rows] = await connection.promise().query(query);
         }
         catch(error) {
           console.log(error)
@@ -145,15 +120,11 @@ router.get("/all", async (req, res) => {
 
       }
 
-
       console.log("sendthis ==> " , sendthis)
       
-
       return res
         .status(200)
-        // .json({ message: "Questions fetched successfully", data: questions });
         .json({ message: "posts fetched successfully", data: sendthis });
-
     } 
     catch (error) {
       return res.status(500).json({ message: "internal server error" });
@@ -167,33 +138,5 @@ router.get("/all", async (req, res) => {
   }
 
 });
-
-
-// router.get("/user", async (req, res) => {
-//   console.log("here question user");
-
-//   try {
-//     const questionid = req.query.questionid;
-
-//     const connection = await mysql2.createConnection(db);
-    
-//     try {
-//       const [questions] = await connection.promise().query(getQuestionuser(questionid));
-//       console.log("questionid ->", questionid, "questions ", questions);
-
-//       return res
-//         .status(200)
-//         .json({ message: "question user fetched successfully", data: questions });
-//     } 
-//     catch (error) {
-//       return res.status(500).json({ message: "internal server error" });
-//     } 
-//     finally {
-//       connection.close();
-//     }
-//   } catch (error) {
-//     return res.status(500).json({ message: "internal server error" });
-//   }
-// });
 
 export default router;

@@ -3,8 +3,6 @@ const router = express.Router();
 import mysql2 from "mysql2";
 import {
   db,
-  // insertIntoReplies,
-  // insertIntoReplyDetails,
   insertIntoReplyTable,
   getRepliesData,
 } from "../util/db.js";
@@ -48,21 +46,9 @@ router.post("/create", verifyJwtToken, async (req, res) => {
 
         console.log(data, replyid, timestamp, username, usertype, parentid);
 
-        // await connection.promise().query(insertIntoReplies(replyid, parentid));
-        // connection.commit();
-        // await connection
-        //   .promise()
-        //   .query(insertIntoReplyDetails(userid, replyid, data, timestamp));
-        // connection.commit();
-
-        // const [reply] = await connection
-        //   .promise()
-        //   .query(`SELECT * FROM replyDetails WHERE replyid='${replyid}'`);
-
         await connection.promise().query(insertIntoReplyTable(replyid, parentid, userid, data, timestamp));
         connection.commit();
 
-        // to check whether reply stored properly we query it and return that only 
         const [reply] = await connection
           .promise()
           .query(`SELECT * FROM replyTable WHERE replyid='${replyid}'`);
@@ -76,7 +62,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
   
         return res
           .status(200)
-          // .json({ message: "reply created", data: reply[0] });
           .json({ message: "reply created", data: combinedObj });
       }
       return res.status(500).json({ message: "internal server error" });
@@ -110,7 +95,6 @@ router.get("/all", async (req, res) => {
 
       return res
         .status(200)
-        // .json({ message: "replies fetched successfully", data: replies });
         .json({ message: "replies fetched successfully", data: repliesWithUsers });
     } 
     catch (error) {

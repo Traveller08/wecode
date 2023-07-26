@@ -12,36 +12,16 @@ import comment from "./Routes/comment.js";
 import reply from "./Routes/reply.js";
 import codeforces from "./Routes/codeforces.js";
 import mysql2 from "mysql2";
-// import axios from "axios";
 
-import {initCF} from "./Routes/codeforces.js";
+import { initCF } from "./Routes/codeforces.js";
 
 import {
   db,
-
   createUsers,
-  
-  // post ==> 
-//   createPosts,
-//   createPostDetails,
-    createPostTable,
-
-  // post comments 
-//   createComments,
-//   createCommentDetails,
-    createCommentTable,
-
-  // post replies 
-//   createReplies,
-//   createReplyDetails,
-    createReplyTable,
-
-
-  // questions 
-  // createQuestions,
-  // createQuestionDetails,
+  createPostTable,
+  createCommentTable,
+  createReplyTable,
   createQuestionTable,
-
 } from "./util/db.js";
 
 app.use("/api/user/", user);
@@ -49,72 +29,40 @@ app.use("/api/codeforces/", codeforces);
 
 app.use("/api/post/", post);
 
-// post comment 
 app.use("/api/comment/", comment);
 
-// reply comment 
 app.use("/api/reply/", reply);
 
-
-app.use("/api/question" , question) 
-// app.use("/api/question/comment/", questionComment);
-// app.use("/api/question/reply/", questionReply);
-
+app.use("/api/question", question);
 
 const intiDB = async () => {
-    try{
+  try {
+    const connection = await mysql2.createConnection(db);
+    await connection.promise().query(createUsers());
+    connection.commit();
 
-        const connection = await mysql2.createConnection(db);
-        await connection.promise().query(createUsers());
-        connection.commit();
-        
-        // await connection.promise().query(createPosts());
-        // connection.commit();
-        // await connection.promise().query(createPostDetails());
-        // connection.commit();
-        await connection.promise().query(createPostTable());
-        connection.commit();
+    await connection.promise().query(createPostTable());
+    connection.commit();
 
+    await connection.promise().query(createCommentTable()); 
+    connection.commit();
 
-        // await connection.promise().query(createComments());
-        // connection.commit();
-        // await connection.promise().query(createCommentDetails());
-        // connection.commit();
-        await connection.promise().query(createCommentTable()); // Add this line
-        connection.commit();
-    
-    
-        // await connection.promise().query(createReplies());
-        // connection.commit();
-        // await connection.promise().query(createReplyDetails());
-        // connection.commit();
-        await connection.promise().query(createReplyTable());
-        connection.commit();
-    
+    await connection.promise().query(createReplyTable());
+    connection.commit();
 
-        // Questions -----------------------------------
-        // await connection.promise().query(createQuestions());
-        // connection.commit();
-        // await connection.promise().query(createQuestionDetails());
-        // connection.commit();
-        await connection.promise().query(createQuestionTable());
-        connection.commit();
-        
-        console.log("db initialised...");
+    await connection.promise().query(createQuestionTable());
+    connection.commit();
 
-    }
-    catch(error){
-        console.log("database initialization failed...");
-        console.log(error);
-    }
-
+    console.log("db initialised...");
+  } 
+  catch (error) {
+    console.log("database initialization failed...");
+    console.log(error);
+  }
 };
 
-
 app.listen(5001, async () => {
-    await intiDB();
-    initCF();
-    console.log("app listening on port 5001");
+  await intiDB();
+  initCF();
+  console.log("app listening on port 5001");
 });
-
-

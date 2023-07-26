@@ -31,7 +31,6 @@ router.post("/login", verifyLoginDetails, async (req, res) => {
     }
     return res.status(401).json({ message: "invalid credentials" });
   } catch (error) {
-    // console.error('Error executing database query:', error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -104,7 +103,6 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/profile", verifyJwtToken, async (req, res) => {
-  // console.log("request ", req.headers.authorization);
   const username = req.user;
 
   try {
