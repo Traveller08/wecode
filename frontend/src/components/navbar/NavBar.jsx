@@ -22,17 +22,43 @@ const NavBar = (props) => {
     navigate('/login')
   }
 
-  const handleLogout = (e) => {
-    // e.preventDefault();
-    if (Cookies.get("token")) {
-        Cookies.remove("token");
-    }
-    if (Cookies.get("user")) {
-        Cookies.remove("user");
-    }
-    successNotify("Logout successfull!");
+  // const handleLogout = (e) => {
+  //   e.preventDefault();
+
+  //   if (Cookies.get("token")) {
+  //       Cookies.remove("token");
+  //   }
+  //   if (Cookies.get("user")) {
+  //       Cookies.remove("user");
+  //   }
+  //   successNotify("Logout successfull!");
     
-    navigate('/');
+  //   navigate('/');
+  // };
+  
+  const handleLogout = (e) => {
+    e.preventDefault();
+    try{
+
+      if (Cookies.get("token")) {
+          Cookies.remove("token");
+      }
+      if (Cookies.get("user")) {
+          Cookies.remove("user");
+      }
+      
+      props.setuser(false);
+      props.setusertype("Learner"); // default value 
+
+      successNotify("Logout successfull!");
+
+      navigate('/');
+      // window.location.href = "/";
+    }catch(error){
+      console.log("logout error" ,error);
+      errorNotify("log out failed");
+    }
+    
   };
 
   return (
@@ -115,7 +141,7 @@ const NavBar = (props) => {
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item >
-                    <Button variant="outline-success" href={handleLogout}>
+                    <Button variant="outline-success" onClick={handleLogout}>
                       Logout
                       </Button>
                     </NavDropdown.Item>

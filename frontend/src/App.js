@@ -25,8 +25,8 @@ import Problemspage from "./pages/ProblemsPage";
 import ContestsPage from "./pages/ContestsPage";
 
 const App = () => {
-  const [user, setUser] = useState(false);
-  const [usertype, setUsertype] = useState("Learner");
+  const [user, setUser] = useState(false); // whether user is logged in or not -> can be learner/educator 
+  const [usertype, setUsertype] = useState("Learner"); // Learner/Educator 
   
   useEffect(() => {
     if (Cookies.get("token")) {

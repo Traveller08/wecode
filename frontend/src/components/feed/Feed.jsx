@@ -31,16 +31,15 @@ export default function Feed(props) {
   const [posts, setPosts] = useState([{}]);
   const [questions, setQuestions]= useState([{}]);
 
-  const [fetched, setFetched] = useState(false);
+  // const [fetched, setFetched] = useState(false);
   const [active, setActive] = useState("posts");
- 
+  
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await apiService.getPosts();
         console.log(response.data)
         setPosts(response.data);
-
 
         // console.log("posts in feeed", response.data);
       } 
@@ -63,10 +62,10 @@ export default function Feed(props) {
     
     // console.log("Posts" , posts)
     
-    console.log("Posts" , posts)
-    console.log("Questions" , questions)
+    // console.log("Posts" , posts)
+    // console.log("Questions" , questions)
 
-    setFetched(true);
+    // setFetched(true);
   }, []);
 
 

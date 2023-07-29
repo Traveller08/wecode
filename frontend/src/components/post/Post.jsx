@@ -7,8 +7,8 @@ import Badge from "react-bootstrap/Badge";
 
 const Post = (props) => {
 
-  const [showComments, setShowComments] = useState(false);
-  const [postRxn, setPostRxn] = useState("");
+  const [showComments, setShowComments] = useState(false); // whether post is being shown or not 
+  const [postRxn, setPostRxn] = useState(""); 
   
   // const [postuserDetails, setPostuserDetails] = useState({});
 

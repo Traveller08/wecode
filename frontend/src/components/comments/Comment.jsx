@@ -9,18 +9,18 @@ import toast from "react-hot-toast";
 const successNotify=(message) => toast.success(message);
 const errorNotify = (message) => toast.error(message);
 
-
 const Comment = (comment) => {
   const [commentRxn, setCommentRxn] = useState("");
+
   const [replies, setReplies] = useState([]);
   const [replyForm, setReplyForm] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
 
-  const [commentUser, setCommentUser] = useState({});
+  // const [commentUser, setCommentUser] = useState({});
   
   const userid = comment.data.userid;
   const commentid = comment.data.commentid;
 
-  const [showReplies, setShowReplies] = useState(false);
   // const isDeleted = comment.isDeleted;
 
   const handleFormClose = (e) => {
@@ -42,7 +42,8 @@ const Comment = (comment) => {
 
       setReplies([response.data,...replies])
       successNotify(response.message);
-    } catch (error) {
+    } 
+    catch (error) {
       errorNotify(error.response.data.message);
       console.error("Error message:", error);
     }
@@ -54,24 +55,25 @@ const Comment = (comment) => {
           const response = await apiService.getReplies(commentid);
           setReplies(response.data);
           console.log("comments ", response.data);
-      } catch (error) {
+      } 
+      catch (error) {
           console.log("Error fetching replies:", error);
       }
   };
     fetchReplies();
   }, []);
 
-  useEffect(() => {
-    const fetchCommentUser = async () => {
-      try {  
-        const response = await apiService.getUserDetails(userid);
-        setCommentUser(response.data[0]);
-      } catch (error) {
-        console.log("Error fetching post user data:", error);
-      }
-    };
-    fetchCommentUser();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCommentUser = async () => {
+  //     try {  
+  //       const response = await apiService.getUserDetails(userid);
+  //       setCommentUser(response.data[0]);
+  //     } catch (error) {
+  //       console.log("Error fetching post user data:", error);
+  //     }
+  //   };
+  //   fetchCommentUser();
+  // }, []);
   
   return (
     <>
@@ -80,7 +82,8 @@ const Comment = (comment) => {
           <div className="comment-left">
             <div className="comment-avatar">
               <img
-                src={commentUser.url?commentUser.url:"https://picsum.photos/50/50"}
+                // src={commentUser.url?commentUser.url:"https://picsum.photos/50/50"}
+                src={comment.data.url ? comment.data.url:"https://picsum.photos/50/50"}
                 className="rounded-circle"
                 width="36"
                 alt="avatar"
@@ -90,7 +93,9 @@ const Comment = (comment) => {
           {}
           <div className="comment-mid">
             <div className="comment-username text-muted">
-              {commentUser.firstName + " " +  commentUser.lastName}
+              {/* {commentUser.firstName + " " +  commentUser.lastName} */}
+              { comment.data.firstName + " " + comment.data.lastName } 
+
             </div>
             {comment.data.isDeleted ? (
               <>
@@ -113,7 +118,7 @@ const Comment = (comment) => {
                     </div>
                   )}
                   {Cookies.get("user") &&
-                    Cookies.get("user") === commentUser.username && (
+                    Cookies.get("user") === comment.data.username && (
                       <div className="comment-footer-link close-write-comment">
                         delete
                       </div>

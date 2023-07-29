@@ -44,7 +44,6 @@ router.post("/create", verifyJwtToken, async (req, res) => {
         const commentid = generateId();
         console.log(data, parentid, timestamp, username, usertype, commentid);
         
-  
         await connection
           .promise()
           .query(insertIntoCommentTable(commentid, parentid, userid, data, timestamp));
@@ -60,6 +59,8 @@ router.post("/create", verifyJwtToken, async (req, res) => {
           ...comment[0],
           ...userdetails,
         };
+
+        console.log(combinedObj);
 
         return res
           .status(200)
