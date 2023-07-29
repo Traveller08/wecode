@@ -22,6 +22,7 @@ import {
   createCommentTable,
   createReplyTable,
   createQuestionTable,
+  createGptTable,
 } from "./util/db.js";
 
 app.use("/api/user/", user);
@@ -51,6 +52,9 @@ const intiDB = async () => {
     connection.commit();
 
     await connection.promise().query(createQuestionTable());
+    connection.commit();
+
+    await connection.promise().query(createGptTable());
     connection.commit();
 
     console.log("db initialised...");

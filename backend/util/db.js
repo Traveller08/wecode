@@ -147,6 +147,24 @@ const getQuestionsData = () =>{
   return 'SELECT * FROM questionTable ORDER BY createdtime DESC'
 };
 
+// GPT response 
+const createGptTable = () => {
+  return `CREATE TABLE IF NOT EXISTS gptTable (
+    questionid VARCHAR(255) NOT NULL,
+    gptresponse VARCHAR(10000) NOT NULL,
+    PRIMARY KEY (questionid)
+);`;
+}
+
+const insertIntoGptTable = (questionid, gptresponse) => {
+  return`INSERT INTO gptTable (questionid, gptresponse) 
+                 VALUES ('${questionid}', '${gptresponse}')`;
+}
+
+const getGptResponseByQuestionId = (questionid) => {
+  return `SELECT gptresponse FROM gptTable WHERE questionid = '${questionid}'`;
+}
+
 
 export {
   db,
@@ -169,4 +187,8 @@ export {
   createQuestionTable,
   insertIntoQuestionTable,
   getQuestionsData,
+
+  createGptTable,
+  insertIntoGptTable,
+  getGptResponseByQuestionId,
 };

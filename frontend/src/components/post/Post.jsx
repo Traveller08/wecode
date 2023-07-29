@@ -115,7 +115,17 @@ const Post = (props) => {
             </div>
 
             <div className="card-body">
-              <p className="card-text sm-text">{props.data}</p>
+              <p className="card-text sm-text">
+                {props.data}
+              </p>
+              
+              {props.isQuestion && (
+                <>
+                  <br />
+                  <pre className="card-text sm-text"> <b>Gpt Response:</b> {props.gptresponse}</pre>
+                </>
+              )}
+
             </div>
             <div className="card-footer">
               <div className="card-footer-left">

@@ -143,6 +143,9 @@ export default function Feed(props) {
                   photourl = {post.photourl}
                   username = {post.username}
 
+                  isQuestion = {false}
+                  gptresponse = {''}
+
                   // onsubmit={createPost}
                 />
               {/* )} */}
@@ -176,6 +179,9 @@ export default function Feed(props) {
                   lastName = {question.lastName}
                   photourl = {question.photourl}
                   username = {question.username}
+
+                  isQuestion = {true}
+                  gptresponse = {question.gptresponse}
 
                   // onsubmit={createPost}
                 />
