@@ -3,16 +3,13 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Comments from "../comments/Comments";
 import Cookies from "js-cookie";
 import apiService from "../../services/apiService";
-import Badge from "react-bootstrap/Badge";
-
 const Post = (props) => {
+  const [showComments, setShowComments] = useState(false); // whether post is being shown or not
+  const [postRxn, setPostRxn] = useState("");
 
-  const [showComments, setShowComments] = useState(false); // whether post is being shown or not 
-  const [postRxn, setPostRxn] = useState(""); 
-  
   // const [postuserDetails, setPostuserDetails] = useState({});
 
-  const [commentsCount, setCommentsCount]=useState(0);
+  const [commentsCount, setCommentsCount] = useState(0);
   const postid = props.postid;
 
   const getTime = (time) => {
@@ -31,22 +28,27 @@ const Post = (props) => {
   const handleComments = async (e) => {
     if (showComments) {
       setShowComments(false);
-    } 
-    else {
+    } else {
       setShowComments(true);
     }
   };
-  
+
+  const handleDelete =(e)=>{
+    // e.preventDefault();
+    props.handleDelete(postid);
+
+  }
+
 
   // useEffect(() => {
-    
+
   //   const fetchPostUser = async () => {
   //     try {
-      
+
   //       const response = await apiService.getPostUser(postid);
   //       setPostuserDetails(response.data[0]);
-        
-  //     } 
+
+  //     }
   //     catch (error) {
   //       console.log("Error fetching post user data:", error);
   //     }
@@ -55,7 +57,6 @@ const Post = (props) => {
   //   fetchPostUser();
 
   // }, []);
-  
   return (
     <>
       {
@@ -65,18 +66,20 @@ const Post = (props) => {
             <div className="card-header">
               <div className="d-flex justify-content-between align-items-center">
                 <div className="d-flex justify-content-between align-items-center">
-                  
                   <div className="mr-2">
                     <img
                       className="rounded-circle"
                       width="45"
-                      src={props.photourl ? props.photourl : "https://picsum.photos/50/50"}
+                      src={
+                        props.photourl
+                          ? props.photourl
+                          : "https://picsum.photos/50/50"
+                      }
                       alt="user"
-                    /> 
+                    />
                   </div>
 
                   <div className="ml-2">
-
                     {/* <div className="h6 m-0">{postuserDetails.username}</div> */}
                     <div className="h6 m-0"> {props.username} </div>
 
@@ -87,12 +90,9 @@ const Post = (props) => {
                       {/* {postuserDetails.firstName +
                         " " +
                         postuserDetails.lastName} */}
-                        {/* "Custom Name" */}
-                        
-                        {props.firstName +
-                        " " +
-                        props.lastName}
+                      {/* "Custom Name" */}
 
+                      {props.firstName + " " + props.lastName}
                     </div>
                   </div>
                 </div>
@@ -103,29 +103,46 @@ const Post = (props) => {
                       align={{ lg: "end" }}
                       id={`offcanvasNavbarDropdown-expand-lg`}
                     >
-                      <NavDropdown.Item name="blogs">Hide</NavDropdown.Item>
-                      <NavDropdown.Item name="tutorials">Save</NavDropdown.Item>
-                      <NavDropdown.Item name="tutorials">
-                        Report
-                      </NavDropdown.Item>
+                      {Cookies.get("user") &&
+                        Cookies.get("user") === props.username && (
+                          <NavDropdown.Item name="delete" onClick={handleDelete}>
+                            Delete
+                          </NavDropdown.Item>
+                        )}
+                      {Cookies.get("user") &&
+                        Cookies.get("user") === props.username && (
+                          <NavDropdown.Item name="edit" onClick={props.handleEdit}>
+                            Edit
+                          </NavDropdown.Item>
+                        )}
+                      <NavDropdown.Item name="save" onClick={props.handleSave}>Save</NavDropdown.Item>
                     </NavDropdown>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="card-body">
-              <p className="card-text sm-text">
+            <div className="card-body" style={{ textAlign: "left" }}>
+            
+              <pre className="card-text sm-text post-pre" >
+              {props.isQuestion && <b>Question: </b>}
                 {props.data}
-              </p>
-              
+              </pre>
+
               {props.isQuestion && (
                 <>
-                  <br />
-                  <pre className="card-text sm-text"> <b>Gpt Response:</b> {props.gptresponse}</pre>
+                 
+                  <pre
+                    className="card-text sm-text code-pre"
+                    style={{ textAlign: "left" }}
+                  >
+                    <b>Gpt Response:</b>
+                    {" "}
+                   
+                    <code style={{whiteSpace: "pre-wrap"}}>{props.gptresponse}</code>
+                  </pre>
                 </>
               )}
-
             </div>
             <div className="card-footer">
               <div className="card-footer-left">
@@ -161,7 +178,7 @@ const Post = (props) => {
                     }
                   }}
                 ></i>
-               
+
                 {!showComments ? (
                   <>
                     <i
@@ -171,9 +188,8 @@ const Post = (props) => {
                         transform: "rotate(360deg) scaleX(-1)",
                       }}
                       onClick={handleComments}
-                    >
-                    </i>
-                       {/* <Badge  bg="primary">{commentsCount}</Badge> */}
+                    ></i>
+                    {/* <Badge  bg="primary">{commentsCount}</Badge> */}
                   </>
                 ) : (
                   <>
@@ -184,9 +200,8 @@ const Post = (props) => {
                         transform: "rotate(360deg) scaleX(-1)",
                       }}
                       onClick={handleComments}
-                    >
-                    </i>
-                       {/* <Badge  bg="primary">{commentsCount}</Badge> */}
+                    ></i>
+                    {/* <Badge  bg="primary">{commentsCount}</Badge> */}
                   </>
                 )}
 
@@ -203,7 +218,9 @@ const Post = (props) => {
               </div>
             </div>
           </div>
-          {showComments &&  <Comments setcnt={setCommentsCount} postid={postid} /> }
+          {showComments && (
+            <Comments setcnt={setCommentsCount} postid={postid} />
+          )}
         </div>
       }
     </>

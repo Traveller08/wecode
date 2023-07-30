@@ -105,7 +105,7 @@ const Comment = (comment) => {
               </>
             ) : (
               <>
-                <div className="comment-body">{comment.data.data}</div>
+                <pre className="comment-body post-pre" >{comment.data.data}</pre>
                 <div className="comment-footer">
                   {Cookies.get("user") && (
                     <div

@@ -44,11 +44,23 @@ router.post("/create", verifyJwtToken, async (req, res) => {
         const commentid = generateId();
         console.log(data, parentid, timestamp, username, usertype, commentid);
         
-        await connection
-          .promise()
-          .query(insertIntoCommentTable(commentid, parentid, userid, data, timestamp));
-        connection.commit();
+        // await connection
+        //   .promise()
+        //   .query(insertIntoCommentTable(commentid, parentid, userid, data, timestamp));
+        // connection.commit();
 
+        const queryInsertIntoCommentTable =`INSERT INTO commentTable
+          (commentid, postid, userid, data, createdtime, likes, dislikes, isdeleted) 
+          VALUES 
+          (?, ?, ?, ?, ?, ?, ?, ?)`;
+        
+
+        await connection 
+          .promise()
+          .query(queryInsertIntoCommentTable, [commentid, parentid, userid, data, timestamp,0,0,0]);
+        
+        connection.commit();
+        
         const [comment] = await connection
           .promise()
           .query(`SELECT * FROM commentTable WHERE commentid='${commentid}'`);

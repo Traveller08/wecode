@@ -6,10 +6,17 @@ import {
   db,
   insertIntoPostTable,
   getPostsData,
+  deletePost
 } from "../util/db.js";
 
 import { generateId } from "../util/id.js";
 import { verifyJwtToken } from "../middleware/verify_jwt_token.js";
+
+
+
+
+
+
 
 router.post("/create", verifyJwtToken, async (req, res) => {
   console.log("post request body ", req.body);
@@ -17,6 +24,7 @@ router.post("/create", verifyJwtToken, async (req, res) => {
   const username = req.user;
   const usertype = req.usertype;
   const timestamp = Date.now();
+  console.log("data of the post ", data);
 
   try {
     const connection = await mysql2.createConnection(db);
@@ -26,21 +34,28 @@ router.post("/create", verifyJwtToken, async (req, res) => {
 
       console.log("users with given username and usertype ", rows);
 
-      if (rows.length == 1) {
+      if (rows.length >= 1) {
         const userid = rows[0].id;
         const postid = generateId();
 
-        await connection
-          .promise()
-          .query(insertIntoPostTable(postid, userid, data, timestamp));
-        connection.commit();
+        // await connection
+        //   .promise()
+        //   .query(insertIntoPostTable(postid, userid, data, timestamp, "post"));
+        // connection.commit();
 
+        const queryInsertpostTable = 'INSERT INTO postTable (postid, userid, data, createdtime, likes, dislikes, type) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        
+        await connection 
+          .promise()
+          .query(queryInsertpostTable, [postid, userid, data, timestamp, 0, 0,"post"]);
+      
+        connection.commit();
 
         const [post] = await connection
           .promise()
           .query(`SELECT * FROM postTable WHERE postid='${postid}'`);
         
-        console.log(post[0])
+        // console.log(post[0])
         
         try {
         
@@ -84,6 +99,8 @@ router.post("/create", verifyJwtToken, async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
   }
 });
+
+
 
 
 router.get("/all", async (req, res) => {
@@ -139,5 +156,27 @@ router.get("/all", async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
   }
 });
+
+
+router.get("/delete", verifyJwtToken, async (req, res) => {
+  try {
+    const postid = req.query.postid;
+    const connection = await mysql2.createConnection(db);
+    try {
+      await connection.promise().query(deletePost(postid));
+     
+      return res
+        .status(200)
+        .json({ message: "post deleted successfully"});
+    } catch (error) {
+      return res.status(500).json({ message: "internal server error" });
+    } finally {
+      connection.close();
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "internal server error" });
+  }
+})
+
 
 export default router;

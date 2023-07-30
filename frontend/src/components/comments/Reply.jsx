@@ -44,7 +44,7 @@ const Reply = (reply) => {
             <div className="comment-username text-muted">
               {reply.data.firstName + " " + reply.data.lastName}</div>
             {!reply.data.isDeleted ? (
-              <div className="comment-body">{reply.data.data}</div>
+              <pre className="comment-body post-pre">{reply.data.data}</pre>
             ) : (
               <>
                 <div

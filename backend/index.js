@@ -21,7 +21,6 @@ import {
   createPostTable,
   createCommentTable,
   createReplyTable,
-  createQuestionTable,
   createGptTable,
 } from "./util/db.js";
 
@@ -51,8 +50,7 @@ const intiDB = async () => {
     await connection.promise().query(createReplyTable());
     connection.commit();
 
-    await connection.promise().query(createQuestionTable());
-    connection.commit();
+    
 
     await connection.promise().query(createGptTable());
     connection.commit();

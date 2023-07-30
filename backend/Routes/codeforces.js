@@ -68,7 +68,8 @@ router.get("/problems", async (req, res) => {
   if(typeof(tags)==="string"){
     tags = [tags]
   }
-  const combineByOr = tags.includes('combine-tags-by-or');
+  var combineByOr =false;
+  if(tags && tags.length>0)combineByOr= tags.includes('combine-tags-by-or');
   try {
     const problems = cf_problems.filter((problem)=>{
         if(combineByOr){

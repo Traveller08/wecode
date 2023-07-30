@@ -37,6 +37,14 @@ const createNewPost = async(token, data) =>{
   }
   return {status:"failed", data:{},message:"session expired"};
 }
+const deletePost = async(token, postid) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.get('/post/delete',{params:{postid:postid}});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
 
 const getPosts = async () => {
     const response = await api.get('/post/all');
@@ -143,6 +151,7 @@ const getContestProblems = async(contestId,cf_username) =>{
 
 const getQuestions = async () => {
   const response = await api.get('/question/all');
+  console.log("response of the question on frontend -> ",response)
   return response.data;
 };
 
@@ -182,6 +191,8 @@ const apiService = {
   getQuestions,
   askNewQuestion,
   getQuestionUser,
+
+  deletePost,
   
 };
 
