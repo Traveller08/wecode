@@ -22,6 +22,20 @@ const NavBar = (props) => {
     navigate('/login')
   }
 
+  // const handleLogout = (e) => {
+  //   e.preventDefault();
+
+  //   if (Cookies.get("token")) {
+  //       Cookies.remove("token");
+  //   }
+  //   if (Cookies.get("user")) {
+  //       Cookies.remove("user");
+  //   }
+  //   successNotify("Logout successfull!");
+    
+  //   navigate('/');
+  // };
+  
   const handleLogout = (e) => {
     e.preventDefault();
     try{
@@ -32,7 +46,12 @@ const NavBar = (props) => {
       if (Cookies.get("user")) {
           Cookies.remove("user");
       }
+      
+      props.setuser(false);
+      props.setusertype("Learner"); // default value 
+
       successNotify("Logout successfull!");
+
       navigate('/');
       // window.location.href = "/";
     }catch(error){

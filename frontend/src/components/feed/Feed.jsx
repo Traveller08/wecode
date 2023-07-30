@@ -31,15 +31,15 @@ export default function Feed(props) {
   const [posts, setPosts] = useState([{}]);
   const [questions, setQuestions]= useState([{}]);
 
+  // const [fetched, setFetched] = useState(false);
   const [active, setActive] = useState("posts");
- 
+  
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await apiService.getPosts();
         console.log(response.data)
         setPosts(response.data);
-
 
         // console.log("posts in feeed", response.data);
       } 
@@ -62,9 +62,10 @@ export default function Feed(props) {
     
     // console.log("Posts" , posts)
     
-    console.log("Posts" , posts)
-    console.log("Questions" , questions)
+    // console.log("Posts" , posts)
+    // console.log("Questions" , questions)
 
+    // setFetched(true);
   }, []);
 
 
@@ -142,6 +143,9 @@ export default function Feed(props) {
                   photourl = {post.photourl}
                   username = {post.username}
 
+                  isQuestion = {false}
+                  gptresponse = {''}
+
                   // onsubmit={createPost}
                 />
               {/* )} */}
@@ -175,6 +179,9 @@ export default function Feed(props) {
                   lastName = {question.lastName}
                   photourl = {question.photourl}
                   username = {question.username}
+
+                  isQuestion = {true}
+                  gptresponse = {question.gptresponse}
 
                   // onsubmit={createPost}
                 />

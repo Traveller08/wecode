@@ -1,13 +1,20 @@
 import express from "express";
 const router = express.Router();
 
+import { generateCodeExplanation } from '../util/test.js'
+
 import mysql2 from "mysql2";
 
 import {
   db,
-  insertIntoQuestionTable,
+  // insertIntoQuestionTable,
+  insertIntoGptTable,
   getQuestionsData,
 } from "../util/db.js";
+
+const insertIntoQuestionTable = (questionid, userid, data, createdtime) => {
+  return 'INSERT INTO questionTable (questionid, userid, data, createdtime, likes, dislikes) VALUES (?, ?, ?, ?, ?, ?)';
+};
 
 import { generateId } from "../util/id.js";
 import { verifyJwtToken } from "../middleware/verify_jwt_token.js";
@@ -32,14 +39,72 @@ router.post("/ask", verifyJwtToken, async (req, res) => {
         const userid = rows[0].id;
         const questionid = generateId();
 
-        await connection
+        // await connection
+        //   .promise()
+        //   .query(insertIntoQuestionTable(questionid, userid, data, timestamp));
+        // connection.commit();
+
+        // SQL query to insert data into the questionTable using a prepared statement
+        const queryInsertQuestionTable = insertIntoQuestionTable(questionid, userid, data, timestamp);
+        
+        await connection 
           .promise()
-          .query(insertIntoQuestionTable(questionid, userid, data, timestamp));
-        connection.commit();
+          .query(queryInsertQuestionTable, [questionid, userid, data, timestamp, 0, 0]);
+      
 
         const [question] = await connection 
           .promise()
           .query(`SELECT * FROM questionTable WHERE questionid='${questionid}'`);
+        
+        console.log(question[0])
+        
+        // gpt start
+        let gptresponse = await generateCodeExplanation(data);
+        console.log(gptresponse);
+        
+        // Escape special characters in the text before inserting to prevent SQL injection
+        // const escapedGptResponse = connection.escape(gptresponse);
+
+        // await connection
+        //   .promise()
+        //   .query(insertIntoGptTable(questionid, escapedGptResponse));
+        // connection.commit();
+
+        // const [gptrow] = await connection 
+        //   .promise()
+        //   .query(`SELECT * FROM gptTable WHERE questionid='${questionid}'`);
+        
+        // console.log(gptrow[0]) 
+
+        // gptresponse = `The code print("Hello World") is a statement in the Python programming language that prints the text "Hello World" to the console 
+        // or output screen.
+        
+        // In Python, print() is a built-in function 
+        // that is used to display or output data to the user. In this case, the function is called with the string "Hello World" as an argument, which is enclosed in double quotation marks to indicate that it is a string literal. `
+        
+        // SQL query to insert the text into the database using a prepared statement
+        const insertQuery = `INSERT INTO gptTable (questionid, gptresponse) VALUES (?, ?)`;
+
+        
+        // Perform the insertion using a prepared statement
+        // const [result] = await connection.query(insertQuery, [questionid, gptresponse]);
+        await connection 
+          .promise()
+          .query(insertQuery, [questionid, gptresponse]);
+        
+        console.log('Gpt Response inserted successfully!');
+        
+
+        const [gptrow] = await connection 
+          .promise()
+          .query(`SELECT * FROM gptTable WHERE questionid='${questionid}'`);
+        
+        console.log("From sql :: " , gptrow[0]) 
+        
+        const originalGptResponse = gptrow[0].gptresponse.replace(/\\/g, '');
+        console.log("Using replace :: " , originalGptResponse) 
+
+        // gpt end 
 
         try {
     
@@ -49,7 +114,8 @@ router.post("/ask", verifyJwtToken, async (req, res) => {
 
             const combinedObj = {
                 ...question[0],
-                ...userdetails[0]
+                ...userdetails[0],
+                gptresponse : originalGptResponse
             }
 
             console.log(combinedObj)
@@ -103,9 +169,22 @@ router.get("/all", async (req, res) => {
           
           const [userdetails] = await connection.promise().query(query);
           
+          // gpt response 
+          const [gptrow] = await connection 
+          .promise()
+          .query(`SELECT * FROM gptTable WHERE questionid='${question.questionid}'`);
+        
+          console.log("From sql :: " , gptrow[0]) 
+          
+          const originalGptResponse = gptrow[0].gptresponse.replace(/\\/g, '');
+          console.log("Using replace :: " , originalGptResponse) 
+
+          // gpt response end 
+
           const combinedObj = {
             ...question,
-            ...userdetails[0]
+            ...userdetails[0],
+            gptresponse : originalGptResponse
           }
 
           console.log(combinedObj)

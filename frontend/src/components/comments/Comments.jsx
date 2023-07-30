@@ -37,7 +37,6 @@ const Comments = (props) => {
     fetchComments();
 
   }, []);
-
   
 
   const handleCommentForm = () => {
@@ -79,6 +78,7 @@ const Comments = (props) => {
         <div className={`comments-right-header ${showCommentForm?"close-write-comment":"open-write-comment"}`} onClick={handleCommentForm}>
           {showCommentForm ? "Close" : "write comment"}
         </div>
+
       </div>
 
       {showCommentForm && (
@@ -91,7 +91,8 @@ const Comments = (props) => {
       )}
       
       <div className="comments-container">
-        {comments && comments.map((rootComment) => (
+        {console.log(comments)}
+        {comments && comments.map((rootComment) => ( 
           <Comment
             data={rootComment}
           />
@@ -102,3 +103,19 @@ const Comments = (props) => {
 };
 
 export default Comments;
+
+// {
+//   commentid: '3ac6689f-bec6-46bd-8feb-4d1d42e766e0',
+//   postid: '0a8e3ca6-48e1-4873-ad0c-a1ff7eb4af23',
+//   userid: 3,
+//   data: 'postnew1-comment11-ankit\n',        
+//   createdtime: 1690653989662,
+//   likes: 0,
+//   dislikes: 0,
+//   isdeleted: 0,
+//   username: 'lit2020034@iiitl.ac.in',        
+//   firstName: 'Ankit',
+//   lastName: 'Kumar',
+//   photourl: null
+// }
+

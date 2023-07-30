@@ -81,6 +81,7 @@ router.post("/register", verifyUserDetails, async (req, res) => {
   }
 });
 
+// Is not required !! 
 router.get("/", async (req, res) => {
   console.log("here ");
   try {
