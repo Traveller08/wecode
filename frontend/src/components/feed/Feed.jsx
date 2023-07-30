@@ -31,7 +31,6 @@ export default function Feed(props) {
   const [posts, setPosts] = useState([{}]);
   const [questions, setQuestions]= useState([{}]);
 
-  const [fetched, setFetched] = useState(false);
   const [active, setActive] = useState("posts");
  
   useEffect(() => {
@@ -66,7 +65,6 @@ export default function Feed(props) {
     console.log("Posts" , posts)
     console.log("Questions" , questions)
 
-    setFetched(true);
   }, []);
 
 

@@ -60,7 +60,7 @@ const Post = (props) => {
     <>
       {
         // postuserDetails  && postuserDetails.username &&
-        <div className="gedf-card">
+        <div className="gedf-card mt-3">
           <div className="card">
             <div className="card-header">
               <div className="d-flex justify-content-between align-items-center">

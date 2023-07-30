@@ -23,6 +23,7 @@ import Profilepage from "./pages/ProfilePage";
 import ReportBugpage from "./pages/ReportBugPage";
 import Problemspage from "./pages/ProblemsPage";
 import ContestsPage from "./pages/ContestsPage";
+import ProblemSheetPage from "./pages/ProblemSheetPage";
 
 const App = () => {
   const [user, setUser] = useState(false);
@@ -110,6 +111,25 @@ const App = () => {
                 />
 
                 <Problemspage user={user} usertype={usertype} />
+
+              </>
+            }
+          />
+
+        <Route
+            exact
+            path="/practice/problemsheets"
+            element={
+              <>
+                <NavBar
+                  user={user}
+                  usertype={usertype}
+                  setuser={setUser}
+                  setusertype={setUsertype}
+                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
+                />
+
+                <ProblemSheetPage user={user} usertype={usertype} />
 
               </>
             }

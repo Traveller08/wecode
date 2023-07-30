@@ -2,7 +2,7 @@ import React from "react";
 import Problems from "../components/practice/problems/Problems";
 import Contests from "../components/practice/contests/Contests";
 import CompanyWise from "../components/practice/companyWise/CompanyWise";
-import ProblemSheet from "../components/practice/problemSheets/ProblemSheet";
+import ProblemSheet from "../components/practice/problemSheets/ProblemList";
 import ProblemsLeftBar from "../components/practice/problems/ProblemsLeftBar";
 import apiService from "../services/apiService";
 import { useState } from "react";
