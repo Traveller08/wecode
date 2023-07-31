@@ -25,6 +25,7 @@ import Problemspage from "./pages/ProblemsPage";
 import ContestsPage from "./pages/ContestsPage";
 import ProblemSheetPage from "./pages/ProblemSheetPage";
 import TutorialsPage from "./pages/TutorialsPage";
+import BlogPage from "./pages/BlogPage";
 
 const App = () => {
   const [user, setUser] = useState(false); // whether user is logged in or not -> can be learner/educator 
@@ -166,6 +167,23 @@ const App = () => {
                 />
                 {/* <Homepage user={user} usertype={usertype} /> */}
                 <TutorialsPage user={user} usertype={usertype} />
+              </>
+            }
+          />
+          <Route
+            exact
+            path="/learn/blogs"
+            element={
+              <>
+                <NavBar
+                  user={user}
+                  usertype={usertype}
+                  setuser={setUser}
+                  setusertype={setUsertype}
+                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
+                />
+                {/* <Homepage user={user} usertype={usertype} /> */}
+                <BlogPage user={user} usertype={usertype} />
               </>
             }
           />

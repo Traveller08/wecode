@@ -1,0 +1,5 @@
+const BlogData = {
+
+}
+
+export {BlogData};
