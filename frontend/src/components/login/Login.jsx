@@ -15,8 +15,7 @@ const Login=(props)=> {
 
   const [userdetails, setUserdetails] = useState({
     username: "",
-    password: "",
-    usertype:""
+    password: ""
   });
 
 
@@ -27,11 +26,7 @@ const Login=(props)=> {
     const { name, value } = e.target;
     setUserdetails({ ...userdetails, [name]: value });
   };
-  
-  useEffect(()=>{  
-    setUserdetails({...userdetails,"usertype":props.usertype});
-  },[]);
-  
+
   const handleSubmit = async (e) => {
     // e.preventDefault();
     e.preventDefault();
@@ -46,15 +41,14 @@ const Login=(props)=> {
       navigate('/');
     } 
     catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Login failed");
       console.error("Error message:", error);
     } 
     finally {
       setWaiting(false);
       setUserdetails({
         username: "",
-        password: "",
-        usertype:userdetails.usertype
+        password: ""
       });
     }
 
@@ -65,7 +59,7 @@ const Login=(props)=> {
       <div className="form-container">
         <div className="form-group row header-container">
              <h2>
-              Login as {props.usertype}
+              Login
               </h2>
         </div>
       
@@ -133,10 +127,5 @@ const Login=(props)=> {
   );
 }
 
-Login.propTypes = {
-  usertype:PropTypes.string
-}
-Login.defaultProps = {
-  usertype:"Learner"
-}
+
 export default Login;

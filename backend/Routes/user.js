@@ -9,11 +9,11 @@ import { verifyUserDetails } from "../middleware/verify_user_details.js";
 const router = express.Router();
 
 router.post("/login", verifyLoginDetails, async (req, res) => {
-  const { username, password, usertype } = req.body;
+  const { username, password } = req.body;
   console.log("login ", req.body);
   try {
     const connection = await mysql2.createConnection(db);
-    const query = `SELECT * FROM users WHERE username = '${username}' and usertype='${usertype}' LIMIT 1`;
+    const query = `SELECT * FROM users WHERE username = '${username}' LIMIT 1`;
     const [rows] = await connection.promise().query(query);
     if (rows.length === 1) {
       const hashedPassword = rows[0].password;
@@ -21,7 +21,6 @@ router.post("/login", verifyLoginDetails, async (req, res) => {
       if (passwordMatch) {
         const payload = {
           username: rows[0].username,
-          usertype: usertype,
         };
         const token = generateAccessToken(payload);
         return res
@@ -37,19 +36,13 @@ router.post("/login", verifyLoginDetails, async (req, res) => {
 
 router.post("/register", verifyUserDetails, async (req, res) => {
   console.log("req : ", req.body);
-  const {
-    firstName,
-    lastName,
-    username,
-    password,
-    codeforcesHandle,
-    usertype,
-  } = req.body;
+  const { firstName, lastName, username, password, codeforcesHandle } =
+    req.body;
   try {
     const connection = await mysql2.createConnection(db);
     try {
       const hashedPassword = await generateHash(password);
-      const checkUserQuery = `select * from users where username='${username}' and usertype='${usertype}'`;
+      const checkUserQuery = `select * from users where username='${username}'`;
       const [rows] = await connection.promise().query(checkUserQuery);
 
       if (rows.length > 0) {
@@ -63,8 +56,7 @@ router.post("/register", verifyUserDetails, async (req, res) => {
         lastName,
         username,
         hashedPassword,
-        codeforcesHandle,
-        usertype
+        codeforcesHandle
       );
       await connection.promise().query(query);
       connection.commit();
@@ -81,49 +73,18 @@ router.post("/register", verifyUserDetails, async (req, res) => {
   }
 });
 
-// Is not required !! 
-router.get("/", async (req, res) => {
-  console.log("here ");
-  try {
-    const userid = req.query.userid;
-    const connection = await mysql2.createConnection(db);
-    try {
-      const [user] = await connection.promise().query(getUserDetails(userid));
-      console.log("user details ", user);
-      return res
-        .status(200)
-        .json({ message: "comment user fetched successfully", data: user });
-    } catch (error) {
-      return res.status(500).json({ message: "internal server error" });
-    } finally {
-      connection.close();
-    }
-  } catch (error) {
-    return res.status(500).json({ message: "internal server error" });
-  }
-});
-
-router.get("/profile", verifyJwtToken, async (req, res) => {
+// Is not required !!
+router.get("/", verifyJwtToken, async (req, res) => {
   const username = req.user;
 
   try {
     const connection = await mysql2.createConnection(db);
     try {
-      const query = `SELECT * FROM users where username='${username}'`;
-      const [rows] = await connection.promise().query(query);
-
-      if (rows.length == 1) {
-        const userProfile = {
-          user_id: rows[0].id,
-          user_type: "individual",
-          email: rows[0].username,
-          user_name: rows[0].firstName + " " + rows[0].lastName,
-          broker: "ZERODHA",
-        };
-
-        return res.status(200).json({ status: "success", data: userProfile });
-      }
-      return res.status(200).json({ status: "failed", data: "" });
+      const [user] = await connection.promise().query(getUserDetails(username));
+      
+      return res
+        .status(200)
+        .json({ message: "comment user fetched successfully", data: user });
     } catch (error) {
       return res.status(500).json({ message: "internal server error" });
     } finally {

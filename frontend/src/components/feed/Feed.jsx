@@ -99,7 +99,7 @@ export default function Feed(props) {
 
     } 
     catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Failed to create post");
       console.error("Error message:", error);
     }
 
@@ -113,7 +113,7 @@ export default function Feed(props) {
       successNotify("post deleted successfully");
     } 
     catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Failed to delete");
       console.error("Error message:", error);
     }
   }
@@ -127,13 +127,11 @@ export default function Feed(props) {
       successNotify("post deleted successfully");
     } 
     catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Failed to delete");
       console.error("Error message:", error);
     }
   }
-  const editPost=async()=>{
-    
-  }
+
   const savePost=async()=>{
     
   }
@@ -149,10 +147,38 @@ export default function Feed(props) {
       setQuestions([response.data,...questions]);
     } 
     catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Failed to ask");
       console.error("Error message:", error);
     }
   };
+
+  const handlePostEdit=async(postid, text)=>{
+
+    try {
+      await apiService.updatePost(
+        Cookies.get("token"),
+        postid,
+        text
+      );
+    
+      successNotify("post updated");
+
+      setPosts(posts.map((post) => {
+        if (post.postid === postid) {
+          return { ...post, data: text };
+        } else {
+          return post;
+        }
+      }));
+      
+    } 
+    catch (error) {
+      errorNotify("Failed to update");
+      console.error("Error message:", error);
+    }
+
+    
+  }
 
 
   return (
@@ -180,8 +206,8 @@ export default function Feed(props) {
                   gptresponse = {''}
                   
                   handleDelete={deletePost}
-                  handleEdit={editPost}
                   handleSave={savePost}
+                  handleEdit={handlePostEdit}
 
                   // onsubmit={createPost}
                 />
@@ -221,7 +247,6 @@ export default function Feed(props) {
                   gptresponse = {question.gptresponse}
 
                   handleDelete={deleteQuestion}
-                  handleEdit={editPost}
                   handleSave={savePost}
 
                   // onsubmit={createPost}

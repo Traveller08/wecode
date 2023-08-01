@@ -37,6 +37,14 @@ const createNewPost = async(token, data) =>{
   }
   return {status:"failed", data:{},message:"session expired"};
 }
+const updatePost = async(token, postid, data) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.post('/post/update',{postid,data});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
 const deletePost = async(token, postid) =>{
   if(token){
     setAuthToken(token);
@@ -59,12 +67,29 @@ const getComments = async (postid) => {
   return response.data;
 };
 
+const deleteComment = async(token, commentid) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.get('/comment/delete',{params:{commentid:commentid}});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
+
 
 
 const getReplies = async (commentid) => {
   const response = await api.get('/reply/all',{params:{commentid:commentid}});
   return response.data;
 };
+const deleteReply = async(token, replyid) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.get('/reply/delete',{params:{replyid:replyid}});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
 
 
 const getPostUser = async(postid) =>{
@@ -73,9 +98,15 @@ const getPostUser = async(postid) =>{
 }
 
 
-const getUserDetails = async(userid) =>{
-  const response = await api.get('/user/',{params:{userid:userid}});
-  return response.data;
+const getUserDetails = async(token) =>{
+  if(token){
+    setAuthToken(token);
+    
+    const response = await api.get('/user/');
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+ 
 }
 
 const createNewComment = async(token, data, parentid) =>{
@@ -83,6 +114,15 @@ const createNewComment = async(token, data, parentid) =>{
     setAuthToken(token);
     console.log("data ", data, "parentid ", parentid);
     const response = await api.post('/comment/create',{data,parentid});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
+
+const updateComment = async(token, commentid, data) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.post('/comment/update',{commentid,data});
     return response.data;
   }
   return {status:"failed", data:{},message:"session expired"};
@@ -96,7 +136,14 @@ const createNewReply = async(token, data, parentid) =>{
   }
   return {status:"failed", data:{},message:"session expired"};
 }
-
+const updateReply = async(token, replyid, data) =>{
+  if(token){
+    setAuthToken(token);
+    const response = await api.post('/reply/update',{replyid,data});
+    return response.data;
+  }
+  return {status:"failed", data:{},message:"session expired"};
+}
 
 
 const getProfile = async (token) => {
@@ -135,6 +182,11 @@ const getContestProblems = async(contestId,cf_username) =>{
   const response = await api.get('codeforces/contest/problems',{
     params:{contestId:contestId,cf_username:cf_username}
   });
+  return response.data;
+}
+
+const getUnsolvedProblems = async(token) =>{
+  const response = await api.get('codeforces/problems/unsolved');
   return response.data;
 }
 
@@ -186,6 +238,7 @@ const apiService = {
   getProblems,
   getContests,
   getContestProblems,
+  getUnsolvedProblems,
 
 
   getQuestions,
@@ -193,6 +246,13 @@ const apiService = {
   getQuestionUser,
 
   deletePost,
+  deleteComment,
+  deleteReply,
+
+
+  updatePost,
+  updateComment,
+  updateReply,
   
 };
 

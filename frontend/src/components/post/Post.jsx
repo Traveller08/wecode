@@ -6,7 +6,8 @@ import apiService from "../../services/apiService";
 const Post = (props) => {
   const [showComments, setShowComments] = useState(false); // whether post is being shown or not
   const [postRxn, setPostRxn] = useState("");
-
+  const [editmode, setEditmode] = useState(false);
+  const [newText, setNewText] = useState("");
   // const [postuserDetails, setPostuserDetails] = useState({});
 
   const [commentsCount, setCommentsCount] = useState(0);
@@ -33,12 +34,23 @@ const Post = (props) => {
     }
   };
 
-  const handleDelete =(e)=>{
+  const handleDelete = (e) => {
     // e.preventDefault();
     props.handleDelete(postid);
+  };
 
+  const handleEdit = (e) => {
+    setEditmode(true);
+    setNewText(props.data);
+  };
+  const handleTextChange = (e) => {
+    setNewText(e.target.value);
+  };
+
+  const handleSave =async(e)=>{
+    await props.handleEdit(props.postid,newText);
+    setEditmode(false);
   }
-
 
   // useEffect(() => {
 
@@ -105,17 +117,22 @@ const Post = (props) => {
                     >
                       {Cookies.get("user") &&
                         Cookies.get("user") === props.username && (
-                          <NavDropdown.Item name="delete" onClick={handleDelete}>
+                          <NavDropdown.Item
+                            name="delete"
+                            onClick={handleDelete}
+                          >
                             Delete
                           </NavDropdown.Item>
                         )}
                       {Cookies.get("user") &&
                         Cookies.get("user") === props.username && (
-                          <NavDropdown.Item name="edit" onClick={props.handleEdit}>
+                          <NavDropdown.Item name="edit" onClick={handleEdit}>
                             Edit
                           </NavDropdown.Item>
                         )}
-                      <NavDropdown.Item name="save" onClick={props.handleSave}>Save</NavDropdown.Item>
+                      <NavDropdown.Item name="save" onClick={props.handleSave}>
+                        Save
+                      </NavDropdown.Item>
                     </NavDropdown>
                   </div>
                 </div>
@@ -123,23 +140,44 @@ const Post = (props) => {
             </div>
 
             <div className="card-body" style={{ textAlign: "left" }}>
-            
-              <pre className="card-text sm-text post-pre" >
-              {props.isQuestion && <b>Question: </b>}
-                {props.data}
-              </pre>
+              {editmode ? (
+                <>
+                  <div className="form-group">
+                    <textarea
+                      className="form-control"
+                      id="post-data"
+                      rows="3"
+                      onChange={handleTextChange}
+                      value={newText}
+                      
+                    ></textarea>
+                  </div>
+                  <div
+                    className="comment-footer-link close-write-comment"
+                    onClick={handleSave}
+                  >
+                    save changes
+                  </div>
+                </>
+              ) : (
+                <>
+                  <pre className="card-text sm-text post-pre">
+                    {props.isQuestion && <b>Question: </b>}
+                    {props.data}
+                  </pre>
+                </>
+              )}
 
               {props.isQuestion && (
                 <>
-                 
                   <pre
                     className="card-text sm-text code-pre"
                     style={{ textAlign: "left" }}
                   >
-                    <b>Gpt Response:</b>
-                    {" "}
-                   
-                    <code style={{whiteSpace: "pre-wrap"}}>{props.gptresponse}</code>
+                    <b>Gpt Response:</b>{" "}
+                    <code style={{ whiteSpace: "pre-wrap" }}>
+                      {props.gptresponse}
+                    </code>
                   </pre>
                 </>
               )}

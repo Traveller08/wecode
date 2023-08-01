@@ -17,17 +17,13 @@ function Register(props) {
     lastName: "",
     username: "",
     password: "",
-    codeforcesHandle: "",
-    usertype:""
+    codeforcesHandle: ""
   });
 
   const [confirmpassword, setConfirmpassword] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const [waiting, setWaiting] = useState(false);
 
-  useEffect(()=>{
-    setUserdetails({...userdetails,"usertype":props.usertype});
-  },[]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +51,7 @@ function Register(props) {
       successNotify(response.message);
       console.log(response);
     } catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Failed to register");
       console.error("Error message:", error);
     } finally {
       
@@ -65,8 +61,7 @@ function Register(props) {
         lastName: "",
         username: "",
         password: "",
-        codeforcesHandle: "",
-        usertype:userdetails.usertype
+        codeforcesHandle: ""
       });
       setConfirmpassword("");
     }
@@ -78,7 +73,7 @@ function Register(props) {
       <div className="form-container">
         <div className="form-group row header-container">
              <h2>
-              Register as {props.usertype}
+              Register 
               </h2>
         </div>     
         <form onSubmit={handleSubmit}>
@@ -212,10 +207,5 @@ function Register(props) {
     </>
   );
 }
-Register.propTypes = {
-  usertype:PropTypes.string
-}
-Register.defaultProps = {
-  usertype:"Learner"
-}
+
 export default Register;
