@@ -4,7 +4,6 @@ import "./Footer.css";
 const WeCodeFooter = () => {
   return (
     <>
-      Foo
       <div className="bg-light text-center text-white footer" >
         <div className="p-4 pb-0 " >
           <section className="mb-4 icon-container">
@@ -49,9 +48,9 @@ const WeCodeFooter = () => {
           className="text-center bg-secondary p-3"
           style={{ color: "rgba(0, 0, 0, 0.6)" }}
         >
-          © 2020 Copyright:
-          <a className="text-white" href="https://ootstrap.com/">
-            MDBootstrap.com
+          © 2023 Copyright:
+          <a className="text-white" href="/">
+            wecode.com
           </a>
         </div>
       </div>

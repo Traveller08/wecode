@@ -19,7 +19,6 @@ const createUsers = () => {
         username VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
         codeforcesHandle VARCHAR(255),
-        usertype VARCHAR(255) NOT NULL,
         photourl VARCHAR(255) 
       )`;
 };
@@ -29,17 +28,16 @@ const insertIntoUsers = (
   lastname,
   username,
   password,
-  codeforcesHandle,
-  usertype
+  codeforcesHandle
 ) => {
   return `INSERT INTO users 
-    (firstName, lastName, username, password, codeforcesHandle, usertype ) 
+    (firstName, lastName, username, password, codeforcesHandle) 
     VALUES 
-    ('${firstname}', '${lastname}', '${username}', '${password}', '${codeforcesHandle}', '${usertype}')`;
+    ('${firstname}', '${lastname}', '${username}', '${password}', '${codeforcesHandle}')`;
 };
 
-const getUserDetails = (userid) =>{
-  return `SELECT username, firstName, lastName, photourl FROM users WHERE id ='${userid}'`
+const getUserDetails = (username) =>{
+  return `SELECT firstname, lastname, username, codeforceshandle, photourl  FROM users WHERE username ='${username}'`
 };
 
 
@@ -52,40 +50,45 @@ const createPostTable = () => {
          data VARCHAR(5000) NOT NULL,
          createdtime BIGINT NOT NULL,
          likes INT,
-         dislikes INT
+         dislikes INT,
+         type VARCHAR(255) NOT NULL
        )`;
 };
       
-const insertIntoPostTable = (postid, userid, data, createdtime) => {
+const insertIntoPostTable = (postid, userid, data, createdtime, type) => {
   return `INSERT INTO postTable
-  (postid, userid, data, createdtime, likes, dislikes ) 
+  (postid, userid, data, createdtime, likes, dislikes, type ) 
   VALUES 
-  ('${postid}', ${userid}, '${data}', '${createdtime}', ${0}, ${0})`;
+  ('${postid}', ${userid}, '${data}', '${createdtime}', ${0}, ${0}, '${type}')`;
 };
 
 const getPostsData = () => {
-  return 'SELECT * FROM postTable ORDER BY createdtime DESC';
+  return 'SELECT * FROM postTable where type="post" ORDER BY createdtime DESC';
 };
 
+const deletePost=(postid)=>{
+  return `DELETE FROM postTable WHERE postid='${postid}'`;
+}
 
 // COMMENTS ------------------------------------------
 
 const createCommentTable = () => {
   return `CREATE TABLE IF NOT EXISTS commentTable (
-         commentid VARCHAR(255) primary key NOT NULL,
-         postid VARCHAR(255) NOT NULL,
+    commentid VARCHAR(255) primary key NOT NULL,
+    postid VARCHAR(255) NOT NULL,
          userid INT NOT NULL,
          data VARCHAR(5000) NOT NULL,
          createdtime BIGINT NOT NULL,
          likes INT,
          dislikes INT,
-         isdeleted INT
-       )`;
-};
+         isdeleted INT,
+         FOREIGN KEY(postid) REFERENCES postTable(postid) ON DELETE CASCADE
+         )`;
+        };
 
-const insertIntoCommentTable = (commentid, postid, userid, data, createdtime) => {
-  return `INSERT INTO commentTable
-  (commentid, postid, userid, data, createdtime, likes, dislikes, isdeleted) 
+        const insertIntoCommentTable = (commentid, postid, userid, data, createdtime) => {
+          return `INSERT INTO commentTable
+          (commentid, postid, userid, data, createdtime, likes, dislikes, isdeleted) 
   VALUES 
   ('${commentid}', '${postid}', ${userid}, '${data}', '${createdtime}', ${0}, ${0}, ${0})`;
 };
@@ -94,57 +97,64 @@ const getCommentsData = (postid) => {
   return `SELECT * FROM commentTable WHERE postid='${postid}' ORDER BY createdtime DESC`;
 };
 
+const deleteComment=(commentid)=>{
+  return `DELETE FROM commentTable WHERE commentid='${commentid}'`;
+}
 
 // REPLIES -----------------------------------------------
 
 const createReplyTable = () => {
   return `CREATE TABLE IF NOT EXISTS replyTable (
-         replyid VARCHAR(255) NOT NULL,
-         commentid VARCHAR(255) NOT NULL,
-         userid INT NOT NULL,
-         data VARCHAR(5000) NOT NULL,
-         createdtime BIGINT NOT NULL,
-         likes INT,
-         dislikes INT,
-         isdeleted INT,
-         PRIMARY KEY (replyid, commentid)
-       )`;
-};
-
-const insertIntoReplyTable = (replyid, commentid, userid, data, createdtime) => {
-  return `INSERT INTO replyTable
+    replyid VARCHAR(255) NOT NULL,
+    commentid VARCHAR(255) NOT NULL,
+    userid INT NOT NULL,
+    data VARCHAR(5000) NOT NULL,
+    createdtime BIGINT NOT NULL,
+    likes INT,
+    dislikes INT,
+    isdeleted INT,
+    PRIMARY KEY (replyid, commentid),
+    FOREIGN KEY(commentid) REFERENCES commentTable(commentid) ON DELETE CASCADE
+    )`;
+  };
+  
+  const insertIntoReplyTable = (replyid, commentid, userid, data, createdtime) => {
+    return `INSERT INTO replyTable
     (replyid, commentid, userid, data, createdtime, likes, dislikes, isdeleted) 
     VALUES 
     ('${replyid}', '${commentid}', ${userid}, '${data}', '${createdtime}', ${0}, ${0}, ${0})`;
-};
+  };
+  
+  const getRepliesData = (commentid) => {
+    return `SELECT * FROM replyTable WHERE commentid='${commentid}' ORDER BY createdtime DESC`;
+  };
 
-const getRepliesData = (commentid) => {
-  return `SELECT * FROM replyTable WHERE commentid='${commentid}' ORDER BY createdtime DESC`;
-};
+  const deleteReply=(replyid)=>{
+    return `DELETE FROM replyTable WHERE replyid='${replyid}'`;
+  }
+  
+  // // ------------------------- Questions
+  
+  // const createQuestionTable = () => {
+    //   return `CREATE TABLE IF NOT EXISTS questionTable (
+      //          questionid VARCHAR(255) NOT NULL,
+//          userid INT NOT NULL,
+//          data VARCHAR(5000) NOT NULL,
+//          createdtime BIGINT NOT NULL,
+//          likes INT,
+//          dislikes INT
+//        )`;
+// };
 
-
-// ------------------------- Questions
-
-const createQuestionTable = () => {
-  return `CREATE TABLE IF NOT EXISTS questionTable (
-         questionid VARCHAR(255) NOT NULL,
-         userid INT NOT NULL,
-         data VARCHAR(5000) NOT NULL,
-         createdtime BIGINT NOT NULL,
-         likes INT,
-         dislikes INT
-       )`;
-};
-
-const insertIntoQuestionTable = (questionid, userid, data, createdtime) => {
-  return `INSERT INTO questionTable
-    (questionid, userid, data, createdtime, likes, dislikes ) 
-    VALUES 
-    ('${questionid}', ${userid}, '${data}', '${createdtime}', ${0}, ${0})`;
-};
+// const insertIntoQuestionTable = (questionid, userid, data, createdtime) => {
+//   return `INSERT INTO questionTable
+//     (questionid, userid, data, createdtime, likes, dislikes ) 
+//     VALUES 
+//     ('${questionid}', ${userid}, '${data}', '${createdtime}', ${0}, ${0})`;
+// };
 
 const getQuestionsData = () =>{
-  return 'SELECT * FROM questionTable ORDER BY createdtime DESC'
+  return 'SELECT * FROM postTable where type="question" ORDER BY createdtime DESC'
 };
 
 // GPT response 
@@ -152,7 +162,8 @@ const createGptTable = () => {
   return `CREATE TABLE IF NOT EXISTS gptTable (
     questionid VARCHAR(255) NOT NULL,
     gptresponse VARCHAR(10000) NOT NULL,
-    PRIMARY KEY (questionid)
+    PRIMARY KEY (questionid),
+    FOREIGN KEY(questionid) REFERENCES postTable(postid) ON DELETE CASCADE
 );`;
 }
 
@@ -175,20 +186,24 @@ export {
   createPostTable,
   insertIntoPostTable,
   getPostsData,
+  deletePost,
 
   createCommentTable,
   insertIntoCommentTable,
   getCommentsData,
+  deleteComment,
 
   createReplyTable,
   insertIntoReplyTable,
   getRepliesData,
+  deleteReply,
 
-  createQuestionTable,
-  insertIntoQuestionTable,
+  // createQuestionTable,
+  // insertIntoQuestionTable,
   getQuestionsData,
 
   createGptTable,
   insertIntoGptTable,
   getGptResponseByQuestionId,
+
 };

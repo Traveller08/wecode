@@ -14,7 +14,7 @@ const Dashboard = (props) => {
   return (
     <>
 
-      <NavBar user={props.user} usertype={props.usertype} setuser={props.setuser} setusertype={props.setusertype} url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}/>
+      <NavBar user={props.user}  setuser={props.setuser}  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}/>
       <div className="container">
         <HomePageCarousel />
         {/* <div>

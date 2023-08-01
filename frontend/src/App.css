@@ -53,3 +53,116 @@
   background-color: white;
 
 }
+.code-pre{
+  background-color: #282c34; /* Dark gray background similar to VSCode's editor */
+  color: #abb2bf; /* Light gray text color similar to VSCode's editor */
+  padding: 10px;
+  overflow-x: auto;
+  word-wrap: normal;
+}
+.post-pre{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow: hidden;
+  font-size: 1rem;
+}
+pre {
+  white-space: pre-wrap;
+  /* padding: 10px; */
+  overflow-x: auto;
+  word-wrap: normal;
+}
+
+/* Style inline code */
+code {
+  background-color: #282c34; /* Dark gray background similar to VSCode's editor */
+  color: #abb2bf; /* Light gray text color similar to VSCode's editor */
+  padding: 2px 5px;
+}
+
+/* Style blockquotes */
+blockquote {
+  border-left: 4px solid #6a9955; /* Green color similar to VSCode's blockquotes */
+  padding-left: 10px;
+}
+
+/* Style lists */
+
+
+.chart-card{
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  background-color: white;
+  padding: 30px;
+  /* display: flex; */
+  /* flex-direction: row; */
+}
+.lg-card{
+  width: 100%;
+}
+.sm-card{
+  width: 49%;
+}
+.visualizer{
+  display: flex;
+  flex-direction: column;
+}
+.chart-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 98%;
+  margin-top: 20px;
+}
+
+
+.carousel-container{
+  width: 100%;
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.carousel-container-main{
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 5px;
+}
+.br-5{
+  border-radius: 5px;
+}
+.blur-image {
+  filter: blur(3px); /* Adjust the blur value as per your preference */
+}
+/* Add this CSS in your main CSS file or component styles */
+.caption-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff; /* White color for title */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow for better visibility */
+}
+
+.caption-text {
+  font-size: 1.2rem;
+  color: #f0f0f0; /* Slightly lighter color for text */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* Add text shadow for better visibility */
+}
+
+.btn-get-started {
+  background-color: #007bff; /* Blue color for the "Get Started" button */
+  border-color: #007bff;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-top: 15px;
+  color: #fff; /* White color for button text */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* Add text shadow for better visibility */
+}
+
+/* CSS for Explore Now button */
+
+
+/* Optional: Add more styles to position the button as needed */
+
+

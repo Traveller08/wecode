@@ -6,8 +6,8 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useNavigate, Link } from 'react-router-dom';
-import Cookies from "js-cookie";
 import './Navbar.css';
+import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 
 const successNotify=(message) =>toast.success(message);
@@ -18,7 +18,6 @@ const NavBar = (props) => {
   const navigate = useNavigate();
 
   const handleLoginButtonClick = (e) =>{
-    props.setusertype(e.target.name);
     navigate('/login')
   }
 
@@ -48,7 +47,6 @@ const NavBar = (props) => {
       }
       
       props.setuser(false);
-      props.setusertype("Learner"); // default value 
 
       successNotify("Logout successfull!");
 
@@ -86,7 +84,7 @@ const NavBar = (props) => {
                   id={`offcanvasNavbarDropdown-expand-lg`}
                 >
                   <NavDropdown.Item name="blogs" href="/learn/blogs">Blogs</NavDropdown.Item>
-                  <NavDropdown.Item name="tutorials" href="learn/tutorials">Tutorials</NavDropdown.Item>
+                  <NavDropdown.Item name="tutorials" href="/learn/tutorials">Tutorials</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item href="#action5">
                     Something else here
@@ -99,6 +97,7 @@ const NavBar = (props) => {
                   align={{lg:"end"}}
                 >
                   <NavDropdown.Item name="problems" href="/practice/problems">Problems</NavDropdown.Item>
+                 {props.user && <NavDropdown.Item name="problems" href="/practice/problems/unsolved">Unsolved Problems</NavDropdown.Item>}
                   <NavDropdown.Item name="contests" href="/practice/contests">Contests</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item name="problemSheets" href="/practice/problemsheets">
@@ -112,9 +111,7 @@ const NavBar = (props) => {
                 {props.user && (
                   <Nav.Link name="discuss" href="/discuss">Discuss</Nav.Link>
                 )}
-                {
-                  props.user && props.usertype==="Educator" &&  <Nav.Link href="#action2">Add resources</Nav.Link>
-                }
+
                
                 {props.user && (
                   <NavDropdown
@@ -132,7 +129,7 @@ const NavBar = (props) => {
                     align={{lg:"end"}}
 
                   >
-                    <NavDropdown.Item name="account" href="/account">Account</NavDropdown.Item>
+                    <NavDropdown.Item name="account" href="/profile">My Profile</NavDropdown.Item>
                     <NavDropdown.Item name="profile" href="/edit/profile">
                       Edit profile
                     </NavDropdown.Item>
@@ -151,8 +148,8 @@ const NavBar = (props) => {
               </Nav>
               {!props.user && (
                 <div className="d-flex">
-                  <Button variant="outline-success"  name="Educator" onClick={handleLoginButtonClick}>Educator</Button>
-                  <Button variant="outline-success" name="Learner" onClick={handleLoginButtonClick}>Learner</Button>
+                  <Button variant="outline-primary"  name="user" onClick={handleLoginButtonClick}>Login</Button>
+                  
                 </div>
               )}
             </Offcanvas.Body>

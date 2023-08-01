@@ -99,11 +99,42 @@ export default function Feed(props) {
 
     } 
     catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Failed to create post");
       console.error("Error message:", error);
     }
 
   };
+  const deletePost=async(postid)=>{
+    try {
+      await apiService.deletePost(
+        Cookies.get("token"), postid
+      );
+      setPosts(posts.filter((post)=>{return post.postid!==postid}));
+      successNotify("post deleted successfully");
+    } 
+    catch (error) {
+      errorNotify("Failed to delete");
+      console.error("Error message:", error);
+    }
+  }
+
+  const deleteQuestion=async(postid)=>{
+    try {
+      await apiService.deletePost(
+        Cookies.get("token"), postid
+      );
+      setQuestions(questions.filter((question)=>{return question.postid!==postid}));
+      successNotify("post deleted successfully");
+    } 
+    catch (error) {
+      errorNotify("Failed to delete");
+      console.error("Error message:", error);
+    }
+  }
+
+  const savePost=async()=>{
+    
+  }
 
   const askQuestion = async (text) => {
     try {
@@ -116,10 +147,38 @@ export default function Feed(props) {
       setQuestions([response.data,...questions]);
     } 
     catch (error) {
-      errorNotify(error.response.data.message);
+      errorNotify("Failed to ask");
       console.error("Error message:", error);
     }
   };
+
+  const handlePostEdit=async(postid, text)=>{
+
+    try {
+      await apiService.updatePost(
+        Cookies.get("token"),
+        postid,
+        text
+      );
+    
+      successNotify("post updated");
+
+      setPosts(posts.map((post) => {
+        if (post.postid === postid) {
+          return { ...post, data: text };
+        } else {
+          return post;
+        }
+      }));
+      
+    } 
+    catch (error) {
+      errorNotify("Failed to update");
+      console.error("Error message:", error);
+    }
+
+    
+  }
 
 
   return (
@@ -142,9 +201,13 @@ export default function Feed(props) {
                   lastName = {post.lastName}
                   photourl = {post.photourl}
                   username = {post.username}
-
+                  user= {props.user}
                   isQuestion = {false}
                   gptresponse = {''}
+                  
+                  handleDelete={deletePost}
+                  handleSave={savePost}
+                  handleEdit={handlePostEdit}
 
                   // onsubmit={createPost}
                 />
@@ -169,7 +232,7 @@ export default function Feed(props) {
                 {/* { console.log(question)} */}
 
                 <Post 
-                  postid={`${question.questionid}`}
+                  postid={`${question.postid}`}
                   createdtime={question.createdtime}
                   data={question.data}
                   likes={question.likes}
@@ -182,6 +245,9 @@ export default function Feed(props) {
 
                   isQuestion = {true}
                   gptresponse = {question.gptresponse}
+
+                  handleDelete={deleteQuestion}
+                  handleSave={savePost}
 
                   // onsubmit={createPost}
                 />

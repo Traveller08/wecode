@@ -38,7 +38,7 @@
    width: 88% !important;
    text-align: left;
    font-size: 1em;
-   line-height: 1.4em;
+   /* line-height: 1.4em; */
    /* background-color: blue; */
 }
 .comment-username{
@@ -49,7 +49,7 @@
 }
 .comment-body{
   font-size: 0.8em;
-  line-height: 1.1em;
+  /* line-height: 1.1em; */
   margin-left: 15px;
   margin-top: 5px;
   margin-bottom: 5px;
