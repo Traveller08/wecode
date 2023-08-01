@@ -84,7 +84,7 @@ const NavBar = (props) => {
                   id={`offcanvasNavbarDropdown-expand-lg`}
                 >
                   <NavDropdown.Item name="blogs" href="/learn/blogs">Blogs</NavDropdown.Item>
-                  <NavDropdown.Item name="tutorials" href="learn/tutorials">Tutorials</NavDropdown.Item>
+                  <NavDropdown.Item name="tutorials" href="/learn/tutorials">Tutorials</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item href="#action5">
                     Something else here
