@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 
 import mysql2 from "mysql2";
+
 import {
   db,
   insertIntoPostTable,

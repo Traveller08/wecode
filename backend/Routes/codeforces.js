@@ -2,11 +2,12 @@ import express from "express";
 const router = express.Router();
 import axios from "axios";
 let cf_problems,cf_problem_stats,cf_contests,cf_gym_contests
-const baseURL = ' https://codeforces.com/api'; // Replace with your backend API URL
+const baseURL = 'https://codeforces.com/api'; // Replace with your backend API URL
 
 const cfapi = axios.create({
 baseURL,
 });
+
 const get_color =(rating) =>{
     "Returns the HEX of appropriate color according to the rating."
     let col="#fff"
