@@ -56,7 +56,7 @@ const ProblemsPage = (props) => {
       <div className="col-md-7 gedf-main">
         <Problems problems={problems} />
       </div>
-      <div className="col-md-3"></div>
+      {/* <div className="col-md-3"></div> */}
       </div>
     </>
   );

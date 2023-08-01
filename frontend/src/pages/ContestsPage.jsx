@@ -28,7 +28,7 @@ const ProblemsPage = (props) => {
         
         <Contests contests={contests} contestType={contestType}/>
       </div>
-      <div className="col-md-3"></div>
+      {/* <div className="col-md-3"></div> */}
       </div>
     </>
   );

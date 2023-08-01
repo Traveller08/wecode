@@ -127,7 +127,7 @@ blockquote {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  padding: 10px;
+  padding: 5px;
 }
 .br-5{
   border-radius: 5px;

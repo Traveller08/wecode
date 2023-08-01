@@ -30,7 +30,7 @@ const CreatePost = (props) => {
 
   return (
     <>
-      <div className="card gedf-card">
+      <div className="card gedf-card mt-3">
     
         <div className="card-header">
           <ul
