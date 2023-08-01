@@ -26,7 +26,7 @@ import TutorialsPage from "./pages/TutorialsPage";
 import VisualizerPage from "./pages/VisualizerPage";
 import UnsolvedProblemsPage from "./pages/UnsolvedProblemsPage";
 import BlogPage from "./pages/BlogPage";
-import BlogPage from "./pages/BlogPage";
+
 
 const App = () => {
   const [user, setUser] = useState(false); // whether user is logged in or not -> can be learner/educator
