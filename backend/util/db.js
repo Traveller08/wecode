@@ -63,7 +63,7 @@ const insertIntoPostTable = (postid, userid, data, createdtime, type) => {
 };
 
 const getPostsData = () => {
-  return 'SELECT * FROM postTable where type="post" ORDER BY createdtime DESC';
+  return 'SELECT * FROM postTable where type="post" ORDER BY createdtime';
 };
 
 const deletePost=(postid)=>{
@@ -94,7 +94,7 @@ const createCommentTable = () => {
 };
 
 const getCommentsData = (postid) => {
-  return `SELECT * FROM commentTable WHERE postid='${postid}' ORDER BY createdtime DESC`;
+  return `SELECT * FROM commentTable WHERE postid='${postid}' ORDER BY createdtime`;
 };
 
 const deleteComment=(commentid)=>{
@@ -126,7 +126,7 @@ const createReplyTable = () => {
   };
   
   const getRepliesData = (commentid) => {
-    return `SELECT * FROM replyTable WHERE commentid='${commentid}' ORDER BY createdtime DESC`;
+    return `SELECT * FROM replyTable WHERE commentid='${commentid}' ORDER BY createdtime`;
   };
 
   const deleteReply=(replyid)=>{
@@ -176,6 +176,21 @@ const getGptResponseByQuestionId = (questionid) => {
   return `SELECT gptresponse FROM gptTable WHERE questionid = '${questionid}'`;
 }
 
+const createPostReactionsTable = () => {
+  return `CREATE TABLE IF NOT EXISTS postReactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    postid VARCHAR(255) NOT NULL,
+    userid INT NOT NULL,
+    reaction ENUM('like', 'dislike') NOT NULL,
+    FOREIGN KEY (postid) REFERENCES postTable(postid) ON DELETE CASCADE
+  )`;
+};
+
+const insertOrUpdatePostReaction = (postid, userid, reaction) => {
+  return `INSERT INTO postReactions (postid, userid, reaction)
+          VALUES ('${postid}', ${userid}, '${reaction}')
+          ON DUPLICATE KEY UPDATE reaction='${reaction}'`;
+};
 
 export {
   db,
@@ -205,5 +220,8 @@ export {
   createGptTable,
   insertIntoGptTable,
   getGptResponseByQuestionId,
+
+  createPostReactionsTable,
+  insertOrUpdatePostReaction,
 
 };

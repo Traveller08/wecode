@@ -3,27 +3,69 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Comments from "../comments/Comments";
 import Cookies from "js-cookie";
 import apiService from "../../services/apiService";
+
 const Post = (props) => {
-  const [showComments, setShowComments] = useState(false); // whether post is being shown or not
-  const [postRxn, setPostRxn] = useState("");
+  const [showComments, setShowComments] = useState(false);
+  const [postRxn, setPostRxn] = useState(props.reaction);
   const [editmode, setEditmode] = useState(false);
   const [newText, setNewText] = useState("");
-  // const [postuserDetails, setPostuserDetails] = useState({});
-
+  const [likesCount, setLikesCount] = useState(props.likes);
+  const [dislikesCount, setDislikesCount] = useState(props.dislikes);
   const [commentsCount, setCommentsCount] = useState(0);
+  console.log("post props ",props)
+  
   const postid = props.postid;
+  const user = Cookies.get("user");
 
-  const getTime = (time) => {
-    const t_esc = Date.now() - time;
-    let mins = t_esc / 36000;
-    let hrs = mins / 60;
-    mins = parseInt(mins);
-    hrs = parseInt(hrs);
-    mins = mins % 60;
+ 
+ 
+  const handleLikeDislike = async (reaction) => {
+    if (!user) {
+      // User is not logged in, redirect to login page or show a login prompt
+      return;
+    }
 
-    const days = parseInt(hrs / 24);
-    hrs = hrs % 24;
-    return `${days} d ${hrs} h ${mins} min ago`;
+    if (postRxn === reaction) {
+      // User already reacted in the same way, remove the reaction
+      removePostReaction();
+    } else {
+      // User is reacting for the first time or changing the reaction
+      setPostRxn(reaction);
+      submitPostReaction(reaction);
+    }
+  };
+
+  const submitPostReaction = async (reaction) => {
+    try {
+      await apiService.submitPostReaction(postid, reaction);
+      if (reaction === "like") {
+        setLikesCount(likesCount + 1);
+        if (postRxn === "dislike") {
+          setDislikesCount(dislikesCount - 1);
+        }
+      } else if (reaction === "dislike") {
+        setDislikesCount(dislikesCount + 1);
+        if (postRxn === "like") {
+          setLikesCount(likesCount - 1);
+        }
+      }
+    } catch (error) {
+      console.error("Error submitting post reaction:", error);
+    }
+  };
+
+  const removePostReaction = async () => {
+    try {
+      await apiService.removePostReaction(postid);
+      if (postRxn === "like") {
+        setLikesCount(likesCount - 1);
+      } else if (postRxn === "dislike") {
+        setDislikesCount(dislikesCount - 1);
+      }
+      setPostRxn("");
+    } catch (error) {
+      console.error("Error removing post reaction:", error);
+    }
   };
 
   const handleComments = async (e) => {
@@ -34,233 +76,205 @@ const Post = (props) => {
     }
   };
 
-  const handleDelete = (e) => {
-    // e.preventDefault();
+  const handleDelete = () => {
     props.handleDelete(postid);
   };
 
-  const handleEdit = (e) => {
+  const handleEdit = () => {
     setEditmode(true);
     setNewText(props.data);
   };
+
   const handleTextChange = (e) => {
     setNewText(e.target.value);
   };
 
-  const handleSave =async(e)=>{
-    await props.handleEdit(props.postid,newText);
+  const handleSave = async () => {
+    await props.handleEdit(props.postid, newText);
     setEditmode(false);
-  }
+  };
 
-  // useEffect(() => {
+  const getTime = (createdTimeMillis) => {
+    const currentTime = Date.now(); // Current time in milliseconds
+    const timeDiff = currentTime - createdTimeMillis; // Time difference in milliseconds
 
-  //   const fetchPostUser = async () => {
-  //     try {
+    const millisecondsInSecond = 1000;
+    const millisecondsInMinute = 60 * millisecondsInSecond;
+    const millisecondsInHour = 60 * millisecondsInMinute;
+    const millisecondsInDay = 24 * millisecondsInHour;
 
-  //       const response = await apiService.getPostUser(postid);
-  //       setPostuserDetails(response.data[0]);
+    if (timeDiff < millisecondsInMinute) {
+      const secondsAgo = Math.floor(timeDiff / millisecondsInSecond);
+      return `${secondsAgo} sec ago`;
+    } else if (timeDiff < millisecondsInHour) {
+      const minutesAgo = Math.floor(timeDiff / millisecondsInMinute);
+      return `${minutesAgo} min ago`;
+    } else if (timeDiff < millisecondsInDay) {
+      const hoursAgo = Math.floor(timeDiff / millisecondsInHour);
+      return `${hoursAgo} h ago`;
+    } else {
+      const daysAgo = Math.floor(timeDiff / millisecondsInDay);
+      return `${daysAgo} d ago`;
+    }
+  };
 
-  //     }
-  //     catch (error) {
-  //       console.log("Error fetching post user data:", error);
-  //     }
-  //   };
-
-  //   fetchPostUser();
-
-  // }, []);
   return (
     <>
-      {
-        // postuserDetails  && postuserDetails.username &&
-        <div className="gedf-card mt-3">
-          <div className="card">
-            <div className="card-header">
+      <div className="gedf-card mt-3">
+        <div className="card">
+          <div className="card-header">
+            <div className="d-flex justify-content-between align-items-center">
               <div className="d-flex justify-content-between align-items-center">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="mr-2">
-                    <img
-                      className="rounded-circle"
-                      width="45"
-                      src={
-                        props.photourl
-                          ? props.photourl
-                          : "https://picsum.photos/50/50"
-                      }
-                      alt="user"
-                    />
-                  </div>
+                <div className="mr-2">
+                  <img
+                    className="rounded-circle"
+                    width="45"
+                    src={
+                      props.photourl
+                        ? props.photourl
+                        : "https://picsum.photos/50/50"
+                    }
+                    alt="user"
+                  />
+                </div>
 
-                  <div className="ml-2">
-                    {/* <div className="h6 m-0">{postuserDetails.username}</div> */}
-                    <div className="h6 m-0"> {props.username} </div>
+                <div className="ml-2">
+                  <div className="h6 m-0"> {props.username} </div>
 
-                    <div
-                      className="h7 text-muted"
-                      style={{ textAlign: "left" }}
-                    >
-                      {/* {postuserDetails.firstName +
-                        " " +
-                        postuserDetails.lastName} */}
-                      {/* "Custom Name" */}
-
-                      {props.firstName + " " + props.lastName}
-                    </div>
+                  <div className="h7 text-muted" style={{ textAlign: "left" }}>
+                    {props.firstName + " " + props.lastName}
                   </div>
                 </div>
+              </div>
+              <div>
                 <div>
-                  <div>
-                    <NavDropdown
-                      title={<i class="bi bi-three-dots-vertical"></i>}
-                      align={{ lg: "end" }}
-                      id={`offcanvasNavbarDropdown-expand-lg`}
-                    >
-                      {Cookies.get("user") &&
-                        Cookies.get("user") === props.username && (
-                          <NavDropdown.Item
-                            name="delete"
-                            onClick={handleDelete}
-                          >
-                            Delete
-                          </NavDropdown.Item>
-                        )}
-                      {Cookies.get("user") &&
-                        Cookies.get("user") === props.username && (
-                          <NavDropdown.Item name="edit" onClick={handleEdit}>
-                            Edit
-                          </NavDropdown.Item>
-                        )}
-                      <NavDropdown.Item name="save" onClick={props.handleSave}>
-                        Save
+                  <NavDropdown
+                    title={<i className="bi bi-three-dots-vertical"></i>}
+                    align={{ lg: "end" }}
+                    id={`offcanvasNavbarDropdown-expand-lg`}
+                  >
+                    {user && user === props.username && (
+                      <NavDropdown.Item name="delete" onClick={handleDelete}>
+                        Delete
                       </NavDropdown.Item>
-                    </NavDropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="card-body" style={{ textAlign: "left" }}>
-              {editmode ? (
-                <>
-                  <div className="form-group">
-                    <textarea
-                      className="form-control"
-                      id="post-data"
-                      rows="3"
-                      onChange={handleTextChange}
-                      value={newText}
-                      
-                    ></textarea>
-                  </div>
-                  <div
-                    className="comment-footer-link close-write-comment"
-                    onClick={handleSave}
-                  >
-                    save changes
-                  </div>
-                </>
-              ) : (
-                <>
-                  <pre className="card-text sm-text post-pre">
-                    {props.isQuestion && <b>Question: </b>}
-                    {props.data}
-                  </pre>
-                </>
-              )}
-
-              {props.isQuestion && (
-                <>
-                  <pre
-                    className="card-text sm-text code-pre"
-                    style={{ textAlign: "left" }}
-                  >
-                    <b>Gpt Response:</b>{" "}
-                    <code style={{ whiteSpace: "pre-wrap" }}>
-                      {props.gptresponse}
-                    </code>
-                  </pre>
-                </>
-              )}
-            </div>
-            <div className="card-footer">
-              <div className="card-footer-left">
-                <i
-                  className={
-                    postRxn === "thumbsup"
-                      ? `f-icon bi bi-hand-thumbs-up-fill`
-                      : `f-icon bi bi-hand-thumbs-up`
-                  }
-                  style={{ fontSize: "1.1rem" }}
-                  onClick={() => {
-                    if (postRxn === "thumbsup") {
-                      setPostRxn("");
-                    } else {
-                      setPostRxn("thumbsup");
-                    }
-                  }}
-                ></i>
-                {/* <i class="bi bi-hand-thumbs-up-fill"></i> */}
-                {/* <i class="bi bi-hand-thumbs-down-fill"></i> */}
-                <i
-                  className={
-                    postRxn === "thumbsdown"
-                      ? `f-icon bi bi-hand-thumbs-down-fill`
-                      : `f-icon bi bi-hand-thumbs-down`
-                  }
-                  style={{ fontSize: "1.1rem" }}
-                  onClick={() => {
-                    if (postRxn === "thumbsdown") {
-                      setPostRxn("");
-                    } else {
-                      setPostRxn("thumbsdown");
-                    }
-                  }}
-                ></i>
-
-                {!showComments ? (
-                  <>
-                    <i
-                      class="f-icon bi bi-chat"
-                      style={{
-                        fontSize: "1.1rem",
-                        transform: "rotate(360deg) scaleX(-1)",
-                      }}
-                      onClick={handleComments}
-                    ></i>
-                    {/* <Badge  bg="primary">{commentsCount}</Badge> */}
-                  </>
-                ) : (
-                  <>
-                    <i
-                      class="f-icon bi bi-chat-fill"
-                      style={{
-                        fontSize: "1.1rem",
-                        transform: "rotate(360deg) scaleX(-1)",
-                      }}
-                      onClick={handleComments}
-                    ></i>
-                    {/* <Badge  bg="primary">{commentsCount}</Badge> */}
-                  </>
-                )}
-
-                <i
-                  class="f-icon bi bi-share"
-                  style={{ fontSize: "1.1rem" }}
-                ></i>
-              </div>
-              <div className="card-footer-right">
-                <div className="text-muted h7">
-                  {" "}
-                  <i class="bi bi-clock"></i> {getTime(props.createdtime)}
+                    )}
+                    {user && user === props.username && (
+                      <NavDropdown.Item name="edit" onClick={handleEdit}>
+                        Edit
+                      </NavDropdown.Item>
+                    )}
+                    <NavDropdown.Item name="save" onClick={handleSave}>
+                      Save
+                    </NavDropdown.Item>
+                  </NavDropdown>
                 </div>
               </div>
             </div>
           </div>
-          {showComments && (
-            <Comments setcnt={setCommentsCount} postid={postid} />
-          )}
+
+          <div className="card-body" style={{ textAlign: "left" }}>
+            {editmode ? (
+              <>
+                <div className="form-group">
+                  <textarea
+                    className="form-control"
+                    id="post-data"
+                    rows="3"
+                    onChange={handleTextChange}
+                    value={newText}
+                  ></textarea>
+                </div>
+                <div
+                  className="comment-footer-link close-write-comment"
+                  onClick={handleSave}
+                >
+                  save changes
+                </div>
+              </>
+            ) : (
+              <>
+                <pre className="card-text sm-text post-pre">
+                  {props.isQuestion && <b>Question: </b>}
+                  {props.data}
+                </pre>
+              </>
+            )}
+
+            {props.isQuestion && (
+              <>
+                <pre
+                  className="card-text sm-text code-pre"
+                  style={{ textAlign: "left" }}
+                >
+                  <b>Gpt Response:</b>{" "}
+                  <code style={{ whiteSpace: "pre-wrap" }}>
+                    {props.gptresponse}
+                  </code>
+                </pre>
+              </>
+            )}
+          </div>
+
+          <div className="card-footer">
+            <div className="card-footer-left">
+            <i
+        className={
+          postRxn === "like"
+            ? "f-icon bi bi-caret-up-fill text-primary"
+            : "f-icon bi bi-caret-up text-primary"
+        }
+        style={{ fontSize: "1.1rem" }}
+        onClick={() => handleLikeDislike("like")}
+      ></i>
+      <span className="text-primary ml-1">{likesCount}</span>
+      <i
+        className={
+          postRxn === "dislike"
+            ? "f-icon bi bi-caret-down-fill text-danger"
+            : "f-icon bi bi-caret-down text-danger"
+        }
+        style={{ fontSize: "1.1rem" }}
+        onClick={() => handleLikeDislike("dislike")}
+      ></i>
+
+              <span className="text-danger ml-1">{dislikesCount}</span>
+
+              {!showComments ? (
+                <>
+                  <i
+                    className="f-icon bi bi-chat"
+                    style={{
+                      fontSize: "1.1rem",
+                      transform: "rotate(360deg) scaleX(-1)",
+                    }}
+                    onClick={handleComments}
+                  ></i>
+                </>
+              ) : (
+                <>
+                  <i
+                    className="f-icon bi bi-chat-fill"
+                    style={{
+                      fontSize: "1.1rem",
+                      transform: "rotate(360deg) scaleX(-1)",
+                    }}
+                    onClick={handleComments}
+                  ></i>
+                </>
+              )}
+
+              <i className="f-icon bi bi-share" style={{ fontSize: "1.1rem" }}></i>
+            </div>
+            <div className="card-footer-right">
+              <div className="text-muted h7">
+                <i className="bi bi-clock"></i> {getTime(props.createdtime)}
+              </div>
+            </div>
+          </div>
         </div>
-      }
+ 
+        {showComments && <Comments setcnt={setCommentsCount} postid={postid} />}
+      </div>
     </>
   );
 };

@@ -1,40 +1,3 @@
-// import React from 'react';
-// import CanvasJSReact from '@canvasjs/react-charts';
-// //var CanvasJSReact = require('@canvasjs/react-charts');
- 
-// var CanvasJS = CanvasJSReact.CanvasJS;
-// var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
-// const BarGraph = () => {
-//     const options = {
-//         title: {
-//             text: "Basic Column Chart"
-//         },
-//         data: [
-//         {
-//             // Change type to "doughnut", "line", "splineArea", etc.
-//             type: "column",
-//             dataPoints: [
-//                 { label: "Apple",  y: 10  },
-//                 { label: "Orange", y: 15  },
-//                 { label: "Banana", y: 25  },
-//                 { label: "Mango",  y: 30  },
-//                 { label: "Grape",  y: 28  }
-//             ]
-//         }
-//         ]
-//     }
-//   return (
-//     <div>
-//         <CanvasJSChart options = {options}
-// 				/* onRef={ref => this.chart = ref} */
-// 			/>
-//     </div>
-//   )
-// }
-
-// export default BarGraph;
-
 import React, { useEffect, useState } from 'react';
 import CanvasJSReact from '@canvasjs/react-charts';
 import axios from 'axios';
@@ -42,18 +5,20 @@ import axios from 'axios';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-const BarGraph = () => {
+const BarGraph = (props) => {
   const [ratingWiseProblems, setRatingWiseProblems] = useState([]);
   const [indexWiseProblems, setIndexWiseProblems] = useState([]);
 
-  const fetchCodeforcesData = (codeforcesUsername) => {
-    axios
+  const fetchCodeforcesData = async(codeforcesUsername) => {
+
+     axios
       .get(`https://codeforces.com/api/user.status?handle=${codeforcesUsername}`)
       .then((response) => {
         const problemsData = response.data.result;
   
         // Calculate rating wise problems count
         const ratingCounts = {};
+        console.log("problems ", problemsData)
         problemsData.forEach((problem) => {
           if (problem.verdict === 'OK') {
             const rating = problem.problem.rating || 'Unrated';
@@ -65,12 +30,11 @@ const BarGraph = () => {
             }
           }
         });
-        const ratingDataPoints = Object.entries(ratingCounts).map(([label, indices]) => ({
+        const ratingDataPoints =  Object.entries(ratingCounts).map(([label, indices]) => ({
           label,
           y: indices.size,
         }));
         setRatingWiseProblems(ratingDataPoints);
-  
         // Calculate index wise problems count
         const indexCounts = {};
         problemsData.forEach((problem) => {
@@ -79,21 +43,23 @@ const BarGraph = () => {
             indexCounts[index] = (indexCounts[index] || 0) + 1;
           }
         });
+        console.log("index ", indexCounts);
         const indexDataPoints = Object.entries(indexCounts).map(([label, y]) => ({
           label,
           y,
         }));
         setIndexWiseProblems(indexDataPoints);
+        // console.log("index data points", indexDataPoints)
       })
       .catch((error) => {
-        console.error('Error fetching Codeforces data:', error);
+        console.error('Error fetching Codeforces data here:', error);
       });
   };
   
   
 
   useEffect(() => {
-    const codeforcesUsername = 'voyager_08'; // Replace with your Codeforces handle
+    const codeforcesUsername = props.cfhandle; // Replace with your Codeforces handle
     fetchCodeforcesData(codeforcesUsername);
   }, []);
   indexWiseProblems.sort((a, b) => a.label.localeCompare(b.label));

@@ -5,7 +5,7 @@ import img2 from "../../images/second.jpg";
 import img3 from "../../images/third.webp";
 import img4 from "../../images/img4.jpg";
 import { Link } from "react-router-dom";
-
+import Cookies from "js-cookie";
 const HomePageCarousel = () => {
   return (
     <Carousel fade style={{ width: "100%" }}>
@@ -42,7 +42,17 @@ const HomePageCarousel = () => {
             Get your doubts resolved with AI-powered support. Join the vibrant
             community to learn, share, and grow together.
           </p>
-          <a href="/ask" className="btn btn-success btn-get-started">Explore Now</a>
+          {
+      Cookies.get("user")? (
+        <a className="btn btn-success btn-get-started" href="/">
+        Explore Now
+      </a>
+      ):(
+        <a className="btn btn-success btn-get-started disabled" href="/">
+        Explore Now
+      </a>
+      )
+    }
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
@@ -61,9 +71,18 @@ const HomePageCarousel = () => {
       platforms. Gain insights into your strengths and weaknesses to improve
       your skills.
     </p>
-    <a className="btn btn-success btn-get-started" href="/visualizer">
-      Explore Now
-    </a>
+    {
+      Cookies.get("user")? (
+        <a className="btn btn-success btn-get-started" href="/visualizer">
+        Explore Now
+      </a>
+      ):(
+        <a className="btn btn-success btn-get-started disabled" href="/visualizer">
+        Explore Now
+      </a>
+      )
+    }
+   
   </div>
   
 </Carousel.Caption>

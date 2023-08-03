@@ -1,229 +1,217 @@
-import axios from 'axios';
+import axios from "axios";
 import qs from "qs";
-const baseURL = 'http://localhost:5001/api'; // Replace with your backend API URL
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
-const api = axios.create({
+const errorNotify = (message) => toast.error(message);
+
+const baseURL = "http://localhost:5001/api"; // base url
+const baseApiClient = axios.create({
+  // for authorized endpoints
   baseURL,
 });
+const apiClient = axios.create({
+  // for un-authorized endpoints
+  baseURL, // Replace with your API base URL
+});
 
-const sessionAlert = () =>{
-  alert("session expired login again to continue...");
-  window.location.href='/';
-}
-
-// Set the token for authenticated requests
-const setAuthToken = (token) => {
-  console.log("token in set auth  -> ", token);
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } 
-  else {
-    delete api.defaults.headers.common['Authorization'];
-    // sessionAlert();
+baseApiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // Check if the error is due to JWT token expiration
+    if (error.response.status === 401) {
+      // Clear the token from local storage or cookies
+      Cookies.remove("token");
+      errorNotify("session expired");
+      // Redirect the user to the login page
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
   }
+  );
+  baseApiClient.interceptors.request.use(
+    (config) => {
+      // Get the JWT token from cookies or local storage (you can use whichever storage you are using)
+      const token = Cookies.get("token"); // Replace "token" with the actual name of your token key
+      
+      if (token) {
+        // Attach the token to the request's Authorization header
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    
+    return config;
+  },
+  (error) => {
+    // If there's an error with the request, handle it here
+    return Promise.reject(error);
+  }
+  );
+  
+  
+  
+  // Register a new user
+  const register = async (userdetails) => {
+    const response = await apiClient.post("/user/register", userdetails);
+    return response.data;
+  };
+
+  const login = async (userdetails) => {
+    const response = await apiClient.post("/user/login", userdetails);
+    return response.data;
+  };
+  
+  const createNewPost = async (data) => {
+    const response = await baseApiClient.post("/post/create", { data });
+    return response.data;
 };
-
-// Register a new user
-const register = async (userdetails) => {
-  const response = await api.post('/user/register', userdetails);
-  return response.data;
+const updatePost = async ( postid, data) => {
+    const response = await baseApiClient.post("/post/update", { postid, data });
+    return response.data;
 };
-
-const createNewPost = async(token, data) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.post('/post/create',{data});
+const deletePost = async ( postid) => {
+    const response = await baseApiClient.get("/post/delete", {
+      params: { postid: postid },
+    });
     return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-const updatePost = async(token, postid, data) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.post('/post/update',{postid,data});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-const deletePost = async(token, postid) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.get('/post/delete',{params:{postid:postid}});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
+};
 
 const getPosts = async () => {
-    const response = await api.get('/post/all');
-    return response.data;
-};
+  if(Cookies.get("token")){
 
+    const response = await baseApiClient.get("/post/all");
+    return response.data;
+  }else{
+    const response = await apiClient.get("/post/all");
+    return response.data;
+
+  }
+};
 
 const getComments = async (postid) => {
-  setAuthToken(postid);
-  const response = await api.get('/comment/all',{params:{postid:postid}});
-  console.log("post id ",postid , "comments in api service ",response.data);
-  return response.data;
-};
-
-const deleteComment = async(token, commentid) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.get('/comment/delete',{params:{commentid:commentid}});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-
-
-
-const getReplies = async (commentid) => {
-  const response = await api.get('/reply/all',{params:{commentid:commentid}});
-  return response.data;
-};
-const deleteReply = async(token, replyid) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.get('/reply/delete',{params:{replyid:replyid}});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-
-
-const getPostUser = async(postid) =>{
-  const response = await api.get('/post/user', {params:{postid:postid}});
-  return response.data;
-}
-
-
-const getUserDetails = async(token) =>{
-  if(token){
-    setAuthToken(token);
-    
-    const response = await api.get('/user/');
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
- 
-}
-
-const createNewComment = async(token, data, parentid) =>{
-  if(token){
-    setAuthToken(token);
-    console.log("data ", data, "parentid ", parentid);
-    const response = await api.post('/comment/create',{data,parentid});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-
-const updateComment = async(token, commentid, data) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.post('/comment/update',{commentid,data});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-
-const createNewReply = async(token, data, parentid) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.post('/reply/create',{data,parentid});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-const updateReply = async(token, replyid, data) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.post('/reply/update',{replyid,data});
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
-
-
-const getProfile = async (token) => {
-  if(token){
-    setAuthToken(token);
-    const response = await api.get('/user/profile');
-    return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-
-};
-
-const login = async (userdetails) => {
-    const response = await api.post('/user/login', userdetails);
-    return response.data;
-};
-
-const getProblems = async(tags,from, to) =>{
-  const response = await api.get('/codeforces/problems', {
-    params:{tags:tags,from:from,to:to},
-    paramsSerializer: function(params) {
-      return qs.stringify(params, {arrayFormat: 'repeat'})
-   },
-});
- console.log(response.data)
-return response.data;
-}
-const getContests = async(contestType) =>{
-  const response = await api.get('/codeforces/contests', {
-    params:{contestType:contestType}
-});
-console.log(response.data)
-return response.data;
-}
-const getContestProblems = async(contestId,cf_username) =>{
-  const response = await api.get('codeforces/contest/problems',{
-    params:{contestId:contestId,cf_username:cf_username}
+  const response = await apiClient.get("/comment/all", {
+    params: { postid: postid },
   });
   return response.data;
-}
+};
 
-const getUnsolvedProblems = async(token) =>{
-  const response = await api.get('codeforces/problems/unsolved');
+const deleteComment = async ( commentid) => {
+    const response = await baseApiClient.get("/comment/delete", {
+      params: { commentid: commentid },
+    });
+    return response.data;
+};
+
+const getReplies = async (commentid) => {
+  const response = await apiClient.get("/reply/all", {
+    params: { commentid: commentid },
+  });
   return response.data;
-}
+};
+const deleteReply = async ( replyid) => {
+    const response = await baseApiClient.get("/reply/delete", {
+      params: { replyid: replyid },
+    });
+    return response.data;
+};
 
-// ---------------------- Questions 
+
+const getUserDetails = async () => {
+    const response = await baseApiClient.get("/user/");
+    return response.data;
+};
+
+const createNewComment = async ( data, parentid) => {
+    console.log("data ", data, "parentid ", parentid);
+    const response = await baseApiClient.post("/comment/create", { data, parentid });
+    return response.data;
+};
+
+const updateComment = async ( commentid, data) => {
+    const response = await baseApiClient.post("/comment/update", { commentid, data });
+    return response.data;
+};
+
+const createNewReply = async ( data, parentid) => {
+    const response = await baseApiClient.post("/reply/create", { data, parentid });
+    return response.data;
+ };
+const updateReply = async ( replyid, data) => {
+    const response = await baseApiClient.post("/reply/update", { replyid, data });
+    return response.data;
+ };
+
+const getProfile = async () => {
+    const response = await baseApiClient.get("/user/profile");
+    return response.data;
+ };
+
+
+const getProblems = async (tags, from, to) => {
+  const response = await apiClient.get("/codeforces/problems", {
+    params: { tags: tags, from: from, to: to },
+    paramsSerializer: function (params) {
+      return qs.stringify(params, { arrayFormat: "repeat" });
+    },
+  });
+  console.log(response.data);
+  return response.data;
+};
+const getContests = async (contestType) => {
+  const response = await apiClient.get("/codeforces/contests", {
+    params: { contestType: contestType },
+  });
+  console.log(response.data);
+  return response.data;
+};
+const getContestProblems = async (contestId, cf_username) => {
+  const response = await apiClient.get("codeforces/contest/problems", {
+    params: { contestId: contestId, cf_username: cf_username },
+  });
+  return response.data;
+};
+
+const getUnsolvedProblems = async () => {
+  const response = await baseApiClient.get("codeforces/problems/unsolved");
+  return response.data;
+};
+
+// ---------------------- Questions
 
 // const getQuestions = async (token) => {
 //   if(token){
 //       setAuthToken(token);
-//       const response = await api.get('/question/all');
+//       const response = await baseApiClient.get('/question/all');
 //       return response.data;
 //   }
 //   return {status:"failed", data:{},message:"session expired"};
 // };
 
 const getQuestions = async () => {
-  const response = await api.get('/question/all');
-  console.log("response of the question on frontend -> ",response)
+  const response = await baseApiClient.get("/question/all");
   return response.data;
 };
 
-const askNewQuestion = async(token, data) =>{
-  if(token){
-    setAuthToken(token);
-    const response = await api.post('/question/ask',{data});
+const askNewQuestion = async ( data) => {
+    const response = await baseApiClient.post("/question/ask", { data });
     return response.data;
-  }
-  return {status:"failed", data:{},message:"session expired"};
-}
+ };
 
-const getQuestionUser = async(questionid) =>{
-  const response = await api.get('/question/user', {params:{questionid:questionid}});
-  return response.data;
-}
+
+const submitPostReaction = async ( postid, reaction) => {
+    const response = await baseApiClient.post("/post/reaction", { postid, reaction });
+    return response.data;
+ };
+
+const removePostReaction = async ( postid) => {
+    const response = await baseApiClient.delete("/post/reaction", { data: { postid } });
+    return response.data;
+ };
+
 
 
 const apiService = {
-  setAuthToken,
   register,
   login,
   getProfile,
@@ -232,7 +220,6 @@ const apiService = {
   createNewReply,
   getPosts,
   getComments,
-  getPostUser,
   getUserDetails,
   getReplies,
   getProblems,
@@ -240,20 +227,21 @@ const apiService = {
   getContestProblems,
   getUnsolvedProblems,
 
-
   getQuestions,
   askNewQuestion,
-  getQuestionUser,
+
 
   deletePost,
   deleteComment,
   deleteReply,
 
-
   updatePost,
   updateComment,
   updateReply,
-  
+
+  submitPostReaction,
+  removePostReaction,
+
 };
 
 export default apiService;

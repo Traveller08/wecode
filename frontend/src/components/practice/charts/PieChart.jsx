@@ -1,52 +1,3 @@
-// import React from "react";
-// import CanvasJSReact from "@canvasjs/react-charts";
-// //var CanvasJSReact = require('@canvasjs/react-charts');
-
-// var CanvasJS = CanvasJSReact.CanvasJS;
-// var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
-// const PieChart = () => {
-//   const options = {
-//     animationEnabled: true,
-//     title: {
-//       text: "Customer Satisfaction",
-//     },
-//     subtitles: [
-//       {
-//         text: "71% Positive",
-//         verticalAlign: "center",
-//         fontSize: 24,
-//         dockInsidePlotArea: true,
-//       },
-//     ],
-//     data: [
-//       {
-//         type: "doughnut",
-//         showInLegend: true,
-//         indexLabel: "{name}: {y}",
-//         yValueFormatString: "#,###'%'",
-//         dataPoints: [
-//           { name: "Unsatisfied", y: 5 },
-//           { name: "Very Unsatisfied", y: 31 },
-//           { name: "Very Satisfied", y: 40 },
-//           { name: "Satisfied", y: 17 },
-//           { name: "Neutral", y: 7 },
-//         ],
-//       },
-//     ],
-//   };
-//   return (
-//     <div>
-//       <CanvasJSChart
-//         options={options}
-//         /* onRef={ref => this.chart = ref} */
-//       />
-//     </div>
-//   );
-// };
-
-// export default PieChart;
-
 import React, { useEffect, useState } from "react";
 import CanvasJSReact from "@canvasjs/react-charts";
 import axios from "axios";
@@ -54,7 +5,7 @@ import axios from "axios";
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-const PieChart = () => {
+const PieChart = (props) => {
   const [verdictData, setVerdictData] = useState([]);
   const [languageData, setLanguageData] = useState([]);
   const [tagsData, setTagsData] = useState([]);
@@ -140,7 +91,7 @@ const PieChart = () => {
   };
 
   useEffect(() => {
-    const codeforcesUsername = "voyager_08"; // Replace with your Codeforces handle
+    const codeforcesUsername = props.cfhandle;; // Replace with your Codeforces handle
     fetchCodeforcesData(codeforcesUsername);
   }, []);
  

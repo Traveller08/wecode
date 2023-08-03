@@ -22,17 +22,14 @@ import {
   createCommentTable,
   createReplyTable,
   createGptTable,
+  createPostReactionsTable, // Add this line to create postReactions table
 } from "./util/db.js";
 
 app.use("/api/user/", user);
 app.use("/api/codeforces/", codeforces);
-
 app.use("/api/post/", post);
-
 app.use("/api/comment/", comment);
-
 app.use("/api/reply/", reply);
-
 app.use("/api/question", question);
 
 const intiDB = async () => {
@@ -44,20 +41,20 @@ const intiDB = async () => {
     await connection.promise().query(createPostTable());
     connection.commit();
 
-    await connection.promise().query(createCommentTable()); 
+    await connection.promise().query(createCommentTable());
     connection.commit();
 
     await connection.promise().query(createReplyTable());
     connection.commit();
 
-    
-
     await connection.promise().query(createGptTable());
     connection.commit();
 
+    await connection.promise().query(createPostReactionsTable()); // Add this line to create postReactions table
+    connection.commit();
+
     console.log("db initialised...");
-  } 
-  catch (error) {
+  } catch (error) {
     console.log("database initialization failed...");
     console.log(error);
   }

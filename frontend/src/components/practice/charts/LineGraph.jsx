@@ -23,11 +23,11 @@ const getRatingLevel = (rating) => {
   }
 };
 
-const LineGraph = () => {
+const LineGraph = (props) => {
   const [contestData, setContestData] = useState([]);
 
   useEffect(() => {
-    const codeforcesUsername = "voyager_08"; // Replace with your Codeforces handle
+    const codeforcesUsername = props.cfhandle;; // Replace with your Codeforces handle
 
     axios
       .get(`https://codeforces.com/api/user.rating?handle=${codeforcesUsername}`)

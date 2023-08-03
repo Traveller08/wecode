@@ -13,7 +13,7 @@ const ProfilePage = (props) => {
     // Fetch user details from your API service and update the state
     const fetchUserDetails = async () => {
       try {
-        const response = await apiService.getUserDetails(Cookies.get("token"));
+        const response = await apiService.getUserDetails();
         console.log("response at profile ", response.data[0]);
         setUser(response.data[0]);
       } catch (error) {

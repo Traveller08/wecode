@@ -43,11 +43,7 @@ const Comments = (props) => {
 
   const addComment = async (comment, parentId) => {
     try {
-      const response = await apiService.createNewComment(
-        Cookies.get("token"),
-        comment,
-        props.postid
-      );
+      const response = await apiService.createNewComment(comment, props.postid);
 
       successNotify(response.message);
       setComments([response.data, ...comments]);
@@ -59,10 +55,7 @@ const Comments = (props) => {
 
   const deleteComment = async (commentid) => {
     try {
-      const response = await apiService.deleteComment(
-        Cookies.get("token"),
-        commentid
-      );
+      const response = await apiService.deleteComment(commentid);
 
       successNotify(response.message);
       setComments(
@@ -77,7 +70,7 @@ const Comments = (props) => {
   };
   const handleCommentEdit = async (commentid, text) => {
     try {
-      await apiService.updateComment(Cookies.get("token"), commentid, text);
+      await apiService.updateComment(commentid, text);
 
       successNotify("comment updated");
 

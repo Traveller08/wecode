@@ -25,3 +25,29 @@
 .card-text{
     font-size: 1rem;
 }
+
+.post-container {
+    /* Your existing styles for post container */
+  
+    /* Add the transition effect for the background color change */
+    transition: background-color 1s ease;
+  }
+  
+  .post-container.new-post {
+    /* Apply the background color change for the new post */
+    background-color: rgba(255, 255, 0, 0.2); /* Change the color and opacity as desired */
+  }
+  
+  /* Add this to your feed.css file */
+.question-container {
+    /* Your existing styles for question container */
+  
+    /* Add the transition effect for the background color change */
+    transition: background-color 1s ease;
+  }
+  
+  .question-container.new-question {
+    /* Apply the background color change for the new question */
+    background-color: rgba(0, 255, 0, 0.2); /* Change the color and opacity as desired */
+  }
+  

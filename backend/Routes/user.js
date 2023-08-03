@@ -23,9 +23,15 @@ router.post("/login", verifyLoginDetails, async (req, res) => {
           username: rows[0].username,
         };
         const token = generateAccessToken(payload);
+        const data={
+          username:rows[0].username,
+          firstName:rows[0].firstName,
+          lastName:rows[0].lastName,
+          codeforcesHandle:rows[0].codeforcesHandle
+        }
         return res
           .status(200)
-          .json({ message: "login successful", token: token });
+          .json({ message: "login successful", token: token,data:data });
       }
     }
     return res.status(401).json({ message: "invalid credentials" });

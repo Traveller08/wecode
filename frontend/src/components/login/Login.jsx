@@ -34,10 +34,13 @@ const Login=(props)=> {
     try {
       const response = await apiService.login(userdetails);
       successNotify(response.message);
-      const { token } = response;
-      Cookies.set('token', token, { expires: 1/48 });
-      Cookies.set('user', userdetails.username, { expires: 1/48 });
-      props.setuser(true);
+      const { token, data } = response;
+      Cookies.set('token', token, { expires: 1});
+      Cookies.set('user', data.username, { expires: 1 });
+      Cookies.set('name', data.firstName + " " + data.lastName, { expires: 1 });
+      Cookies.set('cfHandle', data.codeforcesHandle, { expires: 1 });
+      props.login(data.username);
+      // console.log("user " , props.user)
       navigate('/');
     } 
     catch (error) {

@@ -1,70 +1,88 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // You might need to install axios via npm or yarn
+import Cookies from "js-cookie";
 import Problems from "../components/practice/problems/Problems";
-import axios from "axios";
-import { useState } from "react";
-
-const UnsolvedProblemsPage = (props) => {
-  const [problems, setProblems] = useState([]);
+const UnsolvedProblemsPage = () => {
+  const [attemptedProblems, setAttemptedProblems] = useState([]);
+  const cfhandle = Cookies.get("cfHandle");
 
   useEffect(() => {
-    const handleUnsolvedProblems = async () => {
+    // Fetch attempted problems of the user from Codeforces API
+    const fetchAttemptedProblems = async () => {
       try {
-        // Replace 'YOUR_CODEFORCES_HANDLE' with your actual Codeforces handle
-        const codeforcesHandle = "voyager_08";
-
-        // Call the Codeforces API to get all submissions of the user
         const response = await axios.get(
-          `https://codeforces.com/api/user.status?handle=${codeforcesHandle}&from=1&count=100`
+          `https://codeforces.com/api/user.status?handle=${cfhandle}`
         );
 
-        // Create a map to store the verdict of each problem
-        const verdictMap = new Map();
-
-        // Process each submission to determine the verdict of each problem
-        response.data.result.forEach((submission) => {
-          const { problem, verdict } = submission;
-          if (problem && verdict) {
-            const problemKey = `${problem.contestId}${problem.index}`;
-            // If the problem is not already marked as "OK" (accepted), update the verdict
-            if (verdictMap.get(problemKey) !== "OK") {
-              verdictMap.set(problemKey, verdict);
-            }
+        // Filter out the problems without any accepted submissions
+        const attemptedProblems = response.data.result.filter(
+          (submission) => submission.verdict === "OK"
+        );
+         
+        // Remove duplicates based on problem id (contestId + index)
+        const uniqueProblems = [];
+        const problemIds = new Set();
+        response.data.result.forEach((submission)=>{
+          if (submission.verdict === "OK") {
+            problemIds.add(`${submission.problem.contestId}-${submission.problem.index}`);
+          }
+        })
+        attemptedProblems.forEach((submission) => {
+          const problemId = `${submission.problem.contestId}_${submission.problem.index}`;
+          if (!problemIds.has(problemId)) {
+            problemIds.add(problemId);
+            uniqueProblems.push(submission.problem);
           }
         });
 
-        // Filter the response to get unsolved problems
-        const unsolvedProblems = response.data.result.filter(
-          (submission) =>
-            submission.problem &&
-            verdictMap.get(
-              `${submission.problem.contestId}${submission.problem.index}`
-            ) !== "OK"
-        );
-
-        // Update the problems state with the unsolved problems
-        console.log("unsolved problems without filter",unsolvedProblems);
-        const problems_array = unsolvedProblems.map((problem)=>{
-          return problem.problem;
-        })
-        console.log(problems_array);
-        setProblems("prblem -> ", problems_array);
+        setAttemptedProblems(uniqueProblems);
       } catch (error) {
-        console.log("Error fetching unsolved problems:", error);
+        console.error("Error fetching attempted problems:", error);
       }
     };
-    handleUnsolvedProblems();
+    // const fetchUserAttemptedProblems = async (handle) => {
+    //   try {
+    //     const response = await fetch(`https://codeforces.com/api/user.status?handle=${handle}`);
+    //     const data = await response.json();
+    //     const acceptedProblems = new Set();
+    //     const attemptedProblems = [];
+    
+    //     // Find all the problems with an accepted solution
+    //     for (const submission of data.result) {
+    //       if (submission.verdict === "OK") {
+    //         acceptedProblems.add(`${submission.problem.contestId}-${submission.problem.index}`);
+    //       }
+    //     }
+    
+    //     // Filter problems with at least one submission and no accepted solution
+    //     for (const submission of data.result) {
+    //       const problemId = `${submission.problem.contestId}-${submission.problem.index}`;
+    //       if (!acceptedProblems.has(problemId) && submission.problem.rating !== undefined) {
+    //         attemptedProblems.push(submission.problem);
+    //         acceptedProblems.add(problemId); // Add to the set to avoid duplicates
+    //       }
+    //     }
+    //     // console.log(attemptedProblems)
+    
+    //     return attemptedProblems;
+    //   } catch (error) {
+    //     console.error("Error fetching attempted problems:", error);
+    //     return [];
+    //   }
+    // };
+    
+    fetchAttemptedProblems(cfhandle);
   }, []);
 
   return (
-    <>
-      <div className="container main-container">
-        <div className="col-md-3"></div>
-        <div className="col-md-7 gedf-main">
-          <Problems problems={problems} />
-        </div>
-        <div className="col-md-3"></div>
+    <div style={{width:"100%",display:"flex", flexDirection:"row"}}>
+      <div className="col-md-3"></div>
+      <div className="col-md-6 gedf-main">
+      <h3 style={{textAlign:"center"}}>Unsolved problems of {cfhandle}</h3>
+        <Problems problems={attemptedProblems}/>
+
       </div>
-    </>
+    </div>
   );
 };
 

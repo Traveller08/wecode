@@ -24,23 +24,19 @@ function Register(props) {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [waiting, setWaiting] = useState(false);
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserdetails({ ...userdetails, [name]: value });
   };
   
-  const handleConfirmPasswordChange = (e) => {
-    
+  const handleConfirmPasswordChange = (e) => {  
     setConfirmpassword(e.target.value);
-
     if (e.target.value !== userdetails.password) {
       setPasswordMessage("passwords don't match");
     }
     else{
       setPasswordMessage("");
     }
-
   };
   
   const handleSubmit = async (e) => {
@@ -49,12 +45,12 @@ function Register(props) {
     try {
       const response = await apiService.register(userdetails);
       successNotify(response.message);
+      window.location.href='/login';
       console.log(response);
     } catch (error) {
       errorNotify("Failed to register");
       console.error("Error message:", error);
     } finally {
-      
       setWaiting(false);
       setUserdetails({
         firstName: "",

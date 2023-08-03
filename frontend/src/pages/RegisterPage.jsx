@@ -3,7 +3,7 @@ import Register from "../components/register/Register";
 const RegisterPage = (props) => {
   return (
     <>
-      <Register user={props.user} setuser={props.handleUser} />
+      <Register user={props.user} />
     </>
   );
 };

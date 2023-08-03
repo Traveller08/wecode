@@ -26,234 +26,77 @@ import TutorialsPage from "./pages/TutorialsPage";
 import VisualizerPage from "./pages/VisualizerPage";
 import UnsolvedProblemsPage from "./pages/UnsolvedProblemsPage";
 import BlogPage from "./pages/BlogPage";
-
+import Layout from "./Layout";
 
 const App = () => {
-  const [user, setUser] = useState(false); // whether user is logged in or not -> can be learner/educator
+  const [user, setUser] = useState(null);
+  const handleLogout = () => {
+   
+    setUser(null);
+   
+  };
 
+  const handleLogin = (user) => {
+    setUser(user);
+  };
   useEffect(() => {
-    if (Cookies.get("token")) {
-      setUser(true);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (!Cookies.get("token")) {
-      setUser(false);
+    const userCookie = Cookies.get("user");
+    if (userCookie) {
+      setUser(userCookie);
     }
   }, []);
 
-  const handleUser = (value) => {
-    setUser(value);
-  };
-
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          <Route
-            exact
-            path="/login"
-            element={<LoginPage user={user} setuser={handleUser} />}
-          />
+     
+      <Routes>
+        <Route
+          exact path="/login"
+          element={<LoginPage user={user} login={handleLogin} />}
+        />
+        <Route
+          exact path="/register"
+          element={<RegisterPage user={user} login={handleLogin} />}
+        />
 
-          <Route
-            exact
-            path="/register"
-            element={<RegisterPage user={user} setuser={handleUser} />}
-          />
+        
 
-          <Route
-            exact
-            path="/"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                <Homepage user={user} />
-              </>
-            }
-          />
+        <Route index element={<><NavBar user={user} logout={handleLogout} /><Homepage user={user} /> </>} />
+        <Route exact path="/profile" element={<><NavBar user={user} logout={handleLogout} /><Profilepage user={user} /> </>} />
+        <Route
+          exact path="/practice/problems"
+          element={<><NavBar user={user} logout={handleLogout} /><Problemspage user={user} /> </>}
+        />
+        <Route
+          exact path="/practice/problems/unsolved"
+          element={<><NavBar user={user} logout={handleLogout} /><UnsolvedProblemsPage user={user} /> </>}
+        />
+        <Route
+          exact path="/practice/problemsheets"
+          element={<><NavBar user={user} logout={handleLogout} /><ProblemSheetPage user={user} /> </>}
+        />
+        <Route
+          exact path="/practice/contests"
+          element={<><NavBar user={user} logout={handleLogout} /><ContestsPage user={user} /> </>}
+        />
+        <Route exact path="/learn/tutorials" element={<><NavBar user={user} logout={handleLogout} /><TutorialsPage user={user} /> </>} />
+        <Route exact path="/learn/blogs" element={<><NavBar user={user} logout={handleLogout} /><BlogPage user={user} /> </>} />
+        <Route exact path="/visualizer" element={<><NavBar user={user} logout={handleLogout} /><VisualizerPage user={user} /> </>} />
+        {/* Add other routes for authenticated users */}
 
-          <Route
-            exact
-            path="/profile"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                <Profilepage user={user} />
-              </>
-            }
-          />
+        <Route index element={<><NavBar user={user} logout={handleLogout} /><Homepage /> </>} />
+        <Route exact path="/learn/blogs" element={<><NavBar user={user} logout={handleLogout} /><BlogPage /> </>} />
+        {/* Add other routes for non-authenticated users */}
 
-          <Route
-            exact
-            path="/practice/problems"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-
-                <Problemspage user={user} />
-              </>
-            }
-          />
-
-          <Route
-            exact
-            path="/practice/problems/unsolved"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-
-                <UnsolvedProblemsPage user={user} />
-              </>
-            }
-          />
-
-          <Route
-            exact
-            path="/practice/problemsheets"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-
-                <ProblemSheetPage user={user} />
-              </>
-            }
-          />
-
-          <Route
-            exact
-            path="/practice/contests"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                <ContestsPage user={user} />
-              </>
-            }
-          />
-          <Route
-            exact
-            path="/learn/tutorials"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                {/* <Homepage user={user} /> */}
-                <TutorialsPage user={user} />
-              </>
-            }
-          />
-          <Route
-            exact
-            path="/learn/blogs"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                {/* <Homepage user={user} /> */}
-                <BlogPage user={user} />
-              </>
-            }
-          />
-
-
-          <Route
-            exact
-            path="/visualizer"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                <VisualizerPage user={user} />
-              </>
-            }
-          />
-          <Route
-            exact
-            path="/learn/blogs"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                {/* <Homepage user={user} /> */}
-                <TutorialsPage user={user} />
-              </>
-            }
-          />
-          <Route
-            exact
-            path="/learn/blogs"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                {/* <Homepage user={user} /> */}
-                <BlogPage user={user} />
-              </>
-            }
-          />
-
-
-          <Route
-            exact
-            path="/visualizer"
-            element={
-              <>
-                <NavBar
-                  user={user}
-                  setuser={setUser}
-                  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
-                />
-                <VisualizerPage user={user} />
-              </>
-            }
-          />
-        </Routes>
-      </div>
-
+        <Route exact path="/about" element={<><NavBar user={user} logout={handleLogout} /><Aboutpage /> </>} />
+        <Route exact path="/bug" element={<><NavBar user={user} logout={handleLogout} /><Bugpage /> </>} />
+        <Route exact path="/discuss" element={<><NavBar user={user} logout={handleLogout} /><Discusspage /> </>} />
+        <Route exact path="/error" element={<><NavBar user={user} logout={handleLogout} /><Errorpage /> </>} />
+        <Route exact path="/report/bug" element={<><NavBar user={user} logout={handleLogout} /><ReportBugpage /> </>} />
+        {/* Add other routes for both authenticated and non-authenticated users */}
+      </Routes>
       <NotificationToaster />
-
-      <ChatBot />
-
+      {/* <ChatBot /> */}
       <WeCodeFooter />
     </Router>
   );

@@ -37,7 +37,7 @@ const Comment = (comment) => {
   const addReply = async (reply) => {
     try {
       const response = await apiService.createNewReply(
-        Cookies.get("token"),
+        
         reply,
         commentid
       );
@@ -53,7 +53,7 @@ const Comment = (comment) => {
   const deleteReply = async (replyid) => {
     try {
       const response = await apiService.deleteReply(
-        Cookies.get("token"),
+        
         replyid
       );
 
@@ -70,7 +70,7 @@ const Comment = (comment) => {
   };
   const editReply = async (replyid, text) => {
     try {
-      await apiService.updateReply(Cookies.get("token"), replyid, text);
+      await apiService.updateReply( replyid, text);
 
       successNotify("reply updated");
 

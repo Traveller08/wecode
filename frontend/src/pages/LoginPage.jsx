@@ -4,7 +4,7 @@ import Login from "../components/login/Login";
 const LoginPage = (props) => {
   return (
     <>
-      <Login user={props.user} setuser={props.setuser} />
+      <Login user={props.user} login={props.login} />
     </>
   );
 };

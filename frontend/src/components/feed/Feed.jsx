@@ -1,261 +1,205 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Post from "../post/Post";
 import "./feed.css";
 import apiService from "../../services/apiService";
 import Cookies from "js-cookie";
-import Alert from "react-bootstrap/Alert";
 import CreatePost from "../post/CreatePost";
 import toast from "react-hot-toast";
 
-const successNotify=(message) =>toast.success(message);
+const successNotify = (message) => toast.success(message);
 const errorNotify = (message) => toast.error(message);
 
-// const postsData = [
-//   {
-//     url: "https://picsum.photos/50/50",
-//     username: "lit2020034@iiitl.ac.in",
-//     firstname: "Ankit",
-//     lastname: "Kumar",
-//     id: "1",
-//     data: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam sed praesentium quidem quisquam est maxime necessitatibus tempore illum sint, commodi maiores porro alias accusantium rerum temporibus assumenda voluptatum et eveniet!
-//     Animi, iusto voluptatibus enim, ipsum assumenda provident ex dolore earum nostrum asperiores quaerat distinctio eum! Unde ex suscipit aliquam, quod dolore voluptates eius sit a doloremque itaque molestias nostrum fuga!
-//     Esse, ex vitae fugit labore excepturi beatae itaque similique facilis voluptas omnis est. Labore natus dolore, recusandae esse voluptate dolor fugit accusantium quis earum reiciendis facilis aperiam saepe iusto sunt?
-//     Eum numquam deleniti blanditiis molestiae et deserunt placeat nesciunt odit excepturi illum corrupti quibusdam, quidem aspernatur eaque incidunt tempore explicabo aperiam expedita! Facilis sed corrupti assumenda excepturi consectetur deserunt necessitatibus!
-//     Doloribus ex veritatis suscipit porro aliquam dolorem soluta eaque cumque! A magni dolores illum delectus laudantium cumque quas debitis sint dolor. Aspernatur aliquid voluptate quibusdam hic libero debitis perspiciatis nulla!`,
-//     time: "15",
-//   },
-// ];
-
-export default function Feed(props) {
-  
-  const [posts, setPosts] = useState([{}]);
-  const [questions, setQuestions]= useState([{}]);
-
-  // const [fetched, setFetched] = useState(false);
+const Feed = (props) => {
+  const [posts, setPosts] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [active, setActive] = useState("posts");
-  
+  const [isNewPostAdded, setIsNewPostAdded] = useState(false);
+  const [isNewQuestionAdded, setIsNewQuestionAdded] = useState(false);
+   
+  // Create a ref for the last post element
+  const lastPostRef = useRef(null);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await apiService.getPosts();
-        console.log(response.data)
         setPosts(response.data);
-
-        // console.log("posts in feeed", response.data);
-      } 
-      catch (error) {
+      } catch (error) {
         console.log("Error fetching posts:", error);
       }
     };
     fetchPosts();
-    
+
     const fetchQuestions = async () => {
       try {
         const response = await apiService.getQuestions();
         setQuestions(response.data);
-        // console.log("posts in feeed", response.data);
       } catch (error) {
         console.log("Error fetching questions:", error);
       }
     };
     fetchQuestions();
-    
-    // console.log("Posts" , posts)
-    
-    // console.log("Posts" , posts)
-    // console.log("Questions" , questions)
-
-    // setFetched(true);
   }, []);
-
-
-  // useEffect(() => {
-    // const fetchQuestions = async () => {
-    //   try {
-    //     const response = await apiService.getQuestions();
-    //     setQuestions(response.data);
-    //     // console.log("posts in feeed", response.data);
-    //   } catch (error) {
-    //     console.log("Error fetching posts:", error);
-    //   }
-    // };
-    // fetchQuestions();
-  //   setFetched(true);
-  // }, []);
-
 
   const createPost = async (text) => {
     try {
-      const response = await apiService.createNewPost(
-        Cookies.get("token"),
-        text
-      );
-    
+      const response = await apiService.createNewPost(text);
       successNotify("post created successfully");
-      
-      // console.log(posts)
-      setPosts([response.data,...posts]);
-      // console.log(posts)
-
-    } 
-    catch (error) {
+      setPosts((prevPosts) => [...prevPosts, response.data]);
+      setIsNewPostAdded(true); // Set the state to indicate a new post is added
+      scrollToNewPost();
+    } catch (error) {
       errorNotify("Failed to create post");
       console.error("Error message:", error);
     }
-
   };
-  const deletePost=async(postid)=>{
+
+  const scrollToNewPost = () => {
+    if (lastPostRef.current) {
+      lastPostRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  // ... Rest of the code ...
+  const deletePost = async (postid) => {
     try {
-      await apiService.deletePost(
-        Cookies.get("token"), postid
+      await apiService.deletePost(postid);
+      setPosts((prevPosts) =>
+        prevPosts.filter((post) => post.postid !== postid)
       );
-      setPosts(posts.filter((post)=>{return post.postid!==postid}));
       successNotify("post deleted successfully");
-    } 
-    catch (error) {
+    } catch (error) {
       errorNotify("Failed to delete");
       console.error("Error message:", error);
     }
-  }
+  };
 
-  const deleteQuestion=async(postid)=>{
+  const deleteQuestion = async (postid) => {
     try {
-      await apiService.deletePost(
-        Cookies.get("token"), postid
+      await apiService.deletePost(postid);
+      setQuestions((prevQuestions) =>
+        prevQuestions.filter((question) => question.postid !== postid)
       );
-      setQuestions(questions.filter((question)=>{return question.postid!==postid}));
-      successNotify("post deleted successfully");
-    } 
-    catch (error) {
+      successNotify("question deleted successfully");
+    } catch (error) {
       errorNotify("Failed to delete");
       console.error("Error message:", error);
     }
-  }
+  };
 
-  const savePost=async()=>{
-    
-  }
+  const savePost = async () => {
+    // Implement the save post functionality here if needed
+  };
 
   const askQuestion = async (text) => {
     try {
-      const response = await apiService.askNewQuestion(
-        Cookies.get("token"),
-        text
-      );
-    
-      successNotify("question created successfully");
-      setQuestions([response.data,...questions]);
-    } 
-    catch (error) {
+      const response = await apiService.askNewQuestion(text);
+      successNotify("question asked successfully");
+      setQuestions((prevQuestions) => [response.data, ...prevQuestions]);
+      setIsNewQuestionAdded(true); // Set the state to indicate a new question is added
+      scrollToNewPost();
+    } catch (error) {
       errorNotify("Failed to ask");
       console.error("Error message:", error);
     }
   };
 
-  const handlePostEdit=async(postid, text)=>{
-
+  const handlePostEdit = async (postid, text) => {
     try {
-      await apiService.updatePost(
-        Cookies.get("token"),
-        postid,
-        text
-      );
-    
+      await apiService.updatePost(postid, text);
       successNotify("post updated");
-
-      setPosts(posts.map((post) => {
-        if (post.postid === postid) {
-          return { ...post, data: text };
-        } else {
-          return post;
-        }
-      }));
-      
-    } 
-    catch (error) {
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.postid === postid ? { ...post, data: text } : post
+        )
+      );
+    } catch (error) {
       errorNotify("Failed to update");
       console.error("Error message:", error);
     }
-
-    
-  }
-
+  };
 
   return (
     <>
       <div>
-        {props.user && <CreatePost handleSubmitPost={createPost} handleSubmitQuestion = {askQuestion} user={props.user}  active={active} setactive={setActive}/>}
+        {props.user && (
+          <CreatePost
+            handleSubmitPost={createPost}
+            handleSubmitQuestion={askQuestion}
+            user={props.user}
+            active={active}
+            setactive={setActive}
+          />
+        )}
 
-        {active==="posts" && posts.map((post) => {
-          return (
-            <>
-              {/* {post.postid && ( */}
+        <div>
+          {active === "posts" &&
+            posts.map((post, index) => (
+              <div
+                key={post.postid}
+                ref={index === posts.length - 1 ? lastPostRef : null}
+                className={`post-container ${
+                  isNewPostAdded && index === posts.length - 1 ? "new-post" : ""
+                }`}
+              >
+                {/* 
+                likesCount,
+              dislikesCount,
+              reaction
+                */}
                 <Post
-                  postid={`${post.postid}`}
+                  postid={post.postid}
+                  // Rest of the props
                   createdtime={post.createdtime}
                   data={post.data}
-                  likes={post.likes}
-                  dislikes={post.dislikes}
-
-                  firstName = {post.firstName}
-                  lastName = {post.lastName}
-                  photourl = {post.photourl}
-                  username = {post.username}
-                  user= {props.user}
-                  isQuestion = {false}
-                  gptresponse = {''}
-                  
+                  likes={post.likesCount}
+                  dislikes={post.dislikesCount}
+                  reaction={post.reaction}
+                  firstName={post.firstName}
+                  lastName={post.lastName}
+                  photourl={post.photourl}
+                  username={post.username}
+                  user={props.user}
+                  isQuestion={false}
+                  gptresponse={post.gptresponse}
                   handleDelete={deletePost}
                   handleSave={savePost}
                   handleEdit={handlePostEdit}
-
-                  // onsubmit={createPost}
                 />
-              {/* )} */}
-            </>
-          );
-        })}
+              </div>
+            ))}
 
-
-
-        {active==="ask" && questions.map((question) => {
-          return (
-            <>
-              {/* {question.questionid && ( */}
-                {/* <Post
-                  postid={`${question.questionid}`}
+          {active === "ask" &&
+            questions.map((question, index) => (
+              <div
+                key={question.postid}
+                className={`question-container ${
+                  isNewQuestionAdded && index === 0 ? "new-question" : ""
+                }`}
+              >
+                <Post
+                  postid={question.postid}
+                  // Rest of the props
                   createdtime={question.createdtime}
                   data={question.data}
-                  // onsubmit={askQuestion}
-                  post={false}
-                /> */}
-                {/* { console.log(question)} */}
-
-                <Post 
-                  postid={`${question.postid}`}
-                  createdtime={question.createdtime}
-                  data={question.data}
-                  likes={question.likes}
-                  dislikes={question.dislikes}
-
-                  firstName = {question.firstName}
-                  lastName = {question.lastName}
-                  photourl = {question.photourl}
-                  username = {question.username}
-
-                  isQuestion = {true}
-                  gptresponse = {question.gptresponse}
-
+                  likes={question.likesCount}
+                  dislikes={question.dislikesCount}
+                  reaction={question.reaction}
+                  firstName={question.firstName}
+                  lastName={question.lastName}
+                  photourl={question.photourl}
+                  username={question.username}
+                  isQuestion={true}
+                  gptresponse={question.gptresponse}
                   handleDelete={deleteQuestion}
                   handleSave={savePost}
-
-                  // onsubmit={createPost}
                 />
-              {/* )} */}
-            </>
-          );
-        })}
+              </div>
+            ))}
+        </div>
       </div>
     </>
   );
-}
+};
+
+export default Feed;
