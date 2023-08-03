@@ -1,2 +1,0 @@
-change login signup forms to proper validation forms
-light/dark mode
