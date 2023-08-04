@@ -5,10 +5,10 @@ const Blog = ({title, content}) => {
   return (
     <div className='card lf-s blog' style={{border: "none"}}>
         <div className="card-header">
-            {title}
+            <b>{title}</b>
       </div>
       <div className='card-body'>
-        {content}
+        <a href={content}>{content}</a>
       </div>
     </div>
   )

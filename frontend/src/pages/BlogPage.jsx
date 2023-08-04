@@ -1,10 +1,11 @@
 import React from 'react'
 import Blog from '../components/learn/blog/Blog'
+import {BlogData} from "../data/blogData";
 
 const BlogPage = ({blogList}) => {
   return (
     <>
-    <div><h1>All Blogs</h1></div>
+    <div style={{textAlign: "center"}}><h1>All Blogs</h1></div>
       {/* Uncomment this when you have data in blogdata page  */}
       {/* {
         blogList.map(b => {
@@ -17,10 +18,14 @@ const BlogPage = ({blogList}) => {
         })
       } */}
       {/* Remove blog tag below*/}
-      <Blog
-      title={"Blog Heading"}
-      content={"Blog Content"}
-      />
+      {BlogData.map(b => {
+          return (
+            <Blog
+            title={b.title}
+            content={b.content} 
+            />
+      )})
+      }
     </>
   )
 }
