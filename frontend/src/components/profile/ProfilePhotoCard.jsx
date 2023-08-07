@@ -29,7 +29,7 @@ const ProfilePhotoCard = ({ profilePhotoUrl, onDelete, onUpdate }) => {
           height="150"
         />
       </div>
-      <div className="buttons-container">
+      {/* <div className="buttons-container">
         <div className="image-selector">
           <InputGroup>
             <Form.Control
@@ -48,7 +48,7 @@ const ProfilePhotoCard = ({ profilePhotoUrl, onDelete, onUpdate }) => {
             </Button>
           </InputGroup>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
