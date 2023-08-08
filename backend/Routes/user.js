@@ -79,18 +79,20 @@ router.post("/register", verifyUserDetails, async (req, res) => {
   }
 });
 
-// Is not required !!
 router.get("/", verifyJwtToken, async (req, res) => {
   const username = req.user;
+  console.log(username);
 
   try {
     const connection = await mysql2.createConnection(db);
     try {
       const [user] = await connection.promise().query(getUserDetails(username));
-      
+      console.log(user);
+      console.log(user[0]);
+
       return res
         .status(200)
-        .json({ message: "comment user fetched successfully", data: user });
+        .json({ message: "comment user fetched successfully", data: user[0] });
     } catch (error) {
       return res.status(500).json({ message: "internal server error" });
     } finally {
@@ -100,5 +102,49 @@ router.get("/", verifyJwtToken, async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
   }
 });
+
+
+router.post("/update", verifyJwtToken, async (req, res) => {
+  const username = req.user;
+  // console.log("req : ", req.body);
+  // const { firstName, lastName, codeforcesHandle } = req.body;
+  
+  console.log("req : ", req.body.data.userDetails);
+  const { firstName, lastName, codeforcesHandle } = req.body.data.userDetails;
+  console.log(firstName , lastName , codeforcesHandle);
+
+  try {
+    const connection = await mysql2.createConnection(db);
+    try {
+      const checkUserQuery = `select * from users where username='${username}'`;
+      const [rows] = await connection.promise().query(checkUserQuery);
+
+      if (rows.length == 0) {
+        return res
+          .status(400)
+          .json({ message: "no such user" });
+      }
+
+      const query = `UPDATE users SET firstName='${firstName}', lastName='${lastName}', codeforcesHandle='${codeforcesHandle}' where username='${username}'`;
+
+      await connection.promise().query(query);
+      connection.commit();
+
+      const updatedUserDetails = `select * from users where username='${username}'`;
+      const [result] = await connection.promise().query(updatedUserDetails);
+
+      return res.status(200).json({ message: "User details updated successfully" , data : result[0] });
+    } catch (error) {
+      console.log("error ", error);
+      return res.status(500).json({ message: "Internal server error" });
+    } finally {
+      connection.close();
+    }
+  } catch (error) {
+    console.log("error ", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 export default router;

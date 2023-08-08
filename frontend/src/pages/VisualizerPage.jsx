@@ -37,7 +37,7 @@ const VisualizerPage = () => {
     
 
     if (cfhandle) {
-      const exists =  checkCodeforcesHandleExists(cfhandle);
+      const exists = checkCodeforcesHandleExists(cfhandle);
       if(exists){
         setCfhandle(cfhandle);
       }

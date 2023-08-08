@@ -2,7 +2,7 @@ import { Configuration, OpenAIApi } from "openai";
 
 const configuration = new Configuration({
   // apiKey: "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",  // vatsal ==> gpt-4
-  apiKey : "sk-2dwBDkyyjE6Srrsu2277B52b71Ba4365B58cB67aBf69006d", // free ==> gpt-3.5-turbo
+  apiKey : "sk-ejRvyL0GX69k0ThFDdE6Df68782a460a86462cEeEc0e4215", // free ==> gpt-3.5-turbo
   basePath : "https://chattyapi.tech/v1"
 });
 

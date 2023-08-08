@@ -37,7 +37,7 @@ const insertIntoUsers = (
 };
 
 const getUserDetails = (username) =>{
-  return `SELECT firstname, lastname, username, codeforceshandle, photourl  FROM users WHERE username ='${username}'`
+  return `SELECT firstName, lastName, username, codeforcesHandle, photourl FROM users WHERE username ='${username}'`
 };
 
 
@@ -63,7 +63,7 @@ const insertIntoPostTable = (postid, userid, data, createdtime, type) => {
 };
 
 const getPostsData = () => {
-  return 'SELECT * FROM postTable where type="post" ORDER BY createdtime';
+  return 'SELECT * FROM postTable where type="post" ORDER BY createdtime DESC';
 };
 
 const deletePost=(postid)=>{
@@ -94,7 +94,7 @@ const createCommentTable = () => {
 };
 
 const getCommentsData = (postid) => {
-  return `SELECT * FROM commentTable WHERE postid='${postid}' ORDER BY createdtime`;
+  return `SELECT * FROM commentTable WHERE postid='${postid}' ORDER BY createdtime DESC`;
 };
 
 const deleteComment=(commentid)=>{
@@ -126,7 +126,7 @@ const createReplyTable = () => {
   };
   
   const getRepliesData = (commentid) => {
-    return `SELECT * FROM replyTable WHERE commentid='${commentid}' ORDER BY createdtime`;
+    return `SELECT * FROM replyTable WHERE commentid='${commentid}' ORDER BY createdtime DESC`;
   };
 
   const deleteReply=(replyid)=>{

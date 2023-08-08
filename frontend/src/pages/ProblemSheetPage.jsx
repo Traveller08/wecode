@@ -4,7 +4,7 @@ import Accordion from "react-bootstrap/Accordion";
 import ProblemList from "../components/practice/problemSheets/ProblemList";
 import {list as lovebabbarsheet} from "../data/lovebabbarsheet";
 const ProblemSheetPage = () => {
-  const [active, setActive] = useState("striver");
+  const [active, setActive] = useState("lovebabbar");
   const items = [
     {
       title: "Fruits",
@@ -25,7 +25,7 @@ const ProblemSheetPage = () => {
             id="myTab"
             role="tablist"
           >
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link
                 className={
                   active === "striver" ? "nav-link active" : "nav-link"
@@ -42,7 +42,7 @@ const ProblemSheetPage = () => {
               >
                 Striver's sheet
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link
                 className={

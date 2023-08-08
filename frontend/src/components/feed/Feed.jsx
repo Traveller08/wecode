@@ -45,20 +45,20 @@ const Feed = (props) => {
     try {
       const response = await apiService.createNewPost(text);
       successNotify("post created successfully");
-      setPosts((prevPosts) => [...prevPosts, response.data]);
+      setPosts((prevPosts) => [response.data , ...prevPosts]);
       setIsNewPostAdded(true); // Set the state to indicate a new post is added
-      scrollToNewPost();
+      // scrollToNewPost();
     } catch (error) {
       errorNotify("Failed to create post");
       console.error("Error message:", error);
     }
   };
 
-  const scrollToNewPost = () => {
-    if (lastPostRef.current) {
-      lastPostRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  // const scrollToNewPost = () => {
+  //   if (lastPostRef.current) {
+  //     lastPostRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
 
   // ... Rest of the code ...
   const deletePost = async (postid) => {
@@ -97,7 +97,7 @@ const Feed = (props) => {
       successNotify("question asked successfully");
       setQuestions((prevQuestions) => [response.data, ...prevQuestions]);
       setIsNewQuestionAdded(true); // Set the state to indicate a new question is added
-      scrollToNewPost();
+      // scrollToNewPost();
     } catch (error) {
       errorNotify("Failed to ask");
       console.error("Error message:", error);
@@ -173,9 +173,7 @@ const Feed = (props) => {
             questions.map((question, index) => (
               <div
                 key={question.postid}
-                className={`question-container ${
-                  isNewQuestionAdded && index === 0 ? "new-question" : ""
-                }`}
+                className={`question-container`}
               >
                 <Post
                   postid={question.postid}

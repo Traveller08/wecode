@@ -19,6 +19,8 @@ const NavBar = (props) => {
     navigate('/login');
   };
 
+  const profileUrl = props.url ? props.url : "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+
   const handleLogout = (e) => {
     e.preventDefault();
     try {
@@ -77,10 +79,10 @@ const NavBar = (props) => {
                   <NavDropdown.Item name="tutorials" href="/learn/tutorials">
                     Tutorials
                   </NavDropdown.Item>
-                  <NavDropdown.Divider />
+                  {/* <NavDropdown.Divider />
                   <NavDropdown.Item href="#action5">
                     Something else here
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                 </NavDropdown>
 
                 <NavDropdown
@@ -109,12 +111,12 @@ const NavBar = (props) => {
                   >
                     Problem sheets
                   </NavDropdown.Item>
-                  <NavDropdown.Item
+                  {/* <NavDropdown.Item
                     name="companyWiseProblems"
                     href="/practice/companywise/problems"
                   >
                     Company-wise Problems
-                  </NavDropdown.Item>
+                  </NavDropdown.Item> */}
                 </NavDropdown>
                 {props.user && (
                   <Nav.Link name="visualizer" href="/visualizer">
@@ -127,7 +129,7 @@ const NavBar = (props) => {
                   <NavDropdown
                     title={
                       <img
-                        src={props.url}
+                        src={profileUrl}
                         className="rounded-circle"
                         alt="Avatar"
                         style={{ height: "30px" }}

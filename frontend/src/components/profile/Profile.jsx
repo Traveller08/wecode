@@ -17,13 +17,14 @@ const Profile = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await apiService.getUserDetails();
-        // console.log("response at profile ", response.data[0]);
-        setUser(response.data[0]);
-      } catch (error) {
+        console.log("response at profile ", response.data);
+        setUser(response.data);
+      } 
+      catch (error) {
         errorNotify("Error fetching profile data")
         console.error("Error message:", error);
       }
-      // console.log("user info : ", user);
+      console.log("user info : ", user);
     };
     fetchUserDetails();
   }, []);
@@ -42,6 +43,7 @@ const Profile = () => {
   if (user.photourl) {
     photourl = user.photourl;
   }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prevUser) => ({
@@ -49,6 +51,7 @@ const Profile = () => {
       [name]: value,
     }));
   };
+
   const style_profile ={
     display:"flex", 
     flexDirection:"row",
@@ -62,6 +65,19 @@ const Profile = () => {
 
   const handleCancel = () => {
     setIsEditMode(isEditMode ^ true);
+    const fetchUserDetails = async () => {
+      try {
+        const response = await apiService.getUserDetails();
+        console.log("response at profile ", response.data);
+        setUser(response.data);
+      } 
+      catch (error) {
+        errorNotify("Error fetching profile data")
+        console.error("Error message:", error);
+      }
+      console.log("user info : ", user);
+    };
+    fetchUserDetails();
   };
 
   const handleSave = () => {
@@ -69,7 +85,12 @@ const Profile = () => {
     setIsEditMode(false);
     // Assuming you have an onSave function passed as a prop to handle data save
     handleSaveProfile(user);
+    
+    Cookies.set('name', user.firstName + " " + user.lastName, { expires: 1 });
+    Cookies.set('cfHandle', user.codeforcesHandle, { expires: 1 });
+
   };
+
   const deleteProfilePhoto = async (e) => {};
   const updateProfilePhoto = async (e) => {};
   return (
@@ -90,8 +111,8 @@ const Profile = () => {
             <>
               <Form.Control
                 type="text"
-                name="firstname"
-                value={user.firstname}
+                name="firstName"
+                value={user.firstName}
                 onChange={handleChange}
               />
             </>
@@ -99,8 +120,8 @@ const Profile = () => {
             <>
               <Form.Control
                 type="text"
-                name="firstname"
-                value={user.firstname}
+                name="firstName"
+                value={user.firstName}
                 onChange={handleChange}
                 disabled
                 readOnly
@@ -114,8 +135,8 @@ const Profile = () => {
             <>
               <Form.Control
                 type="text"
-                name="lastname"
-                value={user.lastname}
+                name="lastName"
+                value={user.lastName}
                 onChange={handleChange}
               />
             </>
@@ -124,7 +145,7 @@ const Profile = () => {
               <Form.Control
                 type="text"
                 name="lastName"
-                value={user.lastname}
+                value={user.lastName}
                 onChange={handleChange}
                 disabled
                 readOnly
@@ -138,8 +159,8 @@ const Profile = () => {
             <>
               <Form.Control
                 type="text"
-                name="codeforceshandle"
-                value={user.codeforceshandle}
+                name="codeforcesHandle"
+                value={user.codeforcesHandle}
                 onChange={handleChange}
               />
             </>
@@ -147,8 +168,8 @@ const Profile = () => {
             <>
               <Form.Control
                 type="text"
-                name="codeforceshandle"
-                value={user.codeforceshandle}
+                name="codeforcesHandle"
+                value={user.codeforcesHandle}
                 onChange={handleChange}
                 disabled
                 readOnly

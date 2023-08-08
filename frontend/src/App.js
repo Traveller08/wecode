@@ -31,14 +31,13 @@ import Layout from "./Layout";
 const App = () => {
   const [user, setUser] = useState(null);
   const handleLogout = () => {
-   
     setUser(null);
-   
   };
 
   const handleLogin = (user) => {
     setUser(user);
   };
+
   useEffect(() => {
     const userCookie = Cookies.get("user");
     if (userCookie) {

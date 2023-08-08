@@ -213,6 +213,9 @@ const removePostReaction = async ( postid) => {
 const updateUserDetails = async(userDetails) =>{
   // function to update edited user details
 
+  const response = await baseApiClient.post("/user/update", { data: { userDetails } });
+  return response.data;
+
 }
 
 
