@@ -8,7 +8,7 @@
 //     <>
 //       {tutorials.map(t => {
 //         return (
-//           <Row 
+//           <Row
 //           title={t.title}
 //           linkArray={t.linkArray}
 //           />
@@ -20,11 +20,11 @@
 
 // export default TutorialsPage;
 
-import React from 'react';
-import '../components/row/Row';
-import Row from '../components/row/Row';
-import { tutorials } from '../data/tutorial';
-import './TutorialsPage.css';
+import React from "react";
+import "../components/customrow/customRow";
+import Row from "../components/customrow/customRow";
+import { tutorials } from "../data/tutorial";
+import "./TutorialsPage.css";
 
 const TutorialsPage = () => {
   return (

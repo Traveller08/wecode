@@ -23,15 +23,15 @@ router.post("/login", verifyLoginDetails, async (req, res) => {
           username: rows[0].username,
         };
         const token = generateAccessToken(payload);
-        const data={
-          username:rows[0].username,
-          firstName:rows[0].firstName,
-          lastName:rows[0].lastName,
-          codeforcesHandle:rows[0].codeforcesHandle
-        }
+        const data = {
+          username: rows[0].username,
+          firstName: rows[0].firstName,
+          lastName: rows[0].lastName,
+          codeforcesHandle: rows[0].codeforcesHandle,
+        };
         return res
           .status(200)
-          .json({ message: "login successful", token: token,data:data });
+          .json({ message: "login successful", token: token, data: data });
       }
     }
     return res.status(401).json({ message: "invalid credentials" });
@@ -103,15 +103,14 @@ router.get("/", verifyJwtToken, async (req, res) => {
   }
 });
 
-
 router.post("/update", verifyJwtToken, async (req, res) => {
   const username = req.user;
   // console.log("req : ", req.body);
   // const { firstName, lastName, codeforcesHandle } = req.body;
-  
+
   console.log("req : ", req.body.data.userDetails);
   const { firstName, lastName, codeforcesHandle } = req.body.data.userDetails;
-  console.log(firstName , lastName , codeforcesHandle);
+  console.log(firstName, lastName, codeforcesHandle);
 
   try {
     const connection = await mysql2.createConnection(db);
@@ -120,9 +119,7 @@ router.post("/update", verifyJwtToken, async (req, res) => {
       const [rows] = await connection.promise().query(checkUserQuery);
 
       if (rows.length == 0) {
-        return res
-          .status(400)
-          .json({ message: "no such user" });
+        return res.status(400).json({ message: "no such user" });
       }
 
       const query = `UPDATE users SET firstName='${firstName}', lastName='${lastName}', codeforcesHandle='${codeforcesHandle}' where username='${username}'`;
@@ -133,7 +130,12 @@ router.post("/update", verifyJwtToken, async (req, res) => {
       const updatedUserDetails = `select * from users where username='${username}'`;
       const [result] = await connection.promise().query(updatedUserDetails);
 
-      return res.status(200).json({ message: "User details updated successfully" , data : result[0] });
+      return res
+        .status(200)
+        .json({
+          message: "User details updated successfully",
+          data: result[0],
+        });
     } catch (error) {
       console.log("error ", error);
       return res.status(500).json({ message: "Internal server error" });
@@ -145,6 +147,5 @@ router.post("/update", verifyJwtToken, async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 export default router;

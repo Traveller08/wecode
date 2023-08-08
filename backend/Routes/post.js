@@ -5,12 +5,7 @@ dotenv.config();
 import jwt from "jsonwebtoken";
 import mysql2 from "mysql2";
 
-import {
-  db,
-  insertIntoPostTable,
-  getPostsData,
-  deletePost,
-} from "../util/db.js";
+import { db, getPostsData, deletePost } from "../util/db.js";
 
 import { generateId } from "../util/id.js";
 import { verifyJwtToken } from "../middleware/verify_jwt_token.js";
@@ -62,7 +57,7 @@ router.post("/create", verifyJwtToken, async (req, res) => {
             ...userdetails[0],
             likes: 0,
             dislikes: 0,
-            reaction : ""
+            reaction: "",
           };
 
           console.log(postDetails);
@@ -116,21 +111,18 @@ const isUserAthenticated = (req) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
     return { status: false };
-  } 
-  else {
+  } else {
     const secret_key = process.env.SECRET_KEY;
     const decoded = jwt.verify(token, secret_key);
     if (decoded) {
       return { status: true, username: decoded.username };
-    } 
-    else {
+    } else {
       return { status: false };
     }
   }
 };
 
 router.get("/all", async (req, res) => {
-  // console.log("api point ")
   try {
     const connection = await mysql2.createConnection(db);
     try {
@@ -138,14 +130,14 @@ router.get("/all", async (req, res) => {
 
       const sendthis = [];
       const userVerification = isUserAthenticated(req);
-      var userId=null;
-      if(userVerification.status===true){
+      var userId = null;
+      if (userVerification.status === true) {
         const query = `SELECT id FROM users WHERE username='${userVerification.username}'`;
         const [userRows] = await connection.promise().query(query);
         userId = userRows[0].id;
       }
-      console.log("user verification result -> ", userVerification);
-             
+      // console.log("user verification result -> ", userVerification);
+
       for (let post of posts) {
         try {
           const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id IN (
@@ -155,11 +147,11 @@ router.get("/all", async (req, res) => {
           const [userdetails] = await connection.promise().query(query);
           const queryGetLikesCount = `SELECT COUNT(*) AS likes FROM postReactions WHERE postid='${post.postid}' AND reaction='like'`;
           const queryGetDislikesCount = `SELECT COUNT(*) AS dislikes FROM postReactions WHERE postid='${post.postid}' AND reaction='dislike'`;
-          
+
           const [likesResult] = await connection
             .promise()
             .query(queryGetLikesCount);
-          
+
           const [dislikesResult] = await connection
             .promise()
             .query(queryGetDislikesCount);
@@ -172,9 +164,9 @@ router.get("/all", async (req, res) => {
             const [reactionRows] = await connection
               .promise()
               .query(reactionQuery);
-            
+
             var reaction = "not reacted";
-            
+
             if (reactionRows.length > 0) {
               reaction = reactionRows[0].reaction;
             }
@@ -184,26 +176,24 @@ router.get("/all", async (req, res) => {
               ...userdetails[0],
               likesCount,
               dislikesCount,
-              reaction
+              reaction,
             };
             // console.log("hi: " , combinedObj)
 
             sendthis.push(combinedObj);
-          } 
-          else {
-            var postRxn="not reacted";
+          } else {
+            var reaction = "not reacted";
             const combinedObj = {
               ...post,
               ...userdetails[0],
               likesCount,
               dislikesCount,
-              reaction
+              reaction,
             };
             sendthis.push(combinedObj);
           }
-        } 
-        catch (error) {
-          console.log("error " ,  error);
+        } catch (error) {
+          console.log("error ", error);
           return res.status(500).json({ message: "internal server error" });
         }
       }
@@ -212,13 +202,13 @@ router.get("/all", async (req, res) => {
         .status(200)
         .json({ message: "posts fetched successfully", data: sendthis });
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
       return res.status(500).json({ message: "internal server error" });
     } finally {
       connection.close();
     }
   } catch (error) {
-    console.log("error", error)
+    console.log("error", error);
     return res.status(500).json({ message: "internal server error" });
   }
 });
@@ -395,68 +385,5 @@ router.delete("/reaction", verifyJwtToken, async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
-// router.get("/reaction", async (req, res) => {
-//   const username = req.user;
-//   try {
-//     const connection = await mysql2.createConnection(db);
-//     try {
-//       // First, check if the user has already reacted to the post
-//       const query = `SELECT id FROM users WHERE username='${username}'`;
-//       const [userRows] = await connection.promise().query(query);
-
-//       if (userRows.length < 1) {
-//         return res.status(404).json({ message: "User not found" });
-//       }
-
-//       const userId = userRows[0].id;
-
-//       const reactionQuery = `SELECT postid, reaction FROM postReactions WHERE userid=${userId}`;
-//       const [reactionRows] = await connection.promise().query(reactionQuery);
-
-//       // Additional code to calculate the like and dislike counts
-//       const queryGetLikesCount = `SELECT COUNT(*) AS likes FROM postReactions WHERE postid='${postid}' AND reaction='like'`;
-//       const queryGetDislikesCount = `SELECT COUNT(*) AS dislikes FROM postReactions WHERE postid='${postid}' AND reaction='dislike'`;
-
-//       const [likesResult] = await connection
-//         .promise()
-//         .query(queryGetLikesCount);
-//       const [dislikesResult] = await connection
-//         .promise()
-//         .query(queryGetDislikesCount);
-
-//       const likesCount = likesResult[0]?.likes || 0;
-//       const dislikesCount = dislikesResult[0]?.dislikes || 0;
-//       if (reactionRows.length < 1) {
-//         return res.status(200).json({
-//           message: "Post reaction retrieved successfully",
-//           data: {
-//             reaction: "No reaction",
-//             likes: likesCount,
-//             dislikes: dislikesCount,
-//           },
-//         });
-//       }
-
-//       const postReaction = reactionRows[0].reaction;
-
-//       return res.status(200).json({
-//         message: "Post reaction retrieved successfully",
-//         data: {
-//           reaction: postReaction,
-//           likes: likesCount,
-//           dislikes: dislikesCount,
-//         },
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       return res.status(500).json({ message: "Internal server error" });
-//     } finally {
-//       connection.close();
-//     }
-//   } catch (error) {
-//     return res.status(500).json({ message: "Internal server error" });
-//   }
-// });
 
 export default router;

@@ -1,9 +1,10 @@
 import { Configuration, OpenAIApi } from "openai";
+import dotenv from "dotenv";
+dotenv.config();
 
 const configuration = new Configuration({
-  // apiKey: "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",  // vatsal ==> gpt-4
-  apiKey : "sk-ejRvyL0GX69k0ThFDdE6Df68782a460a86462cEeEc0e4215", // free ==> gpt-3.5-turbo
-  basePath : "https://chattyapi.tech/v1"
+  apiKey : process.env.GPT_API_KEY, 
+  basePath : process.env.GPT_BASE_PATH
 });
 
 const openai = new OpenAIApi(configuration);
@@ -16,7 +17,6 @@ async function generateCodeExplanation( content ) {
     messages: [
       {
         "role": "user",
-        // "content": "Explain this code to me: print('Hello World')"
         "content": content
       }
     ],
@@ -24,20 +24,8 @@ async function generateCodeExplanation( content ) {
     max_tokens: 1005,
   });
 
-  // console.log(response);
-
-  // console.log(response.data.choices[0].message.content);
   return response.data.choices[0].message.content
-
 }
-
-// generateCodeExplanation()
-//   .then((result) => {
-//     console.log("Generated code explanation:", result);
-//   })
-//   .catch((error) => {
-//     console.error("An error occurred:", error);
-//   });
 
 export {
   generateCodeExplanation

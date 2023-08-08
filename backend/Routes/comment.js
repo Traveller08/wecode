@@ -4,7 +4,6 @@ import mysql2 from "mysql2";
 
 import {
   db,
-  insertIntoCommentTable,
   getCommentsData,
   deleteComment,
 } from "../util/db.js";
@@ -125,6 +124,7 @@ router.get("/all", async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
   }
 });
+
 router.post("/update", verifyJwtToken, async (req, res) => {
   const { commentid, data } = req.body;
   const username = req.user;

@@ -3,7 +3,6 @@ const router = express.Router();
 import mysql2 from "mysql2";
 import {
   db,
-  insertIntoReplyTable,
   getRepliesData,
   deleteReply,
 } from "../util/db.js";

@@ -5,7 +5,7 @@ import { generateCodeExplanation } from "../util/test.js";
 
 import mysql2 from "mysql2";
 
-import { db, insertIntoGptTable, getQuestionsData } from "../util/db.js";
+import { db, getQuestionsData } from "../util/db.js";
 
 import { generateId } from "../util/id.js";
 import { verifyJwtToken } from "../middleware/verify_jwt_token.js";

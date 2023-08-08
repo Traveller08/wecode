@@ -22,7 +22,7 @@ import {
   createCommentTable,
   createReplyTable,
   createGptTable,
-  createPostReactionsTable, // Add this line to create postReactions table
+  createPostReactionsTable,
 } from "./util/db.js";
 
 app.use("/api/user/", user);
@@ -50,12 +50,12 @@ const intiDB = async () => {
     await connection.promise().query(createGptTable());
     connection.commit();
 
-    await connection.promise().query(createPostReactionsTable()); // Add this line to create postReactions table
+    await connection.promise().query(createPostReactionsTable()); 
     connection.commit();
 
-    console.log("db initialised...");
+    console.log("Database Initialised ...");
   } catch (error) {
-    console.log("database initialization failed...");
+    console.log("Database Initialization Failed ...");
     console.log(error);
   }
 };
@@ -63,5 +63,5 @@ const intiDB = async () => {
 app.listen(5001, async () => {
   await intiDB();
   initCF();
-  console.log("app listening on port 5001");
+  console.log("App listening on port 5001");
 });

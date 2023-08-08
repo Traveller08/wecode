@@ -4,11 +4,12 @@ import axios from "axios";
 import { verifyJwtToken } from "../middleware/verify_jwt_token.js";
 
 let cf_problems, cf_problem_stats, cf_contests, cf_gym_contests;
-const baseURL = " https://codeforces.com/api"; // Replace with your backend API URL
+const baseURL = " https://codeforces.com/api";
 
 const cfapi = axios.create({
   baseURL,
 });
+
 const get_color = (rating) => {
   "Returns the HEX of appropriate color according to the rating.";
   let col = "#fff";
@@ -119,7 +120,6 @@ router.get("/contests", async (req, res) => {
         return contest.name.includes(contestType);
       });
     }
-    //  console.log("contests")
     return res
       .status(200)
       .json({ message: "contests fetched successfully", data: contests });
@@ -163,12 +163,10 @@ router.get("/contest/problems", async (req, res) => {
     }
 
     //    console.log("data returned")
-    return res
-      .status(200)
-      .json({
-        message: "problems fetched successfully",
-        data: { problems: contest_problems, verdicts: final_verdicts },
-      });
+    return res.status(200).json({
+      message: "problems fetched successfully",
+      data: { problems: contest_problems, verdicts: final_verdicts },
+    });
   } catch (error) {
     // console.log("error sending contest problem data \n");
     return res.status(500).json({ message: "Error fetching contest problems" });
@@ -178,12 +176,10 @@ router.get("/contest/problems", async (req, res) => {
 router.get("/problems/unsolved", verifyJwtToken, async (req, res) => {
   const username = req.user;
   try {
-    return res
-      .status(200)
-      .json({
-        message: "unsolved problems fetched successfully",
-        data: contests,
-      });
+    return res.status(200).json({
+      message: "unsolved problems fetched successfully",
+      data: contests,
+    });
   } catch (error) {
     console.log("error fetching problems data \n", error);
     return res.status(500).json({ message: "Error fetching problems" });
