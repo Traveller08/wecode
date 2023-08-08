@@ -49,8 +49,8 @@ const createPostTable = () => {
          userid INT NOT NULL,
          data VARCHAR(5000) NOT NULL,
          createdtime BIGINT NOT NULL,
-         likes INT,
-         dislikes INT,
+         likes INT DEFAULT 0,
+         dislikes INT DEFAULT 0,
          type VARCHAR(255) NOT NULL
        )`;
 };
@@ -79,8 +79,8 @@ const createCommentTable = () => {
          userid INT NOT NULL,
          data VARCHAR(5000) NOT NULL,
          createdtime BIGINT NOT NULL,
-         likes INT,
-         dislikes INT,
+         likes INT DEFAULT 0,
+         dislikes INT DEFAULT 0,
          isdeleted INT,
          FOREIGN KEY(postid) REFERENCES postTable(postid) ON DELETE CASCADE
          )`;
@@ -110,8 +110,8 @@ const createReplyTable = () => {
     userid INT NOT NULL,
     data VARCHAR(5000) NOT NULL,
     createdtime BIGINT NOT NULL,
-    likes INT,
-    dislikes INT,
+    likes INT DEFAULT 0,
+    dislikes INT DEFAULT 0,
     isdeleted INT,
     PRIMARY KEY (replyid, commentid),
     FOREIGN KEY(commentid) REFERENCES commentTable(commentid) ON DELETE CASCADE
