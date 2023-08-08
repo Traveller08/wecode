@@ -1,121 +1,42 @@
-/* .row {
-    padding: 10px;
-    margin: 5px;
-}
-.row_header {
-    margin: 0;
-    font-size: 25px;
-    text-align: left;
-    padding-left: 20px;
+.custom-row {
+  padding: 10px;
+  margin: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
-.row_posters {
-    display: flex;
-    overflow-y: hidden;
-    overflow-x: scroll;
-    padding-left: 20px;
+.custom-row-header {
+  margin: 0;
+  font-size: 24px;
+  text-align: left;
+  padding-left: 20px;
+  margin-bottom: 10px;
 }
 
-.row_posters::-webkit-scrollbar {
-    display: none;
+.custom-row-posters {
+  display: flex;
+  overflow-x: auto;
+  padding-left: 20px;
+  gap: 10px;
 }
 
-.row_poster {
-    object-fit: contain;
-    width: 100%;
-    margin-right: 10px;
-    max-height: 200px;
-    transition: transfrom 450ms ease-in-out;
+.custom-row-poster {
+  width: 320px;
+  max-height: 180px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
 }
 
-.row_poster:hover {
-    transform: scale(1.2);
-} */
-/* 
-.row {
-    padding: 10px;
-    margin: 20px;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-  }
-  
-  .row-header {
-    margin: 0;
-    font-size: 24px;
-    text-align: left;
-    padding-left: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .row-posters {
-    display: flex;
-    overflow-x: auto;
-    padding-left: 20px;
-    gap: 10px;
-  }
-  
-  .row-poster {
-    width: 320px;
-    max-height: 180px;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;
-  }
-  
-  .row-poster iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  
-  .row-poster:hover {
-    transform: scale(1.05);
-  }
-   */
+.custom-row-poster iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
 
-   .custom-row {
-    padding: 10px;
-    margin: 20px;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-  }
-  
-  .custom-row-header {
-    margin: 0;
-    font-size: 24px;
-    text-align: left;
-    padding-left: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .custom-row-posters {
-    display: flex;
-    overflow-x: auto;
-    padding-left: 20px;
-    gap: 10px;
-  }
-  
-  .custom-row-poster {
-    width: 320px;
-    max-height: 180px;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;
-  }
-  
-  .custom-row-poster iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  
-  .custom-row-poster:hover {
-    transform: scale(1.05);
-  }
-  
+.custom-row-poster:hover {
+  transform: scale(1.05);
+}

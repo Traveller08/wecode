@@ -1,53 +1,61 @@
-.card-footer{
+.card-footer {
   display: flex;
   flex-direction: row;
 }
-.card-footer-left{
-   display: flex;
-   flex-direction: row;
-   width: 50%;
-   
+.card-footer-left {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
 }
-.f-icon{
-    margin-left: 3%;
-    transition: all ease-in-out 0.3s;
+.f-icon {
+  margin-left: 3%;
+  transition: all ease-in-out 0.3s;
 }
-.f-icon:hover{
-    cursor: pointer;
-    font-size: 1.2rem;
+.f-icon:hover {
+  cursor: pointer;
+  font-size: 1.2rem;
 }
 
-.card-footer-right{
-    display: flex;
-    width: 50%;
-    flex-direction: row-reverse;
+.card-footer-right {
+  display: flex;
+  width: 50%;
+  flex-direction: row-reverse;
 }
-.card-text{
-    font-size: 1rem;
+.card-text {
+  font-size: 1rem;
 }
 
 .post-container {
-    /* Your existing styles for post container */
-  
-    /* Add the transition effect for the background color change */
-    transition: background-color 1s ease;
-  }
-  
-  .post-container.new-post {
-    /* Apply the background color change for the new post */
-    background-color: rgba(255, 255, 0, 0.2); /* Change the color and opacity as desired */
-  }
-  
-  /* Add this to your feed.css file */
+  /* Your existing styles for post container */
+
+  /* Add the transition effect for the background color change */
+  transition: background-color 1s ease;
+}
+
+.post-container.new-post {
+  /* Apply the background color change for the new post */
+  background-color: rgba(
+    255,
+    255,
+    0,
+    0.2
+  ); /* Change the color and opacity as desired */
+}
+
+/* Add this to your feed.css file */
 .question-container {
-    /* Your existing styles for question container */
-  
-    /* Add the transition effect for the background color change */
-    transition: background-color 1s ease;
-  }
-  
-  .question-container.new-question {
-    /* Apply the background color change for the new question */
-    background-color: rgba(0, 255, 0, 0.2); /* Change the color and opacity as desired */
-  }
-  
+  /* Your existing styles for question container */
+
+  /* Add the transition effect for the background color change */
+  transition: background-color 1s ease;
+}
+
+.question-container.new-question {
+  /* Apply the background color change for the new question */
+  background-color: rgba(
+    0,
+    255,
+    0,
+    0.2
+  ); /* Change the color and opacity as desired */
+}

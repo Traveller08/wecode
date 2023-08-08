@@ -6,10 +6,12 @@ import toast from "react-hot-toast";
 const errorNotify = (message) => toast.error(message);
 
 const baseURL = "http://localhost:5001/api"; // base url
+
 const baseApiClient = axios.create({
   // for authorized endpoints
   baseURL,
 });
+
 const apiClient = axios.create({
   // for un-authorized endpoints
   baseURL, // Replace with your API base URL
@@ -30,63 +32,105 @@ baseApiClient.interceptors.response.use(
     }
     return Promise.reject(error);
   }
-  );
-  baseApiClient.interceptors.request.use(
-    (config) => {
-      // Get the JWT token from cookies or local storage (you can use whichever storage you are using)
-      const token = Cookies.get("token"); // Replace "token" with the actual name of your token key
-      
-      if (token) {
-        // Attach the token to the request's Authorization header
+);
+
+baseApiClient.interceptors.request.use(
+  (config) => {
+    // Get the JWT token from cookies or local storage (you can use whichever storage you are using)
+    const token = Cookies.get("token"); // Replace "token" with the actual name of your token key
+
+    if (token) {
+      // Attach the token to the request's Authorization header
       config.headers["Authorization"] = `Bearer ${token}`;
     }
-    
+
     return config;
   },
   (error) => {
     // If there's an error with the request, handle it here
     return Promise.reject(error);
   }
-  );
-  
-  
-  
-  // Register a new user
-  const register = async (userdetails) => {
-    const response = await apiClient.post("/user/register", userdetails);
-    return response.data;
-  };
+);
 
-  const login = async (userdetails) => {
-    const response = await apiClient.post("/user/login", userdetails);
-    return response.data;
-  };
-  
-  const createNewPost = async (data) => {
-    const response = await baseApiClient.post("/post/create", { data });
-    return response.data;
+
+// User ------------------------------------------
+
+const register = async (userdetails) => {
+  const response = await apiClient.post("/user/register", userdetails);
+  return response.data;
 };
-const updatePost = async ( postid, data) => {
-    const response = await baseApiClient.post("/post/update", { postid, data });
-    return response.data;
+
+const login = async (userdetails) => {
+  const response = await apiClient.post("/user/login", userdetails);
+  return response.data;
 };
-const deletePost = async ( postid) => {
-    const response = await baseApiClient.get("/post/delete", {
-      params: { postid: postid },
-    });
-    return response.data;
+
+const getUserDetails = async () => {
+  const response = await baseApiClient.get("/user/");
+  return response.data;
+};
+
+const getProfile = async () => {
+  const response = await baseApiClient.get("/user/profile");
+  return response.data;
+};
+
+const updateUserDetails = async (userDetails) => {
+  // function to update edited user details
+  const response = await baseApiClient.post("/user/update", {
+    data: { userDetails },
+  });
+  return response.data;
+};
+
+
+// POST --------------------------------------
+
+const createNewPost = async (data) => {
+  const response = await baseApiClient.post("/post/create", { data });
+  return response.data;
+};
+
+const updatePost = async (postid, data) => {
+  const response = await baseApiClient.post("/post/update", { postid, data });
+  return response.data;
+};
+
+const deletePost = async (postid) => {
+  const response = await baseApiClient.get("/post/delete", {
+    params: { postid: postid },
+  });
+  return response.data;
 };
 
 const getPosts = async () => {
-  if(Cookies.get("token")){
-
+  if (Cookies.get("token")) {
     const response = await baseApiClient.get("/post/all");
     return response.data;
-  }else{
+  } else {
     const response = await apiClient.get("/post/all");
     return response.data;
-
   }
+};
+
+
+// COMMENT -----------------------------------------------
+
+const createNewComment = async (data, parentid) => {
+  console.log("data ", data, "parentid ", parentid);
+  const response = await baseApiClient.post("/comment/create", {
+    data,
+    parentid,
+  });
+  return response.data;
+};
+
+const updateComment = async (commentid, data) => {
+  const response = await baseApiClient.post("/comment/update", {
+    commentid,
+    data,
+  });
+  return response.data;
 };
 
 const getComments = async (postid) => {
@@ -96,11 +140,27 @@ const getComments = async (postid) => {
   return response.data;
 };
 
-const deleteComment = async ( commentid) => {
-    const response = await baseApiClient.get("/comment/delete", {
-      params: { commentid: commentid },
-    });
-    return response.data;
+const deleteComment = async (commentid) => {
+  const response = await baseApiClient.get("/comment/delete", {
+    params: { commentid: commentid },
+  });
+  return response.data;
+};
+
+
+// REPLIES ----------------------------------------------------
+
+const createNewReply = async (data, parentid) => {
+  const response = await baseApiClient.post("/reply/create", {
+    data,
+    parentid,
+  });
+  return response.data;
+};
+
+const updateReply = async (replyid, data) => {
+  const response = await baseApiClient.post("/reply/update", { replyid, data });
+  return response.data;
 };
 
 const getReplies = async (commentid) => {
@@ -109,44 +169,16 @@ const getReplies = async (commentid) => {
   });
   return response.data;
 };
-const deleteReply = async ( replyid) => {
-    const response = await baseApiClient.get("/reply/delete", {
-      params: { replyid: replyid },
-    });
-    return response.data;
+
+const deleteReply = async (replyid) => {
+  const response = await baseApiClient.get("/reply/delete", {
+    params: { replyid: replyid },
+  });
+  return response.data;
 };
 
 
-const getUserDetails = async () => {
-    const response = await baseApiClient.get("/user/");
-    return response.data;
-};
-
-const createNewComment = async ( data, parentid) => {
-    console.log("data ", data, "parentid ", parentid);
-    const response = await baseApiClient.post("/comment/create", { data, parentid });
-    return response.data;
-};
-
-const updateComment = async ( commentid, data) => {
-    const response = await baseApiClient.post("/comment/update", { commentid, data });
-    return response.data;
-};
-
-const createNewReply = async ( data, parentid) => {
-    const response = await baseApiClient.post("/reply/create", { data, parentid });
-    return response.data;
- };
-const updateReply = async ( replyid, data) => {
-    const response = await baseApiClient.post("/reply/update", { replyid, data });
-    return response.data;
- };
-
-const getProfile = async () => {
-    const response = await baseApiClient.get("/user/profile");
-    return response.data;
- };
-
+// CODEFORCES ---------------------------------------------------
 
 const getProblems = async (tags, from, to) => {
   const response = await apiClient.get("/codeforces/problems", {
@@ -158,6 +190,7 @@ const getProblems = async (tags, from, to) => {
   console.log(response.data);
   return response.data;
 };
+
 const getContests = async (contestType) => {
   const response = await apiClient.get("/codeforces/contests", {
     params: { contestType: contestType },
@@ -165,6 +198,7 @@ const getContests = async (contestType) => {
   console.log(response.data);
   return response.data;
 };
+
 const getContestProblems = async (contestId, cf_username) => {
   const response = await apiClient.get("codeforces/contest/problems", {
     params: { contestId: contestId, cf_username: cf_username },
@@ -177,59 +211,58 @@ const getUnsolvedProblems = async () => {
   return response.data;
 };
 
-// ---------------------- Questions
 
-// const getQuestions = async (token) => {
-//   if(token){
-//       setAuthToken(token);
-//       const response = await baseApiClient.get('/question/all');
-//       return response.data;
-//   }
-//   return {status:"failed", data:{},message:"session expired"};
-// };
+// QUESTIONS ---------------------------------------------------
 
 const getQuestions = async () => {
   const response = await baseApiClient.get("/question/all");
   return response.data;
 };
 
-const askNewQuestion = async ( data) => {
-    const response = await baseApiClient.post("/question/ask", { data });
-    return response.data;
- };
-
-
-const submitPostReaction = async ( postid, reaction) => {
-    const response = await baseApiClient.post("/post/reaction", { postid, reaction });
-    return response.data;
- };
-
-const removePostReaction = async ( postid) => {
-    const response = await baseApiClient.delete("/post/reaction", { data: { postid } });
-    return response.data;
- };
-
-
-const updateUserDetails = async(userDetails) =>{
-  // function to update edited user details
-
-  const response = await baseApiClient.post("/user/update", { data: { userDetails } });
+const askNewQuestion = async (data) => {
+  const response = await baseApiClient.post("/question/ask", { data });
   return response.data;
+};
 
-}
+// REACTIONS ------------------------------------------------------
 
+const submitPostReaction = async (postid, reaction) => {
+  const response = await baseApiClient.post("/post/reaction", {
+    postid,
+    reaction,
+  });
+  return response.data;
+};
+
+const removePostReaction = async (postid) => {
+  const response = await baseApiClient.delete("/post/reaction", {
+    data: { postid },
+  });
+  return response.data;
+};
 
 const apiService = {
   register,
   login,
   getProfile,
-  createNewPost,
-  createNewComment,
-  createNewReply,
-  getPosts,
-  getComments,
   getUserDetails,
+  updateUserDetails,
+  
+  createNewPost,
+  getPosts,
+  updatePost,
+  deletePost,
+
+  createNewComment,
+  getComments,
+  updateComment,
+  deleteComment,
+
+  createNewReply,
   getReplies,
+  updateReply,
+  deleteReply,
+
   getProblems,
   getContests,
   getContestProblems,
@@ -238,19 +271,8 @@ const apiService = {
   getQuestions,
   askNewQuestion,
 
-
-  deletePost,
-  deleteComment,
-  deleteReply,
-
-  updatePost,
-  updateComment,
-  updateReply,
-
   submitPostReaction,
   removePostReaction,
-  updateUserDetails
-
 };
 
 export default apiService;

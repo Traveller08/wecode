@@ -16,15 +16,16 @@ const NavBar = (props) => {
   const navigate = useNavigate();
 
   const handleLoginButtonClick = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
-  const profileUrl = props.url ? props.url : "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+  const profileUrl = props.url
+    ? props.url
+    : "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
 
   const handleLogout = (e) => {
     e.preventDefault();
     try {
-
       successNotify("Logout successfull!");
       // Call the logout function from App component to update the user state
       if (Cookies.get("token")) {
@@ -34,10 +35,9 @@ const NavBar = (props) => {
         Cookies.remove("user");
       }
       props.logout();
-      window.location.href="/";
+      window.location.href = "/";
 
       // Redirect to home page
-    
     } catch (error) {
       console.log("logout error", error);
       errorNotify("log out failed");
@@ -123,7 +123,6 @@ const NavBar = (props) => {
                     Visualizer
                   </Nav.Link>
                 )}
-            
 
                 {props.user && (
                   <NavDropdown
@@ -141,7 +140,7 @@ const NavBar = (props) => {
                     <NavDropdown.Item name="account" href="/profile">
                       My Profile
                     </NavDropdown.Item>
-                    
+
                     <NavDropdown.Divider />
                     <NavDropdown.Item>
                       <Button variant="outline-success" onClick={handleLogout}>

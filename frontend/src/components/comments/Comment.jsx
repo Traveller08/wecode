@@ -36,11 +36,7 @@ const Comment = (comment) => {
 
   const addReply = async (reply) => {
     try {
-      const response = await apiService.createNewReply(
-        
-        reply,
-        commentid
-      );
+      const response = await apiService.createNewReply(reply, commentid);
 
       setReplies([response.data, ...replies]);
       successNotify(response.message);
@@ -52,10 +48,7 @@ const Comment = (comment) => {
 
   const deleteReply = async (replyid) => {
     try {
-      const response = await apiService.deleteReply(
-        
-        replyid
-      );
+      const response = await apiService.deleteReply(replyid);
 
       successNotify(response.message);
       setReplies(
@@ -70,7 +63,7 @@ const Comment = (comment) => {
   };
   const editReply = async (replyid, text) => {
     try {
-      await apiService.updateReply( replyid, text);
+      await apiService.updateReply(replyid, text);
 
       successNotify("reply updated");
 
@@ -116,7 +109,6 @@ const Comment = (comment) => {
     await comment.handleEdit(comment.data.commentid, newText);
     setEditmode(false);
   };
-
 
   return (
     <>
@@ -259,7 +251,13 @@ const Comment = (comment) => {
             <div className="replies">
               {replies &&
                 replies.map((reply) => {
-                  return <Reply data={reply} handleEdit={editReply} handleDelete={deleteReply} />;
+                  return (
+                    <Reply
+                      data={reply}
+                      handleEdit={editReply}
+                      handleDelete={deleteReply}
+                    />
+                  );
                 })}
             </div>
           )}

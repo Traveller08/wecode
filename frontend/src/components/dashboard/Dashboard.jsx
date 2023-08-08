@@ -8,13 +8,16 @@ import RightSideBar from "../sidebar/RightSideBar";
 import Content from "../content/Content";
 import WeCodeFooter from "../footer/WeCodeFooter";
 const Dashboard = (props) => {
-  useEffect(()=>{
-    console.log("props ",props);
-  },[]);
+  useEffect(() => {
+    console.log("props ", props);
+  }, []);
   return (
     <>
-
-      <NavBar user={props.user}  setuser={props.setuser}  url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}/>
+      <NavBar
+        user={props.user}
+        setuser={props.setuser}
+        url={"https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"}
+      />
       <div className="container">
         <HomePageCarousel />
         {/* <div>
@@ -37,6 +40,6 @@ const Dashboard = (props) => {
       <WeCodeFooter />
     </>
   );
-}
+};
 
 export default Dashboard;

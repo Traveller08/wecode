@@ -13,7 +13,9 @@ const PieChart = (props) => {
 
   const fetchCodeforcesData = (codeforcesUsername) => {
     axios
-      .get(`https://codeforces.com/api/user.status?handle=${codeforcesUsername}`)
+      .get(
+        `https://codeforces.com/api/user.status?handle=${codeforcesUsername}`
+      )
       .then((response) => {
         const problemsData = response.data.result;
         const uniqueProblems = new Set();
@@ -58,15 +60,19 @@ const PieChart = (props) => {
         });
 
         // Prepare data for pie charts
-        const verdictDataPoints = Object.entries(verdictCounts).map(([name, y]) => ({
-          name,
-          y,
-        }));
+        const verdictDataPoints = Object.entries(verdictCounts).map(
+          ([name, y]) => ({
+            name,
+            y,
+          })
+        );
 
-        const languageDataPoints = Object.entries(languageCounts).map(([name, y]) => ({
-          name,
-          y,
-        }));
+        const languageDataPoints = Object.entries(languageCounts).map(
+          ([name, y]) => ({
+            name,
+            y,
+          })
+        );
 
         const tagsDataPoints = Object.entries(tagsCounts).map(([name, y]) => ({
           name,
@@ -91,27 +97,26 @@ const PieChart = (props) => {
   };
 
   useEffect(() => {
-    const codeforcesUsername = props.cfhandle;; // Replace with your Codeforces handle
+    const codeforcesUsername = props.cfhandle; // Replace with your Codeforces handle
     fetchCodeforcesData(codeforcesUsername);
   }, []);
- 
+
   const formatDataForTooltip = (dataPoints) => {
-  let total = 0;
-  dataPoints.forEach((dataPoint) => {
-    total += dataPoint.y;
-  });
+    let total = 0;
+    dataPoints.forEach((dataPoint) => {
+      total += dataPoint.y;
+    });
 
-  const formattedDataPoints = dataPoints.map((dataPoint) => {
-    const percentage = ((dataPoint.y / total) * 100).toFixed(2);
-    return {
-      ...dataPoint,
-      y: `${percentage}% (${dataPoint.y})`,
-    };
-  });
+    const formattedDataPoints = dataPoints.map((dataPoint) => {
+      const percentage = ((dataPoint.y / total) * 100).toFixed(2);
+      return {
+        ...dataPoint,
+        y: `${percentage}% (${dataPoint.y})`,
+      };
+    });
 
-  return formattedDataPoints;
-};
-
+    return formattedDataPoints;
+  };
 
   const optionsVerdict = {
     animationEnabled: true,

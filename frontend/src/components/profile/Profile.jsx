@@ -19,9 +19,8 @@ const Profile = () => {
         const response = await apiService.getUserDetails();
         console.log("response at profile ", response.data);
         setUser(response.data);
-      } 
-      catch (error) {
-        errorNotify("Error fetching profile data")
+      } catch (error) {
+        errorNotify("Error fetching profile data");
         console.error("Error message:", error);
       }
       console.log("user info : ", user);
@@ -33,7 +32,7 @@ const Profile = () => {
     // Implement the logic to save the editedUser data to the database
     apiService.updateUserDetails(user).then((response) => {
       // Assuming the API call is successful, update the user state with the new data
-      successNotify("details updated successfully")
+      successNotify("details updated successfully");
       setUser(response.data);
     });
   };
@@ -52,11 +51,11 @@ const Profile = () => {
     }));
   };
 
-  const style_profile ={
-    display:"flex", 
-    flexDirection:"row",
-    marginTop:"10px",
-    marginBottom:"10px"
+  const style_profile = {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: "10px",
+    marginBottom: "10px",
   };
 
   const handleEdit = () => {
@@ -70,9 +69,8 @@ const Profile = () => {
         const response = await apiService.getUserDetails();
         console.log("response at profile ", response.data);
         setUser(response.data);
-      } 
-      catch (error) {
-        errorNotify("Error fetching profile data")
+      } catch (error) {
+        errorNotify("Error fetching profile data");
         console.error("Error message:", error);
       }
       console.log("user info : ", user);
@@ -85,113 +83,122 @@ const Profile = () => {
     setIsEditMode(false);
     // Assuming you have an onSave function passed as a prop to handle data save
     handleSaveProfile(user);
-    
-    Cookies.set('name', user.firstName + " " + user.lastName, { expires: 1 });
-    Cookies.set('cfHandle', user.codeforcesHandle, { expires: 1 });
 
+    Cookies.set("name", user.firstName + " " + user.lastName, { expires: 1 });
+    Cookies.set("cfHandle", user.codeforcesHandle, { expires: 1 });
   };
 
   const deleteProfilePhoto = async (e) => {};
   const updateProfilePhoto = async (e) => {};
   return (
-    <Container >
-    <div className="profile">
-      <div className="profile-picture">
-        <ProfilePhotoCard
-          profilePhotoUrl={photourl}
-          onDelete={deleteProfilePhoto}
-          onUpdate={updateProfilePhoto}
-        />
-      </div>
+    <Container>
+      <div className="profile">
+        <div className="profile-picture">
+          <ProfilePhotoCard
+            profilePhotoUrl={photourl}
+            onDelete={deleteProfilePhoto}
+            onUpdate={updateProfilePhoto}
+          />
+        </div>
 
-      <Form  className="profile-data">
-        <Form.Group style={style_profile}>
-          <Form.Label>First Name:</Form.Label>
-          {isEditMode ? (
-            <>
-              <Form.Control
-                type="text"
-                name="firstName"
-                value={user.firstName}
-                onChange={handleChange}
-              />
-            </>
-          ) : (
-            <>
-              <Form.Control
-                type="text"
-                name="firstName"
-                value={user.firstName}
-                onChange={handleChange}
-                disabled
-                readOnly
-              />
-            </>
-          )}
-        </Form.Group>
-        <Form.Group style={style_profile}>
-          <Form.Label>Last Name:</Form.Label>
-          {isEditMode ? (
-            <>
-              <Form.Control
-                type="text"
-                name="lastName"
-                value={user.lastName}
-                onChange={handleChange}
-              />
-            </>
-          ) : (
-            <>
-              <Form.Control
-                type="text"
-                name="lastName"
-                value={user.lastName}
-                onChange={handleChange}
-                disabled
-                readOnly
-              />
-            </>
-          )}
-        </Form.Group>
-        <Form.Group style={style_profile}>
-          <Form.Label>Handle:</Form.Label>
-          {isEditMode ? (
-            <>
-              <Form.Control
-                type="text"
-                name="codeforcesHandle"
-                value={user.codeforcesHandle}
-                onChange={handleChange}
-              />
-            </>
-          ) : (
-            <>
-              <Form.Control
-                type="text"
-                name="codeforcesHandle"
-                value={user.codeforcesHandle}
-                onChange={handleChange}
-                disabled
-                readOnly
-              />
-            </>
-          )}
-        </Form.Group>
-        <Form.Group >
-        {/* <Form.Label></Form.Label> */}
-          {isEditMode ? (
-            <>
-              <Button onClick={handleSave} style={{marginLeft:"17%"}}>Save Changes</Button>
-              <Button onClick={handleCancel} variant="danger" style={{marginLeft:"20px"}}>Cancel</Button>
-            </>
-          ) : (
-            <>
-              <Button onClick={handleEdit} style={{marginLeft:"17%"}}>Edit Details</Button>
-            </>
-          )}
-        </Form.Group>
-      </Form>
-    </div>
+        <Form className="profile-data">
+          <Form.Group style={style_profile}>
+            <Form.Label>First Name:</Form.Label>
+            {isEditMode ? (
+              <>
+                <Form.Control
+                  type="text"
+                  name="firstName"
+                  value={user.firstName}
+                  onChange={handleChange}
+                />
+              </>
+            ) : (
+              <>
+                <Form.Control
+                  type="text"
+                  name="firstName"
+                  value={user.firstName}
+                  onChange={handleChange}
+                  disabled
+                  readOnly
+                />
+              </>
+            )}
+          </Form.Group>
+          <Form.Group style={style_profile}>
+            <Form.Label>Last Name:</Form.Label>
+            {isEditMode ? (
+              <>
+                <Form.Control
+                  type="text"
+                  name="lastName"
+                  value={user.lastName}
+                  onChange={handleChange}
+                />
+              </>
+            ) : (
+              <>
+                <Form.Control
+                  type="text"
+                  name="lastName"
+                  value={user.lastName}
+                  onChange={handleChange}
+                  disabled
+                  readOnly
+                />
+              </>
+            )}
+          </Form.Group>
+          <Form.Group style={style_profile}>
+            <Form.Label>Handle:</Form.Label>
+            {isEditMode ? (
+              <>
+                <Form.Control
+                  type="text"
+                  name="codeforcesHandle"
+                  value={user.codeforcesHandle}
+                  onChange={handleChange}
+                />
+              </>
+            ) : (
+              <>
+                <Form.Control
+                  type="text"
+                  name="codeforcesHandle"
+                  value={user.codeforcesHandle}
+                  onChange={handleChange}
+                  disabled
+                  readOnly
+                />
+              </>
+            )}
+          </Form.Group>
+          <Form.Group>
+            {/* <Form.Label></Form.Label> */}
+            {isEditMode ? (
+              <>
+                <Button onClick={handleSave} style={{ marginLeft: "17%" }}>
+                  Save Changes
+                </Button>
+                <Button
+                  onClick={handleCancel}
+                  variant="danger"
+                  style={{ marginLeft: "20px" }}
+                >
+                  Cancel
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button onClick={handleEdit} style={{ marginLeft: "17%" }}>
+                  Edit Details
+                </Button>
+              </>
+            )}
+          </Form.Group>
+        </Form>
+      </div>
     </Container>
   );
 };

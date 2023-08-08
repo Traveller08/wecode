@@ -24,8 +24,7 @@ const Feed = (props) => {
       try {
         const response = await apiService.getPosts();
         setPosts(response.data);
-      } 
-      catch (error) {
+      } catch (error) {
         console.log("Error fetching posts:", error);
       }
     };

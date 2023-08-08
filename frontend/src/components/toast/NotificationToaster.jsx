@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import { Toaster } from "react-hot-toast";
 const NotificationToaster = () => {
   return (
     <>
-        <Toaster
+      <Toaster
         position="bottom-right"
         reverseOrder={false}
         gutter={8}
@@ -29,7 +29,7 @@ const NotificationToaster = () => {
         }}
       />
     </>
-  )
-}
+  );
+};
 
-export default NotificationToaster
+export default NotificationToaster;

@@ -1,5 +1,5 @@
 .form-container {
-    margin: 2%  auto;
+  margin: 2% auto;
 
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
   text-align: left;
@@ -10,21 +10,14 @@
   padding-right: 30px;
   padding-bottom: 20px;
 }
-.input-group-container{
+.input-group-container {
   display: flex;
   flex-direction: row;
-  
 }
-.form-label{
+.form-label {
   /* width: 20%; */
 }
 
-.header-container{
+.header-container {
   text-align: center;
 }
-
-
-
-
-
-

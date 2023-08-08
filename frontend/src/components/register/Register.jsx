@@ -1,14 +1,14 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import apiService from "../../services/apiService";
 import "./index.css";
 import { Link } from "react-router-dom";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import FormNavBar from "../navbar/FormNavbar";
 import toast from "react-hot-toast";
 
-const successNotify=(message) =>toast.success(message);
+const successNotify = (message) => toast.success(message);
 const errorNotify = (message) => toast.error(message);
 
 function Register(props) {
@@ -17,7 +17,7 @@ function Register(props) {
     lastName: "",
     username: "",
     password: "",
-    codeforcesHandle: ""
+    codeforcesHandle: "",
   });
 
   const [confirmpassword, setConfirmpassword] = useState("");
@@ -28,24 +28,23 @@ function Register(props) {
     const { name, value } = e.target;
     setUserdetails({ ...userdetails, [name]: value });
   };
-  
-  const handleConfirmPasswordChange = (e) => {  
+
+  const handleConfirmPasswordChange = (e) => {
     setConfirmpassword(e.target.value);
     if (e.target.value !== userdetails.password) {
       setPasswordMessage("passwords don't match");
-    }
-    else{
+    } else {
       setPasswordMessage("");
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setWaiting(true);
     try {
       const response = await apiService.register(userdetails);
       successNotify(response.message);
-      window.location.href='/login';
+      window.location.href = "/login";
       console.log(response);
     } catch (error) {
       errorNotify("Failed to register");
@@ -57,21 +56,19 @@ function Register(props) {
         lastName: "",
         username: "",
         password: "",
-        codeforcesHandle: ""
+        codeforcesHandle: "",
       });
       setConfirmpassword("");
     }
   };
-  
+
   return (
     <>
       <FormNavBar />
       <div className="form-container">
         <div className="form-group row header-container">
-             <h2>
-              Register 
-              </h2>
-        </div>     
+          <h2>Register</h2>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label for="inputEmail3" className="col-sm-2 col-form-label">
@@ -127,9 +124,13 @@ function Register(props) {
                 required={true}
                 id="inputPassword4"
                 placeholder="confirm password"
-                
               />
-              <Form.Text style={{color:`${passwordMessage!==""?"red":"black"}`}} id="confirm-pass-text">{passwordMessage}</Form.Text>
+              <Form.Text
+                style={{ color: `${passwordMessage !== "" ? "red" : "black"}` }}
+                id="confirm-pass-text"
+              >
+                {passwordMessage}
+              </Form.Text>
             </div>
           </div>
 
@@ -177,17 +178,22 @@ function Register(props) {
           </div>
           <div className="form-group row">
             <div className="col-sm btn-container">
-              <button 
-              type="submit" 
-              className="btn btn-primary" 
-              disabled={confirmpassword==="" || confirmpassword!==userdetails.password}
-              >{
-                waiting &&  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              }
-                {
-                  waiting?"please wait...":"Register"
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={
+                  confirmpassword === "" ||
+                  confirmpassword !== userdetails.password
                 }
-                
+              >
+                {waiting && (
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                {waiting ? "please wait..." : "Register"}
               </button>
             </div>
             <div className="form-group row">

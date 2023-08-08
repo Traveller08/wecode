@@ -27,10 +27,12 @@ const LineGraph = (props) => {
   const [contestData, setContestData] = useState([]);
 
   useEffect(() => {
-    const codeforcesUsername = props.cfhandle;; // Replace with your Codeforces handle
+    const codeforcesUsername = props.cfhandle; // Replace with your Codeforces handle
 
     axios
-      .get(`https://codeforces.com/api/user.rating?handle=${codeforcesUsername}`)
+      .get(
+        `https://codeforces.com/api/user.rating?handle=${codeforcesUsername}`
+      )
       .then((response) => {
         const contestRatings = response.data.result.map((contest) => ({
           x: new Date(contest.ratingUpdateTimeSeconds * 1000),

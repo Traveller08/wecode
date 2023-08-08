@@ -7,15 +7,25 @@ import Button from "react-bootstrap/esm/Button.js";
 const ProblemsLeftBar = (props) => {
   return (
     <div>
-      <div className="card lf-s" style={{border:"none"}}>
+      <div className="card lf-s" style={{ border: "none" }}>
         <div className="card-header">Filter Problems</div>
         <div className="card-body">
           <div className="list-group-flush">
             <div className="difficulty">
               <InputGroup className="mb-3">
                 <InputGroup.Text>Difficulty: </InputGroup.Text>
-                <Form.Control aria-label="From" placeholder="from - " value={props.from} onChange={props.handleFrom} />
-                <Form.Control aria-label="To" placeholder="to" value={props.to} onChange={props.handleTo} />
+                <Form.Control
+                  aria-label="From"
+                  placeholder="from - "
+                  value={props.from}
+                  onChange={props.handleFrom}
+                />
+                <Form.Control
+                  aria-label="To"
+                  placeholder="to"
+                  value={props.to}
+                  onChange={props.handleTo}
+                />
               </InputGroup>
             </div>
 

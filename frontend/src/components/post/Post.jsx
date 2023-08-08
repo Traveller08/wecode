@@ -6,7 +6,9 @@ import apiService from "../../services/apiService";
 
 const Post = (props) => {
   const [showComments, setShowComments] = useState(false);
-  const [postRxn, setPostRxn] = useState(props.reaction ? props.reaction : "not reacted");
+  const [postRxn, setPostRxn] = useState(
+    props.reaction ? props.reaction : "not reacted"
+  );
   const [editmode, setEditmode] = useState(false);
   const [newText, setNewText] = useState("");
   const [likesCount, setLikesCount] = useState(props.likes || 0);
@@ -26,8 +28,7 @@ const Post = (props) => {
     if (postRxn === reaction) {
       // User already reacted in the same way, remove the reaction
       removePostReaction();
-    } 
-    else {
+    } else {
       // User is reacting for the first time or changing the reaction
       setPostRxn(reaction);
       submitPostReaction(reaction);
@@ -42,15 +43,13 @@ const Post = (props) => {
         if (postRxn === "dislike") {
           setDislikesCount(dislikesCount - 1);
         }
-      } 
-      else if (reaction === "dislike") {
+      } else if (reaction === "dislike") {
         setDislikesCount(dislikesCount + 1);
         if (postRxn === "like") {
           setLikesCount(likesCount - 1);
         }
       }
-    } 
-    catch (error) {
+    } catch (error) {
       console.error("Error submitting post reaction:", error);
     }
   };
@@ -60,13 +59,11 @@ const Post = (props) => {
       await apiService.removePostReaction(postid);
       if (postRxn === "like") {
         setLikesCount(likesCount - 1);
-      } 
-      else if (postRxn === "dislike") {
+      } else if (postRxn === "dislike") {
         setDislikesCount(dislikesCount - 1);
       }
       setPostRxn("");
-    } 
-    catch (error) {
+    } catch (error) {
       console.error("Error removing post reaction:", error);
     }
   };
@@ -74,8 +71,7 @@ const Post = (props) => {
   const handleComments = async (e) => {
     if (showComments) {
       setShowComments(false);
-    } 
-    else {
+    } else {
       setShowComments(true);
     }
   };

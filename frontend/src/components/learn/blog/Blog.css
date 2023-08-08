@@ -1,33 +1,32 @@
 .blog-card {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    padding: 20px;
-    text-align: left;
-    transition: transform 0.2s ease-in-out;
-  
-    &:hover {
-      transform: translateY(-3px);
-    }
-  
-    .blog-header {
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-  
-    .blog-content {
-      font-size: 14px;
-      color: #666666;
-  
-      a {
-        color: #007bff;
-        text-decoration: none;
-  
-        &:hover {
-          text-decoration: underline;
-        }
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  padding: 20px;
+  text-align: left;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  .blog-header {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .blog-content {
+    font-size: 14px;
+    color: #666666;
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
-  
+}

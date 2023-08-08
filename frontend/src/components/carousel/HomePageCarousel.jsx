@@ -42,17 +42,15 @@ const HomePageCarousel = () => {
             Get your doubts resolved with AI-powered support. Join the vibrant
             community to learn, share, and grow together.
           </p>
-          {
-      Cookies.get("user")? (
-        <a className="btn btn-success btn-get-started" href="/">
-        Explore Now
-      </a>
-      ):(
-        <a className="btn btn-success btn-get-started disabled" href="/">
-        Explore Now
-      </a>
-      )
-    }
+          {Cookies.get("user") ? (
+            <a className="btn btn-success btn-get-started" href="/">
+              Explore Now
+            </a>
+          ) : (
+            <a className="btn btn-success btn-get-started disabled" href="/">
+              Explore Now
+            </a>
+          )}
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
@@ -63,30 +61,30 @@ const HomePageCarousel = () => {
           alt="Third slide"
         />
 
-<Carousel.Caption>
-  <div >
-    <h3 className="caption-title">Visualize Your Performance on Coding Platforms</h3>
-    <p className="caption-text">
-      Analyze your coding journey and track your progress on various coding
-      platforms. Gain insights into your strengths and weaknesses to improve
-      your skills.
-    </p>
-    {
-      Cookies.get("user")? (
-        <a className="btn btn-success btn-get-started" href="/visualizer">
-        Explore Now
-      </a>
-      ):(
-        <a className="btn btn-success btn-get-started disabled" href="/visualizer">
-        Explore Now
-      </a>
-      )
-    }
-   
-  </div>
-  
-</Carousel.Caption>
-
+        <Carousel.Caption>
+          <div>
+            <h3 className="caption-title">
+              Visualize Your Performance on Coding Platforms
+            </h3>
+            <p className="caption-text">
+              Analyze your coding journey and track your progress on various
+              coding platforms. Gain insights into your strengths and weaknesses
+              to improve your skills.
+            </p>
+            {Cookies.get("user") ? (
+              <a className="btn btn-success btn-get-started" href="/visualizer">
+                Explore Now
+              </a>
+            ) : (
+              <a
+                className="btn btn-success btn-get-started disabled"
+                href="/visualizer"
+              >
+                Explore Now
+              </a>
+            )}
+          </div>
+        </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
   );

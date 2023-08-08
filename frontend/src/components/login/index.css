@@ -8,7 +8,7 @@
    */
 
 .form-container {
-    margin: 2%  auto;
+  margin: 2% auto;
 
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
   text-align: left;
@@ -19,34 +19,28 @@
   padding-right: 30px;
   padding-bottom: 20px;
 }
-.form-container div{
+.form-container div {
   margin-bottom: 10px;
 }
-.input-group-container{
+.input-group-container {
   display: flex;
   flex-direction: row;
-  
 }
-.form-label{
+.form-label {
   width: 20%;
 }
 
-.header-container{
+.header-container {
   text-align: center;
 }
 
-
-.btn-container{
+.btn-container {
   display: flex;
   flex-direction: row-reverse;
   /* background-color: red */
 }
 
-.btn-container button{
-   margin-right: 0px;
-   min-width: 100px;
+.btn-container button {
+  margin-right: 0px;
+  min-width: 100px;
 }
-
-
-
-

@@ -18,15 +18,17 @@ const UnsolvedProblemsPage = () => {
         const attemptedProblems = response.data.result.filter(
           (submission) => submission.verdict === "OK"
         );
-         
+
         // Remove duplicates based on problem id (contestId + index)
         const uniqueProblems = [];
         const problemIds = new Set();
-        response.data.result.forEach((submission)=>{
+        response.data.result.forEach((submission) => {
           if (submission.verdict === "OK") {
-            problemIds.add(`${submission.problem.contestId}-${submission.problem.index}`);
+            problemIds.add(
+              `${submission.problem.contestId}-${submission.problem.index}`
+            );
           }
-        })
+        });
         attemptedProblems.forEach((submission) => {
           const problemId = `${submission.problem.contestId}_${submission.problem.index}`;
           if (!problemIds.has(problemId)) {
@@ -46,14 +48,14 @@ const UnsolvedProblemsPage = () => {
     //     const data = await response.json();
     //     const acceptedProblems = new Set();
     //     const attemptedProblems = [];
-    
+
     //     // Find all the problems with an accepted solution
     //     for (const submission of data.result) {
     //       if (submission.verdict === "OK") {
     //         acceptedProblems.add(`${submission.problem.contestId}-${submission.problem.index}`);
     //       }
     //     }
-    
+
     //     // Filter problems with at least one submission and no accepted solution
     //     for (const submission of data.result) {
     //       const problemId = `${submission.problem.contestId}-${submission.problem.index}`;
@@ -63,24 +65,23 @@ const UnsolvedProblemsPage = () => {
     //       }
     //     }
     //     // console.log(attemptedProblems)
-    
+
     //     return attemptedProblems;
     //   } catch (error) {
     //     console.error("Error fetching attempted problems:", error);
     //     return [];
     //   }
     // };
-    
+
     fetchAttemptedProblems(cfhandle);
   }, []);
 
   return (
-    <div style={{width:"100%",display:"flex", flexDirection:"row"}}>
+    <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
       <div className="col-md-3"></div>
       <div className="col-md-6 gedf-main">
-      <h3 style={{textAlign:"center"}}>Unsolved problems of {cfhandle}</h3>
-        <Problems problems={attemptedProblems}/>
-
+        <h3 style={{ textAlign: "center" }}>Unsolved problems of {cfhandle}</h3>
+        <Problems problems={attemptedProblems} />
       </div>
     </div>
   );

@@ -1,22 +1,22 @@
-.ps-card{
-    display: block;
+.ps-card {
+  display: block;
 }
-.ps-name{
-    float: left;
+.ps-name {
+  float: left;
 }
-.ps-btn-container{
-    min-width: 10%;
-    width: max-content;
-    text-decoration: underline;
-    color: blue;
-    float: right;
-    /* display: block; */
-    /* background-color: red; */
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+.ps-btn-container {
+  min-width: 10%;
+  width: max-content;
+  text-decoration: underline;
+  color: blue;
+  float: right;
+  /* display: block; */
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
-.ps-btn-container a{
-    margin-left: 5px;
+.ps-btn-container a {
+  margin-left: 5px;
 }

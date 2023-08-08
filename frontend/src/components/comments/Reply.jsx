@@ -9,8 +9,6 @@ const Reply = (reply) => {
   const [editmode, setEditmode] = useState(false);
   const [newText, setNewText] = useState("");
 
-
-
   const handleDelete = async () => {
     reply.handleDelete(reply.data.replyid);
   };
@@ -64,8 +62,6 @@ const Reply = (reply) => {
             ) : (
               <pre className="comment-body post-pre">{reply.data.data}</pre>
             )}
-
-          
 
             <div className="comment-footer">
               {Cookies.get("user") &&

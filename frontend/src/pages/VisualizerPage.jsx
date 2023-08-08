@@ -17,9 +17,11 @@ const VisualizerPage = () => {
 
     const checkCodeforcesHandleExists = async (handle) => {
       try {
-        const response = await fetch(`https://codeforces.com/api/user.info?handles=${handle}`);
+        const response = await fetch(
+          `https://codeforces.com/api/user.info?handles=${handle}`
+        );
         const data = await response.json();
-        
+
         if (data.status === "OK" && data.result.length > 0) {
           // Handle exists
           return true;
@@ -29,16 +31,15 @@ const VisualizerPage = () => {
         }
       } catch (error) {
         // Error occurred while fetching data
-        errorNotify("Error fetching codeforces data")
+        errorNotify("Error fetching codeforces data");
         console.error("Error checking Codeforces handle:", error);
         return false;
       }
     };
-    
 
     if (cfhandle) {
       const exists = checkCodeforcesHandleExists(cfhandle);
-      if(exists){
+      if (exists) {
         setCfhandle(cfhandle);
       }
     }
@@ -47,7 +48,7 @@ const VisualizerPage = () => {
   return (
     <>
       {/* <div className="col-md-3"></div> */}
-      { (cfhandle) ? (
+      {cfhandle ? (
         <>
           <div className="gedf-main visualizer">
             <div className="chart-container">
@@ -56,8 +57,8 @@ const VisualizerPage = () => {
               </div>
             </div>
 
-            <PieChart cfhandle={cfhandle}  />
-            <BarGraph cfhandle={cfhandle}  />
+            <PieChart cfhandle={cfhandle} />
+            <BarGraph cfhandle={cfhandle} />
           </div>
         </>
       ) : (
@@ -65,7 +66,10 @@ const VisualizerPage = () => {
           {show && (
             <Alert variant="danger" onClose={() => setShow(false)} dismissible>
               <Alert.Heading>Invalid codeforces handle</Alert.Heading>
-              <p>Invalid codeforces handle. To continue <a href="/profile">update</a> your codeforces handle</p>
+              <p>
+                Invalid codeforces handle. To continue{" "}
+                <a href="/profile">update</a> your codeforces handle
+              </p>
             </Alert>
           )}
         </>

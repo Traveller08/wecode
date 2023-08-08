@@ -7,11 +7,9 @@ const ProblemList = (props) => {
     <div>
       {props && props.list && (
         <ListGroup>
-          {
-            props.list.map((question,index) => {
-              return <ProblemSheetCard problem={question} index={index+1}/>
-            })
-          }
+          {props.list.map((question, index) => {
+            return <ProblemSheetCard problem={question} index={index + 1} />;
+          })}
         </ListGroup>
       )}
     </div>

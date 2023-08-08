@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const CompanyWise = () => {
-  return (
-    <div>CompanyWise</div>
-  )
-}
+  return <div>CompanyWise</div>;
+};
 
 export default CompanyWise;
