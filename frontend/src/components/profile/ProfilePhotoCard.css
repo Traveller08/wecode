@@ -1,3 +1,20 @@
+.profile{
+  display: flex;
+  flex-direction: row;
+  /* background-color: red; */
+  padding: 10px;
+}
+.profile-data{
+  /* background-color: blue; */
+  min-width: 60%;
+  width: 70%;
+  padding: 10px;
+}
+.profile-picture{
+  /* background-color: purple; */
+  width: 30%;
+  padding: 10px;
+}
 .profile-photo-card {
     display: flex;
     flex-direction: column;

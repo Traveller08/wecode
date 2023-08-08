@@ -210,6 +210,11 @@ const removePostReaction = async ( postid) => {
  };
 
 
+const updateUserDetails = async(userDetails) =>{
+  // function to update edited user details
+
+}
+
 
 const apiService = {
   register,
@@ -241,6 +246,7 @@ const apiService = {
 
   submitPostReaction,
   removePostReaction,
+  updateUserDetails
 
 };
 

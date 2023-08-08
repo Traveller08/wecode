@@ -60,7 +60,7 @@ const NavBar = (props) => {
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg`}>
-                Offcanvas
+                wecode
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
@@ -121,11 +121,7 @@ const NavBar = (props) => {
                     Visualizer
                   </Nav.Link>
                 )}
-                {props.user && (
-                  <Nav.Link name="discuss" href="/discuss">
-                    Discuss
-                  </Nav.Link>
-                )}
+            
 
                 {props.user && (
                   <NavDropdown
@@ -143,12 +139,7 @@ const NavBar = (props) => {
                     <NavDropdown.Item name="account" href="/profile">
                       My Profile
                     </NavDropdown.Item>
-                    <NavDropdown.Item name="profile" href="/edit/profile">
-                      Edit profile
-                    </NavDropdown.Item>
-                    <NavDropdown.Item name="reportBug" href="/report/bug">
-                      Report a bug
-                    </NavDropdown.Item>
+                    
                     <NavDropdown.Divider />
                     <NavDropdown.Item>
                       <Button variant="outline-success" onClick={handleLogout}>
