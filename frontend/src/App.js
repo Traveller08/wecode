@@ -47,51 +47,180 @@ const App = () => {
 
   return (
     <Router>
-     
       <Routes>
         <Route
-          exact path="/login"
+          exact
+          path="/login"
           element={<LoginPage user={user} login={handleLogin} />}
         />
         <Route
-          exact path="/register"
+          exact
+          path="/register"
           element={<RegisterPage user={user} login={handleLogin} />}
         />
 
-        
-
-        <Route index element={<><NavBar user={user} logout={handleLogout} /><Homepage user={user} /> </>} />
-        <Route exact path="/profile" element={<><NavBar user={user} logout={handleLogout} /><Profilepage user={user} /> </>} />
         <Route
-          exact path="/practice/problems"
-          element={<><NavBar user={user} logout={handleLogout} /><Problemspage user={user} /> </>}
+          index
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Homepage user={user} />{" "}
+            </>
+          }
         />
         <Route
-          exact path="/practice/problems/unsolved"
-          element={<><NavBar user={user} logout={handleLogout} /><UnsolvedProblemsPage user={user} /> </>}
+          exact
+          path="/profile"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Profilepage user={user} />{" "}
+            </>
+          }
         />
         <Route
-          exact path="/practice/problemsheets"
-          element={<><NavBar user={user} logout={handleLogout} /><ProblemSheetPage user={user} /> </>}
+          exact
+          path="/practice/problems"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Problemspage user={user} />{" "}
+            </>
+          }
         />
         <Route
-          exact path="/practice/contests"
-          element={<><NavBar user={user} logout={handleLogout} /><ContestsPage user={user} /> </>}
+          exact
+          path="/practice/problems/unsolved"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <UnsolvedProblemsPage user={user} />{" "}
+            </>
+          }
         />
-        <Route exact path="/learn/tutorials" element={<><NavBar user={user} logout={handleLogout} /><TutorialsPage user={user} /> </>} />
-        <Route exact path="/learn/blogs" element={<><NavBar user={user} logout={handleLogout} /><BlogPage user={user} /> </>} />
-        <Route exact path="/visualizer" element={<><NavBar user={user} logout={handleLogout} /><VisualizerPage user={user} /> </>} />
+        <Route
+          exact
+          path="/practice/problemsheets"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <ProblemSheetPage user={user} />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/practice/contests"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <ContestsPage user={user} />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/learn/tutorials"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <TutorialsPage user={user} />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/learn/blogs"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <BlogPage user={user} />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/visualizer"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <VisualizerPage user={user} />{" "}
+            </>
+          }
+        />
         {/* Add other routes for authenticated users */}
 
-        <Route index element={<><NavBar user={user} logout={handleLogout} /><Homepage /> </>} />
-        <Route exact path="/learn/blogs" element={<><NavBar user={user} logout={handleLogout} /><BlogPage /> </>} />
+        <Route
+          index
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Homepage />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/learn/blogs"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <BlogPage />{" "}
+            </>
+          }
+        />
         {/* Add other routes for non-authenticated users */}
 
-        <Route exact path="/about" element={<><NavBar user={user} logout={handleLogout} /><Aboutpage /> </>} />
-        <Route exact path="/bug" element={<><NavBar user={user} logout={handleLogout} /><Bugpage /> </>} />
-        <Route exact path="/discuss" element={<><NavBar user={user} logout={handleLogout} /><Discusspage /> </>} />
-        <Route exact path="/error" element={<><NavBar user={user} logout={handleLogout} /><Errorpage /> </>} />
-        <Route exact path="/report/bug" element={<><NavBar user={user} logout={handleLogout} /><ReportBugpage /> </>} />
+        <Route
+          exact
+          path="/about"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Aboutpage />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/bug"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Bugpage />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/discuss"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Discusspage />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/error"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <Errorpage />{" "}
+            </>
+          }
+        />
+        <Route
+          exact
+          path="/report/bug"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <ReportBugpage />{" "}
+            </>
+          }
+        />
         {/* Add other routes for both authenticated and non-authenticated users */}
       </Routes>
       <NotificationToaster />

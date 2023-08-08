@@ -181,7 +181,7 @@ const createPostReactionsTable = () => {
     id INT AUTO_INCREMENT PRIMARY KEY,
     postid VARCHAR(255) NOT NULL,
     userid INT NOT NULL,
-    reaction ENUM('like', 'dislike') NOT NULL,
+    reaction ENUM('like', 'dislike' ) NOT NULL,
     FOREIGN KEY (postid) REFERENCES postTable(postid) ON DELETE CASCADE
   )`;
 };

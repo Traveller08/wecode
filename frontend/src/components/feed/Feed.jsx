@@ -15,7 +15,7 @@ const Feed = (props) => {
   const [active, setActive] = useState("posts");
   const [isNewPostAdded, setIsNewPostAdded] = useState(false);
   const [isNewQuestionAdded, setIsNewQuestionAdded] = useState(false);
-   
+
   // Create a ref for the last post element
   const lastPostRef = useRef(null);
 
@@ -24,7 +24,8 @@ const Feed = (props) => {
       try {
         const response = await apiService.getPosts();
         setPosts(response.data);
-      } catch (error) {
+      } 
+      catch (error) {
         console.log("Error fetching posts:", error);
       }
     };
@@ -45,7 +46,7 @@ const Feed = (props) => {
     try {
       const response = await apiService.createNewPost(text);
       successNotify("post created successfully");
-      setPosts((prevPosts) => [response.data , ...prevPosts]);
+      setPosts((prevPosts) => [response.data, ...prevPosts]);
       setIsNewPostAdded(true); // Set the state to indicate a new post is added
       // scrollToNewPost();
     } catch (error) {
@@ -171,10 +172,7 @@ const Feed = (props) => {
 
           {active === "ask" &&
             questions.map((question, index) => (
-              <div
-                key={question.postid}
-                className={`question-container`}
-              >
+              <div key={question.postid} className={`question-container`}>
                 <Post
                   postid={question.postid}
                   // Rest of the props

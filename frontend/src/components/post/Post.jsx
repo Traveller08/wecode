@@ -6,19 +6,17 @@ import apiService from "../../services/apiService";
 
 const Post = (props) => {
   const [showComments, setShowComments] = useState(false);
-  const [postRxn, setPostRxn] = useState(props.reaction);
+  const [postRxn, setPostRxn] = useState(props.reaction ? props.reaction : "not reacted");
   const [editmode, setEditmode] = useState(false);
   const [newText, setNewText] = useState("");
-  const [likesCount, setLikesCount] = useState(props.likes);
-  const [dislikesCount, setDislikesCount] = useState(props.dislikes);
+  const [likesCount, setLikesCount] = useState(props.likes || 0);
+  const [dislikesCount, setDislikesCount] = useState(props.dislikes || 0);
   const [commentsCount, setCommentsCount] = useState(0);
-  console.log("post props ",props)
-  
+  console.log("post props ", props);
+
   const postid = props.postid;
   const user = Cookies.get("user");
 
- 
- 
   const handleLikeDislike = async (reaction) => {
     if (!user) {
       // User is not logged in, redirect to login page or show a login prompt
@@ -28,7 +26,8 @@ const Post = (props) => {
     if (postRxn === reaction) {
       // User already reacted in the same way, remove the reaction
       removePostReaction();
-    } else {
+    } 
+    else {
       // User is reacting for the first time or changing the reaction
       setPostRxn(reaction);
       submitPostReaction(reaction);
@@ -43,13 +42,15 @@ const Post = (props) => {
         if (postRxn === "dislike") {
           setDislikesCount(dislikesCount - 1);
         }
-      } else if (reaction === "dislike") {
+      } 
+      else if (reaction === "dislike") {
         setDislikesCount(dislikesCount + 1);
         if (postRxn === "like") {
           setLikesCount(likesCount - 1);
         }
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error submitting post reaction:", error);
     }
   };
@@ -59,11 +60,13 @@ const Post = (props) => {
       await apiService.removePostReaction(postid);
       if (postRxn === "like") {
         setLikesCount(likesCount - 1);
-      } else if (postRxn === "dislike") {
+      } 
+      else if (postRxn === "dislike") {
         setDislikesCount(dislikesCount - 1);
       }
       setPostRxn("");
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error removing post reaction:", error);
     }
   };
@@ -71,7 +74,8 @@ const Post = (props) => {
   const handleComments = async (e) => {
     if (showComments) {
       setShowComments(false);
-    } else {
+    } 
+    else {
       setShowComments(true);
     }
   };
@@ -217,25 +221,25 @@ const Post = (props) => {
 
           <div className="card-footer">
             <div className="card-footer-left">
-            <i
-        className={
-          postRxn === "like"
-            ? "f-icon bi bi-caret-up-fill text-primary"
-            : "f-icon bi bi-caret-up text-primary"
-        }
-        style={{ fontSize: "1.1rem" }}
-        onClick={() => handleLikeDislike("like")}
-      ></i>
-      <span className="text-primary ml-1">{likesCount}</span>
-      <i
-        className={
-          postRxn === "dislike"
-            ? "f-icon bi bi-caret-down-fill text-danger"
-            : "f-icon bi bi-caret-down text-danger"
-        }
-        style={{ fontSize: "1.1rem" }}
-        onClick={() => handleLikeDislike("dislike")}
-      ></i>
+              <i
+                className={
+                  postRxn === "like"
+                    ? "f-icon bi bi-caret-up-fill text-primary"
+                    : "f-icon bi bi-caret-up text-primary"
+                }
+                style={{ fontSize: "1.1rem" }}
+                onClick={() => handleLikeDislike("like")}
+              ></i>
+              <span className="text-primary ml-1">{likesCount}</span>
+              <i
+                className={
+                  postRxn === "dislike"
+                    ? "f-icon bi bi-caret-down-fill text-danger"
+                    : "f-icon bi bi-caret-down text-danger"
+                }
+                style={{ fontSize: "1.1rem" }}
+                onClick={() => handleLikeDislike("dislike")}
+              ></i>
 
               <span className="text-danger ml-1">{dislikesCount}</span>
 
@@ -263,7 +267,10 @@ const Post = (props) => {
                 </>
               )}
 
-              <i className="f-icon bi bi-share" style={{ fontSize: "1.1rem" }}></i>
+              <i
+                className="f-icon bi bi-share"
+                style={{ fontSize: "1.1rem" }}
+              ></i>
             </div>
             <div className="card-footer-right">
               <div className="text-muted h7">
@@ -272,7 +279,7 @@ const Post = (props) => {
             </div>
           </div>
         </div>
- 
+
         {showComments && <Comments setcnt={setCommentsCount} postid={postid} />}
       </div>
     </>

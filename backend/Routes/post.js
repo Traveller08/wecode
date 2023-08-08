@@ -62,7 +62,10 @@ router.post("/create", verifyJwtToken, async (req, res) => {
             ...userdetails[0],
             likes: 0,
             dislikes: 0,
+            reaction : ""
           };
+
+          console.log(postDetails);
 
           return res
             .status(200)
@@ -108,20 +111,24 @@ router.post("/update", verifyJwtToken, async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
   }
 });
+
 const isUserAthenticated = (req) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
     return { status: false };
-  } else {
+  } 
+  else {
     const secret_key = process.env.SECRET_KEY;
     const decoded = jwt.verify(token, secret_key);
     if (decoded) {
       return { status: true, username: decoded.username };
-    } else {
+    } 
+    else {
       return { status: false };
     }
   }
 };
+
 router.get("/all", async (req, res) => {
   // console.log("api point ")
   try {
@@ -148,9 +155,11 @@ router.get("/all", async (req, res) => {
           const [userdetails] = await connection.promise().query(query);
           const queryGetLikesCount = `SELECT COUNT(*) AS likes FROM postReactions WHERE postid='${post.postid}' AND reaction='like'`;
           const queryGetDislikesCount = `SELECT COUNT(*) AS dislikes FROM postReactions WHERE postid='${post.postid}' AND reaction='dislike'`;
+          
           const [likesResult] = await connection
             .promise()
             .query(queryGetLikesCount);
+          
           const [dislikesResult] = await connection
             .promise()
             .query(queryGetDislikesCount);
@@ -163,10 +172,13 @@ router.get("/all", async (req, res) => {
             const [reactionRows] = await connection
               .promise()
               .query(reactionQuery);
-            var reaction="not reacted";
+            
+            var reaction = "not reacted";
+            
             if (reactionRows.length > 0) {
-              reaction=reactionRows[0].reaction;
+              reaction = reactionRows[0].reaction;
             }
+
             const combinedObj = {
               ...post,
               ...userdetails[0],
@@ -174,9 +186,12 @@ router.get("/all", async (req, res) => {
               dislikesCount,
               reaction
             };
+            // console.log("hi: " , combinedObj)
+
             sendthis.push(combinedObj);
-          } else {
-            var reaction="not reacted";
+          } 
+          else {
+            var postRxn="not reacted";
             const combinedObj = {
               ...post,
               ...userdetails[0],
@@ -186,7 +201,8 @@ router.get("/all", async (req, res) => {
             };
             sendthis.push(combinedObj);
           }
-        } catch (error) {
+        } 
+        catch (error) {
           console.log("error " ,  error);
           return res.status(500).json({ message: "internal server error" });
         }

@@ -1,0 +1,16 @@
+.blog-page {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .page-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .blog-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  

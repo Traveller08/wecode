@@ -8,14 +8,12 @@ const Homepage = (props) => {
       <div className="container-fluid">
         <div className="carousel-container">
           <div className="carousel-container-main lf-s">
-              <HomePageCarousel  />
-
+            <HomePageCarousel />
           </div>
         </div>
         <div className="col-md-3"></div>
         <div className="col-md-6 gedf-main container">
-          
-        <Feed user={props.user} />
+          <Feed user={props.user} />
         </div>
         <div className="col-md-3"></div>
       </div>
