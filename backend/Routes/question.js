@@ -1,6 +1,8 @@
 import express from "express";
 const router = express.Router();
-
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 import { generateCodeExplanation } from "../util/test.js";
 
 import mysql2 from "mysql2";
@@ -77,13 +79,14 @@ router.post("/ask", verifyJwtToken, async (req, res) => {
             ...question[0],
             ...userdetails[0],
             gptresponse: originalGptResponse,
+            likes: 0,
+            dislikes: 0,
+            reaction: "",
           };
-          return res
-            .status(200)
-            .json({
-              message: "question created successfully",
-              data: combinedObj,
-            });
+          return res.status(200).json({
+            message: "question created successfully",
+            data: combinedObj,
+          });
         } catch (error) {
           console.log(error);
           return res.status(500).json({ message: "internal server error" });
@@ -102,17 +105,42 @@ router.post("/ask", verifyJwtToken, async (req, res) => {
   }
 });
 
+const isUserAthenticated = (req) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return { status: false };
+  } else {
+    const secret_key = process.env.SECRET_KEY;
+    const decoded = jwt.verify(token, secret_key);
+    if (decoded) {
+      return { status: true, username: decoded.username };
+    } else {
+      return { status: false };
+    }
+  }
+};
+
 router.get("/all", async (req, res) => {
   try {
     const connection = await mysql2.createConnection(db);
     try {
       const [questions] = await connection.promise().query(getQuestionsData());
       const sendthis = [];
+
       if (!questions || questions.length <= 0) {
         return res
           .status(200)
           .json({ message: "posts fetched successfully", data: sendthis });
       }
+
+      const userVerification = isUserAthenticated(req);
+      var userId = null;
+      if (userVerification.status === true) {
+        const query = `SELECT id FROM users WHERE username='${userVerification.username}'`;
+        const [userRows] = await connection.promise().query(query);
+        userId = userRows[0].id;
+      }
+
       for (let question of questions) {
         try {
           const query = `SELECT username, firstName, lastName, photourl FROM users WHERE id IN (
@@ -120,6 +148,33 @@ router.get("/all", async (req, res) => {
           )`;
 
           const [userdetails] = await connection.promise().query(query);
+
+          const queryGetLikesCount = `SELECT COUNT(*) AS likes FROM postReactions WHERE postid='${question.postid}' AND reaction='like'`;
+          const queryGetDislikesCount = `SELECT COUNT(*) AS dislikes FROM postReactions WHERE postid='${question.postid}' AND reaction='dislike'`;
+
+          const [likesResult] = await connection
+            .promise()
+            .query(queryGetLikesCount);
+
+          const [dislikesResult] = await connection
+            .promise()
+            .query(queryGetDislikesCount);
+
+          const likesCount = likesResult[0]?.likes || 0;
+          const dislikesCount = dislikesResult[0]?.dislikes || 0;
+
+          var reaction = "not reacted";
+
+          if (userId) {
+            const reactionQuery = `SELECT * FROM postReactions WHERE postid='${question.postid}' AND userid=${userId}`;
+            const [reactionRows] = await connection
+              .promise()
+              .query(reactionQuery);
+
+            if (reactionRows.length > 0) {
+              reaction = reactionRows[0].reaction;
+            }
+          }
 
           // gpt response
           const [gptrow] = await connection
@@ -134,6 +189,9 @@ router.get("/all", async (req, res) => {
             ...question,
             ...userdetails[0],
             gptresponse: originalGptResponse,
+            likesCount,
+            dislikesCount,
+            reaction,
           };
 
           sendthis.push(combinedObj);
@@ -147,11 +205,13 @@ router.get("/all", async (req, res) => {
         .status(200)
         .json({ message: "posts fetched successfully", data: sendthis });
     } catch (error) {
+      console.log("error1 : ", error);
       return res.status(500).json({ message: "internal server error" });
     } finally {
       connection.close();
     }
   } catch (error) {
+    console.log("error2 : ", error);
     return res.status(500).json({ message: "internal server error" });
   }
 });

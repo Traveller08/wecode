@@ -231,6 +231,7 @@ router.get("/delete", verifyJwtToken, async (req, res) => {
   }
 });
 
+// same for both question and post
 router.post("/reaction", verifyJwtToken, async (req, res) => {
   const { postid, reaction } = req.body;
   const username = req.user;
@@ -308,6 +309,7 @@ router.post("/reaction", verifyJwtToken, async (req, res) => {
   }
 });
 
+// same for both question and post
 router.delete("/reaction", verifyJwtToken, async (req, res) => {
   const { postid } = req.body;
   const username = req.user;
