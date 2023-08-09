@@ -52,4 +52,7 @@
    cd ../frontend
    npm start
 
+## Demo Video  
+[![Watch the video](https://img.youtube.com/vi/20tCSEdF9TY/hqdefault.jpg)](https://www.youtube.com/embed/20tCSEdF9TY)
+
 Happy Coding
