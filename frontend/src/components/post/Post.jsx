@@ -132,7 +132,8 @@ const Post = (props) => {
                     src={
                       props.photourl
                         ? props.photourl
-                        : "https://picsum.photos/50/50"
+                        // : "https://picsum.photos/50/50"
+                        : require("../../images/user.png")
                     }
                     alt="user"
                   />
@@ -148,6 +149,8 @@ const Post = (props) => {
               </div>
               <div>
                 <div>
+                {user && user === props.username && (
+                  <>
                   <NavDropdown
                     title={<i className="bi bi-three-dots-vertical"></i>}
                     align={{ lg: "end" }}
@@ -163,10 +166,13 @@ const Post = (props) => {
                         Edit
                       </NavDropdown.Item>
                     )}
-                    <NavDropdown.Item name="save" onClick={handleSave}>
+                    {/* <NavDropdown.Item name="save" onClick={handleSave}>
                       Save
-                    </NavDropdown.Item>
+                    </NavDropdown.Item> */}
                   </NavDropdown>
+                  </>
+                )}
+
                 </div>
               </div>
             </div>
@@ -263,10 +269,10 @@ const Post = (props) => {
                 </>
               )}
 
-              <i
+              {/* <i
                 className="f-icon bi bi-share"
                 style={{ fontSize: "1.1rem" }}
-              ></i>
+              ></i> */}
             </div>
             <div className="card-footer-right">
               <div className="text-muted h7">

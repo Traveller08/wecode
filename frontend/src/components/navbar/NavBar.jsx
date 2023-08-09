@@ -21,7 +21,8 @@ const NavBar = (props) => {
 
   const profileUrl = props.url
     ? props.url
-    : "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+    // : "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+    : require("../../images/user.png");
 
   const handleLogout = (e) => {
     e.preventDefault();

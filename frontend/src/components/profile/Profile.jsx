@@ -38,7 +38,8 @@ const Profile = () => {
   };
 
   // console.log("user in profile component -> ", user, "edited ",editedUser);
-  var photourl = "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+  // var photourl = "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp";
+  var photourl = require("../../images/user.png");
   if (user.photourl) {
     photourl = user.photourl;
   }
