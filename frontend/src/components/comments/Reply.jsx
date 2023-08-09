@@ -97,7 +97,7 @@ const Reply = (reply) => {
             </div>
           </div>
 
-          <div className="comment-right">
+          {/* <div className="comment-right">
             <div className="comment-reaction">
               <i
                 className={
@@ -130,7 +130,7 @@ const Reply = (reply) => {
                 }}
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

@@ -192,7 +192,7 @@ const Comment = (comment) => {
                 )}
             </div>
           </div>
-
+{/* 
           <div className="comment-right">
             <div className="comment-reaction">
               <i
@@ -227,7 +227,7 @@ const Comment = (comment) => {
                 }}
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {replyForm && (
