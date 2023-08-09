@@ -68,7 +68,8 @@ const Feed = (props) => {
         prevPosts.filter((post) => post.postid !== postid)
       );
       successNotify("post deleted successfully");
-    } catch (error) {
+    } 
+    catch (error) {
       errorNotify("Failed to delete");
       console.error("Error message:", error);
     }

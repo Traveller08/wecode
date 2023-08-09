@@ -36,7 +36,8 @@ const Reply = (reply) => {
                 src={
                   reply.data.url
                     ? reply.data.url
-                    : "https://picsum.photos/50/50"
+                    // : "https://picsum.photos/50/50"
+                    : require("../../images/user.png")
                 }
                 className="rounded-circle"
                 width="36"
