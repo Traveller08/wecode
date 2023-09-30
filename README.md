@@ -63,7 +63,7 @@ Reflect your coding persona through customizable profiles. Share your coding ody
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Traveller08/we-code.git
+   git clone https://github.com/Traveller08/wecode.git
    
 2. Install the dependencies for the backend:
    ```bash
@@ -85,7 +85,5 @@ Reflect your coding persona through customizable profiles. Share your coding ody
    cd ../frontend
    npm start
 
-## Demo Video  
-[![Watch the video](https://img.youtube.com/vi/20tCSEdF9TY/hqdefault.jpg)](https://www.youtube.com/embed/20tCSEdF9TY)
 
 Happy Coding
