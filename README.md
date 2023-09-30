@@ -85,7 +85,9 @@ Reflect your coding persona through customizable profiles. Share your coding ody
    cd ../frontend
    npm start
 
-## Demo Video  
-[![Watch the video](https://img.youtube.com/vi/20tCSEdF9TY/hqdefault.jpg)](https://www.youtube.com/embed/20tCSEdF9TY)
+## How to Contribute
+
+We welcome contributions from the community to make wecode even better. If you'd like to contribute, please follow the guidelines outlined in our [Contribution Guide](contribution.md).
+
 
 Happy Coding
