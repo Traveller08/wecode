@@ -226,13 +226,13 @@ const Post = (props) => {
               <i
                 className={
                   postRxn === "like"
-                    ? "f-icon bi bi-caret-up-fill text-primary"
-                    : "f-icon bi bi-caret-up text-primary"
+                    ? "f-icon bi bi-caret-up-fill text-success"
+                    : "f-icon bi bi-caret-up text-success"
                 }
                 style={{ fontSize: "1.1rem" }}
                 onClick={() => handleLikeDislike("like")}
               ></i>
-              <span className="text-primary ml-1">{likesCount}</span>
+              <span className="text-success ml-1">{likesCount}</span>
               <i
                 className={
                   postRxn === "dislike"
