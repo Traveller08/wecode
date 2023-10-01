@@ -66,9 +66,14 @@ const NavBar = (props) => {
                 wecode
               </Offcanvas.Title>
             </Offcanvas.Header>
+
+
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 <Nav.Link href="/">Home</Nav.Link>
+               
+                  
+               
                 <NavDropdown
                   title="Learn"
                   align={{ lg: "end" }}
@@ -85,6 +90,8 @@ const NavBar = (props) => {
                     Something else here
                   </NavDropdown.Item> */}
                 </NavDropdown>
+
+               
 
                 <NavDropdown
                   title="Practice"
@@ -111,6 +118,14 @@ const NavBar = (props) => {
                     href="/practice/problemsheets"
                   >
                     Problem sheets
+                  </NavDropdown.Item>
+
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    name="ide"
+                    href="/practice/ide"
+                  >
+                    ide
                   </NavDropdown.Item>
                   {/* <NavDropdown.Item
                     name="companyWiseProblems"

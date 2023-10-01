@@ -27,7 +27,7 @@ import VisualizerPage from "./pages/VisualizerPage";
 import UnsolvedProblemsPage from "./pages/UnsolvedProblemsPage";
 import BlogPage from "./pages/BlogPage";
 import Layout from "./Layout";
-
+import IdePage from "./pages/IdePage";
 const App = () => {
   const [user, setUser] = useState(null);
   const handleLogout = () => {
@@ -118,6 +118,18 @@ const App = () => {
             </>
           }
         />
+
+      <Route
+          exact
+          path="/practice/ide"
+          element={
+            <>
+              <NavBar user={user} logout={handleLogout} />
+              <IdePage user={user} />{" "}
+            </>
+          }
+        />
+
         <Route
           exact
           path="/learn/tutorials"
