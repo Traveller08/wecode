@@ -232,7 +232,7 @@ const Post = (props) => {
                 style={{ fontSize: "1.1rem" }}
                 onClick={() => handleLikeDislike("like")}
               ></i>
-              <span className="text-primary ml-1">{likesCount}</span>
+              <span className="text-success ml-1">{likesCount}</span>
               <i
                 className={
                   postRxn === "dislike"
