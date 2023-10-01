@@ -56,7 +56,7 @@ const ContestCard = (props) => {
   }, []);
   return (
     <div className="c-card">
-      <div className="c-name">{props.contest.name}</div>
+      <div className="c-name w-100">{props.contest.name}</div>
       <Stack direction="horizontal" className="c-problems-container" gap={1}>
         {problems.map((problem) => {
           return (
@@ -71,7 +71,7 @@ const ContestCard = (props) => {
           );
         })}
       </Stack>
-      <div className="c-btn-container">
+      <div className="d-flex justify-content-end c-btn-container w-100">
         <Button
           className="c-btn"
           variant="outline-success"
