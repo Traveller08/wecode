@@ -157,6 +157,10 @@ const NavBar = (props) => {
                       My Profile
                     </NavDropdown.Item>
 
+                    <NavDropdown.Item name="saved" href="/saved">
+                      Saved Items
+                    </NavDropdown.Item>
+
                     <NavDropdown.Divider />
                     <NavDropdown.Item>
                       <Button variant="outline-success" onClick={handleLogout}>

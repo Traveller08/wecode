@@ -94,6 +94,10 @@ const Post = (props) => {
     setEditmode(false);
   };
 
+  const handleSaveItem = async () =>{
+    
+  }
+
   const getTime = (createdTimeMillis) => {
     const currentTime = Date.now(); // Current time in milliseconds
     const timeDiff = currentTime - createdTimeMillis; // Time difference in milliseconds
@@ -156,6 +160,11 @@ const Post = (props) => {
                     align={{ lg: "end" }}
                     id={`offcanvasNavbarDropdown-expand-lg`}
                   >
+                    {user  && (
+                      <NavDropdown.Item name="save" onClick={handleSaveItem}>
+                        Save
+                      </NavDropdown.Item>
+                    )}
                     {user && user === props.username && (
                       <NavDropdown.Item name="delete" onClick={handleDelete}>
                         Delete
@@ -166,9 +175,7 @@ const Post = (props) => {
                         Edit
                       </NavDropdown.Item>
                     )}
-                    {/* <NavDropdown.Item name="save" onClick={handleSave}>
-                      Save
-                    </NavDropdown.Item> */}
+          
                   </NavDropdown>
                   </>
                 )}
