@@ -1,5 +1,11 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import dotenv from "dotenv";
+
+// dotenv.config({
+//   path: path.join(path.resolve(), "../.env"),
+// });
 
 const app = express();
 app.use(cors());
@@ -50,7 +56,7 @@ const intiDB = async () => {
     await connection.promise().query(createGptTable());
     connection.commit();
 
-    await connection.promise().query(createPostReactionsTable()); 
+    await connection.promise().query(createPostReactionsTable());
     connection.commit();
 
     console.log("Database Initialised ...");
