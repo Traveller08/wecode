@@ -28,6 +28,7 @@ import UnsolvedProblemsPage from "./pages/UnsolvedProblemsPage";
 import BlogPage from "./pages/BlogPage";
 import Layout from "./Layout";
 import IdePage from "./pages/IdePage";
+import NotFoundPage from "./pages/NotFoundPage";
 const App = () => {
   const [user, setUser] = useState(null);
   const handleLogout = () => {
@@ -233,6 +234,16 @@ const App = () => {
             </>
           }
         />
+          <Route
+              exact
+              path="*"
+              element={
+                  <>
+                      <NavBar user={user} logout={handleLogout} />
+                      <NotFoundPage />{" "}
+                  </>
+              }
+          />
         {/* Add other routes for both authenticated and non-authenticated users */}
       </Routes>
       <NotificationToaster />
