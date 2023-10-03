@@ -4,7 +4,7 @@ import "./Footer.css";
 const WeCodeFooter = () => {
   return (
     <>
-      <div className="bg-light text-center text-white footer fixed-bottom full-width">
+      <div className="bg-light text-center text-white footer relative full-width">
         <div className="p-4 pb-0 ">
           <section className="mb-4 icon-container">
             <div className="icon-container-sh">
