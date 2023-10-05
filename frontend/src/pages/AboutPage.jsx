@@ -5,7 +5,7 @@ const AboutPage = () => {
   return (
     <>
     <div className="col-md-3"></div>
-    <div className="col-md-6 gedf-main">
+    <div className="col-md-6 gedf-main main">
       <h1>About us</h1>
     </div>
     <div className="col-md-3"></div>

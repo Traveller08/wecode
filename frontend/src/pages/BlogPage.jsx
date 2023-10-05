@@ -5,7 +5,7 @@ import './BlogPage.css';
 
 const BlogPage = ({ blogList }) => {
   return (
-    <div className="blog-page container">
+    <div className="blog-page container main">
       <h1 className="page-title fw-bold fs-1" style={{ letterSpacing: 3 }}>
         All Blogs
       </h1>

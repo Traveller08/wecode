@@ -6,7 +6,7 @@ import "./TutorialsPage.css";
 
 const TutorialsPage = () => {
   return (
-    <div className="tutorials-page">
+    <div className="tutorials-page main">
       {tutorials.map((t, index) => (
         <Row key={index} title={t.title} linkArray={t.linkArray} />
       ))}

@@ -79,7 +79,7 @@ const UnsolvedProblemsPage = () => {
   return (
     <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
       <div className="col-md-3"></div>
-      <div className="col-md-6 gedf-main">
+      <div className="col-md-6 gedf-main main">
         <h3 style={{ textAlign: "center" }}>Unsolved problems of {cfhandle}</h3>
         <Problems problems={attemptedProblems} />
       </div>

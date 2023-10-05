@@ -12,7 +12,7 @@ const Homepage = (props) => {
           </div>
         </div>
         <div className="col-md-3"></div>
-        <div className="col-md-6 gedf-main container">
+        <div className="col-md-6 gedf-main container main">
           <Feed user={props.user} />
         </div>
         <div className="col-md-3"></div>

@@ -50,7 +50,7 @@ const VisualizerPage = () => {
       {/* <div className="col-md-3"></div> */}
       {cfhandle ? (
         <>
-          <div className="gedf-main visualizer">
+          <div className="gedf-main visualizer main">
             <div className="chart-container">
               <div className="chart-card lg-card">
                 <LineGraph className="chart" cfhandle={cfhandle} />

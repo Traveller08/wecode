@@ -5,20 +5,10 @@ import ProblemList from "../components/practice/problemSheets/ProblemList";
 import {list as lovebabbarsheet} from "../data/lovebabbarsheet";
 const ProblemSheetPage = () => {
   const [active, setActive] = useState("lovebabbar");
-  const items = [
-    {
-      title: "Fruits",
-      items: ["Apple", "Banana", "Orange"],
-    },
-    {
-      title: "Vegetables",
-      items: ["Carrot", "Broccoli", "Tomato"],
-    },
-  ];
   return (
     <>
    
-      <div className="tab-content" style={{ border: "none" }}>
+      <div className="tab-content main" style={{ border: "none" }}>
         <div className="card-header">
           <ul
             className="nav nav-tabs card-header-tabs"
