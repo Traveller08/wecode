@@ -5,8 +5,8 @@ import axios from "axios";
 
 const Contests = (props) => {
     const [loading, startTransition] = useTransition();
-    const [submissions, setSubmissions] = useState();
-    const [problems, setProblems] = useState();
+    const [submissions, setSubmissions] = useState({});
+    const [problems, setProblems] = useState({});
 
     useEffect(() => {
         const submissions = {};
@@ -49,8 +49,8 @@ const Contests = (props) => {
                 return (
                     <ContestCard
                         contest={contest}
-                        problems={problems[contest.id]}
-                        submissions={submissions[contest.id]}
+                        problems={Object.keys(problems).length !== 0 ? problems[contest.id] : []}
+                        submissions={Object.keys(submissions).length !== 0 ? submissions[contest.id] : []}
                         type={props.contestType}
                         key={i}
                     />
