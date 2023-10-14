@@ -54,7 +54,7 @@ const NavBar = (props) => {
         style={{ padding: "15px 30px" }}
       >
         <Container fluid>
-          <Navbar.Brand href="#">wecode</Navbar.Brand>
+          <Navbar.Brand as={Link} to="#">wecode</Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-lg`}
@@ -70,7 +70,7 @@ const NavBar = (props) => {
 
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
-                <Nav.Link href="/">Home</Nav.Link>
+                <Nav.Link as={Link} to="/">Home</Nav.Link>
                
                   
                
@@ -79,14 +79,14 @@ const NavBar = (props) => {
                   align={{ lg: "end" }}
                   id={`offcanvasNavbarDropdown-expand-lg`}
                 >
-                  <NavDropdown.Item name="blogs" href="/learn/blogs">
+                  <NavDropdown.Item name="blogs" as={Link} to="/learn/blogs">
                     Blogs
                   </NavDropdown.Item>
-                  <NavDropdown.Item name="tutorials" href="/learn/tutorials">
+                  <NavDropdown.Item name="tutorials" as={Link} to="/learn/tutorials">
                     Tutorials
                   </NavDropdown.Item>
                   {/* <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action5">
+                  <NavDropdown.Item as={Link} to="#action5">
                     Something else here
                   </NavDropdown.Item> */}
                 </NavDropdown>
@@ -98,24 +98,26 @@ const NavBar = (props) => {
                   id={`offcanvasNavbarDropdown-expand-lg`}
                   align={{ lg: "end" }}
                 >
-                  <NavDropdown.Item name="problems" href="/practice/problems">
+                  <NavDropdown.Item name="problems" as={Link} to="/practice/problems">
                     Problems
                   </NavDropdown.Item>
                   {props.user && (
                     <NavDropdown.Item
                       name="problems"
-                      href="/practice/problems/unsolved"
+                      as={Link}
+                      to="/practice/problems/unsolved"
                     >
                       Unsolved Problems
                     </NavDropdown.Item>
                   )}
-                  <NavDropdown.Item name="contests" href="/practice/contests">
+                  <NavDropdown.Item name="contests" as={Link} to="/practice/contests">
                     Contests
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item
                     name="problemSheets"
-                    href="/practice/problemsheets"
+                    as={Link}
+                    to="/practice/problemsheets"
                   >
                     Problem sheets
                   </NavDropdown.Item>
@@ -123,19 +125,21 @@ const NavBar = (props) => {
                   <NavDropdown.Divider />
                   <NavDropdown.Item
                     name="ide"
-                    href="/practice/ide"
+                    as={Link}
+                    to="/practice/ide"
                   >
                     ide
                   </NavDropdown.Item>
                   {/* <NavDropdown.Item
                     name="companyWiseProblems"
-                    href="/practice/companywise/problems"
+                    as={Link}
+                    to="/practice/companywise/problems"
                   >
                     Company-wise Problems
                   </NavDropdown.Item> */}
                 </NavDropdown>
                 {props.user && (
-                  <Nav.Link name="visualizer" href="/visualizer">
+                  <Nav.Link name="visualizer" as={Link} to="/visualizer">
                     Visualizer
                   </Nav.Link>
                 )}
@@ -153,7 +157,7 @@ const NavBar = (props) => {
                     id={`offcanvasNavbarDropdown-expand-lg`}
                     align={{ lg: "end" }}
                   >
-                    <NavDropdown.Item name="account" href="/profile">
+                    <NavDropdown.Item name="account" as={Link} to="/profile">
                       My Profile
                     </NavDropdown.Item>
 
