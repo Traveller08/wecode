@@ -22,7 +22,7 @@ const ProblemsPage = (props) => {
             setContests={handleContestsForm}
           />
         </div>
-        <div className="col-md-7 gedf-main main">
+        <div className=" gedf-main main">
           <Contests contests={contests} contestType={contestType} />
         </div>
         {/* <div className="col-md-3"></div> */}

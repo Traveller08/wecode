@@ -39,6 +39,7 @@ const Contests = (props) => {
                 });
                 setSubmissions(submissions);
                 setProblems(problems);
+                
             });
         })();
     }, []);

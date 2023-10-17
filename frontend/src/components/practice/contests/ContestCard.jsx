@@ -33,7 +33,7 @@ const ContestCard = (props) => {
                 if (submission.verdict === "OK") {
                     bg = "success";
                 } else {
-                    if (bg != "success") bg = "danger";
+                    if (bg !== "success") bg = "danger";
                 }
             }
         });
